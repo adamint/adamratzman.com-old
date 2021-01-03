@@ -15,7 +15,7 @@ fi
 docker rm adamratzman-site --force
 
 if [[ $2 == "true" ]]; then
-  gradle jar
+  ./gradlew jar
   docker build --tag adamratzman/site .
 fi
 
