@@ -29,7 +29,7 @@ object SiteManager {
 
     val siteStore = createReduxStore(::siteStateReducer, SiteState())
 
-    val navigo = Navigo(null, isDevServer, "#!")
+    val navigo = Navigo(null, isDevServer, if (isDevServer) "#!" else null)
 
     fun stringParameter(params: dynamic, parameterName: String): String {
         return (params[parameterName]).toString()

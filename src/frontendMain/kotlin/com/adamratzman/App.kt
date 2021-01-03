@@ -8,9 +8,17 @@ import com.adamratzman.layouts.partials.HeaderComponent
 import com.adamratzman.layouts.projects.*
 import com.adamratzman.layouts.projects.conversion.BaseConversionComponent
 import com.adamratzman.layouts.projects.spotify.*
+import com.adamratzman.utils.UikitName.UkSpinnerAttribute
+import com.adamratzman.utils.addAttributes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.treksoft.kvision.Application
+import pl.treksoft.kvision.core.PosFloat
+import pl.treksoft.kvision.core.Position
+import pl.treksoft.kvision.core.UNIT.perc
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.html.div
 import pl.treksoft.kvision.html.main
 import pl.treksoft.kvision.module
 import pl.treksoft.kvision.panel.root
@@ -29,6 +37,20 @@ class App : Application() {
             main(SiteManager.siteStore) { state ->
                 id = "main"
                 println(state.view.name)
+
+                if (state.view.needsInitialLoadingSpinner) {
+                    state.loadingDiv = div {
+                        div {
+                            style {
+                                right = 0 to px
+                                position = Position.ABSOLUTE
+                                marginRight = 10 to perc
+                            }
+                            addAttributes(UkSpinnerAttribute to "ratio: 2;")
+                        }
+                    }
+                }
+
                 when (state.view) {
                     Home -> HomePageComponent(this)
                     Portfolio -> PortfolioComponent(this)

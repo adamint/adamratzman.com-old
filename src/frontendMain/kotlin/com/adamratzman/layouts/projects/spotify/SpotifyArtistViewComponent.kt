@@ -6,11 +6,13 @@ import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyCategoryViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.setTitle
 import com.adamratzman.spotify.models.Album
 import com.adamratzman.spotify.models.Artist
 import com.adamratzman.spotify.models.Track
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
+import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.*
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.core.UNIT.px
@@ -27,6 +29,7 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
         div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
             GlobalScope.launch {
                 api.artists.getArtist(artistId)?.let { artist ->
+                    setTitle("View Spotify Artist: ${artist.name}")
                     val data = listOf<Deferred<Any>>(
                         async { api.artists.getArtistAlbums(artist.id).getAllItemsNotNull() },
                         async { api.artists.getArtistTopTracks(artist.id) },
@@ -100,6 +103,8 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                         }
                     }
                 } ?: NotFoundComponent(this@div)
+
+                removeLoadingSpinner(state)
             }
         }
 

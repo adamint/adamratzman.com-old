@@ -23,7 +23,7 @@ repositories {
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://jitpack.io") }
- //   mavenLocal()
+  //  mavenLocal()
 }
 
 // Versions
@@ -110,7 +110,6 @@ kotlin {
             dependencies {
                 implementation("pl.treksoft:kvision:$kvisionVersion")
                 implementation("pl.treksoft:kvision-bootstrap:$kvisionVersion")
-                // implementation(npm("uikit", "3.6.5"))
                 // implementation("pl.treksoft:kvision-bootstrap-css:$kvisionVersion")
                 implementation("pl.treksoft:kvision-bootstrap-select:$kvisionVersion")
                 implementation("pl.treksoft:kvision-bootstrap-datetime:$kvisionVersion")
@@ -129,7 +128,7 @@ kotlin {
                 implementation("pl.treksoft:kvision-pace:$kvisionVersion")
                 implementation("pl.treksoft:kvision-toast:$kvisionVersion")
                 implementation("pl.treksoft:kvision-moment:$kvisionVersion")
-                implementation("com.adamratzman:spotify-api-kotlin-core:3.4.0")
+                implementation("com.adamratzman:spotify-api-kotlin-core:3.4.03")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }

@@ -1,6 +1,8 @@
 package com.adamratzman.utils
 
+import com.adamratzman.database.SiteState
 import com.adamratzman.database.isDevServer
+import kotlinx.browser.document
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Tag
 import pl.treksoft.kvision.html.link
@@ -44,4 +46,8 @@ fun Tag.noBorderRounding() {
 fun Widget.unfocus() {
     hide()
     show()
+}
+
+fun removeLoadingSpinner(state: SiteState) {
+    state.loadingDiv?.removeAll()
 }

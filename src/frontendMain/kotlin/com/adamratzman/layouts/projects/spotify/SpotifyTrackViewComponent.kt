@@ -3,8 +3,10 @@ package com.adamratzman.layouts.projects.spotify
 import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
+import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.treksoft.kvision.core.Container
@@ -16,8 +18,9 @@ class SpotifyTrackViewComponent(trackId: String, parent: Container) : SiteStatef
     guardValidSpotifyApi(state) { api ->
         div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom, TextCenter)) {
             GlobalScope.launch {
-                println(trackId)
                 api.tracks.getTrack(trackId)?.let { track ->
+                    setTitle("View Spotify Track: ${track.name} by ${track.artists.joinToString(", ") { it.name }} ")
+
                     h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
                         +"Track "
                         bold(content = track.name)
@@ -42,6 +45,8 @@ class SpotifyTrackViewComponent(trackId: String, parent: Container) : SiteStatef
                         classes = nameSetOf(MarginAuto)
                     )
                 } ?: NotFoundComponent(this@div)
+
+                removeLoadingSpinner(state)
             }
         }
 

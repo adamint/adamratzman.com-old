@@ -111,6 +111,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     IconAttribute("uk-icon"),
     UkTooltipAttribute("uk-tooltip"),
     UkGridAttribute("uk-grid"),
+    UkSpinnerAttribute("uk-spinner"),
 
     // Text
     TextCenter("uk-text-center"),
@@ -145,7 +146,6 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     UkCardDefault("uk-card-default"),
     UkCardBody("uk-card-body"),
     UkCardTitle("uk-card-title"),
-
 
     ;
 

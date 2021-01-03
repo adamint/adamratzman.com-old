@@ -2,7 +2,7 @@ package com.adamratzman.services
 
 import pl.treksoft.kvision.remote.ServiceException
 
-actual class BaseConversionService : IBaseConversionService {
+actual open class BaseConversionService : IBaseConversionService {
     override suspend fun convert(baseFrom: Int, baseTo: Int, numberAsString: String): String {
         return try {
             numberAsString.toLong(baseFrom).toString(baseTo)

@@ -1,6 +1,7 @@
 package com.adamratzman.layouts.projects.spotify
 
 import com.adamratzman.database.SiteManager
+import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyGenreListPage
 import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.layouts.projects.goBackToProjectHome
@@ -440,7 +441,6 @@ private class SearchFilterTypeComponent<T>(
 private class RecommendedPlaylistComponent(formInputs: AssociatedFormInputs, recommendationResponse: RecommendationResponse, parent: Container) :
     SiteStatefulComponent(parent = parent, buildStatefulComponent = {
         parent.removeAll()
-        println(recommendationResponse)
         h3("Recommended Tracks (${recommendationResponse.tracks.size})")
         p {
             link(label = "Create your playlist →", classes = nameSetOf("link-color", "link-color")) {
@@ -466,7 +466,14 @@ private class RecommendedPlaylistComponent(formInputs: AssociatedFormInputs, rec
                     track,
                     this,
                     target = "_blank",
-                    bottomComponent = { span(content = track.artists.joinToString(", ") { it.name }) })
+                    bottomComponent = {
+                        span {
+                            track.artists.forEachIndexed { i, artist ->
+                                link(label = artist.name, url = SpotifyArtistViewPage(artist.id).devOrProdUrl(), classes = nameSetOf("black"))
+                                if (i != track.artists.lastIndex) +", "
+                            }
+                        }
+                    })
             }
         }
 

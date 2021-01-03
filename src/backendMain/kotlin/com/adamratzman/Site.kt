@@ -58,7 +58,7 @@ fun Application.module() {
         }
 
         status(HttpStatusCode.NotFound) {
-            println(call.request.path())
+            println("Not found: ${call.request.path()}")
             call.respond(this.context.resolveResource("assets/index.html")!!)
             // call.respondFile(File("/assets/index.html"))
 

@@ -34,6 +34,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
 import org.w3c.dom.set
+import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.state.ObservableList
 import pl.treksoft.kvision.state.observableListOf
 import pl.treksoft.navigo.Navigo
@@ -87,27 +88,30 @@ data class SiteState(
                 refreshTokenProducer = { throw IllegalStateException("API Token has expired and cannot be refreshed.") }
             }
         }
+
+    var loadingDiv: Div? = null
 }
 
-sealed class View(val name: String, val url: String) {
+sealed class View(val name: String, val url: String, val needsInitialLoadingSpinner: Boolean = false) {
     object Home : View("Home", "/")
     object NotFound : View("404 Not Found", "/404")
     object ProjectsHome : View("Online Projects", "/projects")
     object Portfolio : View("Portfolio", "/portfolio")
     object ContactMe : View("Contact Me", "/contact")
     object FrenchLearningPage : View("French Resources", "/projects/french")
-    object BaseConversionPage : View("Base Conversion Tool", "/projects/conversion/base-converter")
+    object BaseConversionPage : View("Base Conversion Tool", "/projects/conversion/base-converter", needsInitialLoadingSpinner = true)
     object UrlShortenerHomePage : View("URL Shortener", "/projects/shortener")
     data class UrlShortenerViewSingleShortenedLink(val path: String) : View(
         "URL Shortener - /$path",
-        "/projects/shortener/info/$path"
+        "/projects/shortener/info/$path",
+        needsInitialLoadingSpinner = true
     ) {
         companion object {
             val regExp = RegExp("/projects/shortener/info/(.+)")
         }
     }
 
-    object UrlShortenerViewAllShortenedLinks : View("All Shortened URLs", "/projects/shortener/all")
+    object UrlShortenerViewAllShortenedLinks : View("All Shortened URLs", "/projects/shortener/all", needsInitialLoadingSpinner = true)
     data class UrlShortenerRedirectToShortenedLink(val path: String) : View(
         "URL Shortener - Redirecting from $path",
         "/u/$path"
@@ -117,28 +121,31 @@ sealed class View(val name: String, val url: String) {
         }
     }
 
-    object ArbitraryPrecisionCalculatorPage : View("Calculator", "/projects/calculator")
+    object ArbitraryPrecisionCalculatorPage : View("Calculator", "/projects/calculator", needsInitialLoadingSpinner = true)
     object SpotifyPlaylistGeneratorPage : View("Spotify Music Recommender", "/projects/spotify/recommend")
-    object SpotifyGenreListPage : View("All Spotify Genres", "/projects/spotify/genres/list")
-    data class SpotifyTrackViewPage(val trackId: String) : View("Track Details", "/projects/spotify/tracks-view/$trackId") {
+    object SpotifyGenreListPage : View("All Spotify Genres", "/projects/spotify/genres/list", needsInitialLoadingSpinner = true)
+    data class SpotifyTrackViewPage(val trackId: String) :
+        View("Track Details", "/projects/spotify/tracks-view/$trackId", needsInitialLoadingSpinner = true) {
         companion object {
             val regExp = RegExp("/projects/spotify/tracks-view/(.+)")
         }
     }
 
-    data class SpotifyArtistViewPage(val artistId: String) : View("Artist Details", "/projects/spotify/artists-view/$artistId") {
+    data class SpotifyArtistViewPage(val artistId: String) :
+        View("Artist Details", "/projects/spotify/artists-view/$artistId", needsInitialLoadingSpinner = true) {
         companion object {
             val regExp = RegExp("/projects/spotify/artists-view/(.+)")
         }
     }
 
-    data class SpotifyCategoryViewPage(val categoryName: String) : View("View category: $categoryName", "/projects/spotify/categories-view/$categoryName") {
+    data class SpotifyCategoryViewPage(val categoryName: String) :
+        View("View category: $categoryName", "/projects/spotify/categories-view/$categoryName", needsInitialLoadingSpinner = true) {
         companion object {
             val regExp = RegExp("/projects/spotify/categories-view/(.+)")
         }
     }
 
-    object SpotifyCategoryListPage : View("Spotify Categories", "/projects/spotify/categories")
+    object SpotifyCategoryListPage : View("Spotify Categories", "/projects/spotify/categories", needsInitialLoadingSpinner = true)
 
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class

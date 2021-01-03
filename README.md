@@ -1,14 +1,17 @@
-## Gradle Tasks
+# adamratzman.com
+My personal site, built using Kotlin, HTML, and CSS (no JavaScript!). Frontend framework is KVision, backend is Ktor. 
+Publishable using docker (publish and run scripts inside the repository root).
 
-### Resource Processing
+### Gradle Tasks
+#### Resource Processing
 * generatePotFile - Generates a `src/frontendMain/resources/i18n/messages.pot` translation template file.
-### Compiling
+#### Compiling
 * compileKotlinFrontend - Compiles frontend sources.
 * compileKotlinBackend - Compiles backend sources.
-### Running
+#### Running
 * frontendRun - Starts a webpack dev server on port 3000
 * backendRun - Starts a dev server on port 8080
-### Packaging
+#### Packaging
 * frontendBrowserWebpack - Bundles the compiled js files into `build/distributions`
 * frontendJar - Packages a standalone "web" frontend jar with all required files into `build/libs/*.jar`
 * backendJar - Packages a backend jar with compiled source files into `build/libs/*.jar`

@@ -4,8 +4,10 @@ import com.adamratzman.database.View.SpotifyCategoryListPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.layouts.projects.goBackToProjectHome
+import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
+import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -20,12 +22,19 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
     guardValidSpotifyApi(state) { api ->
         GlobalScope.launch {
             if (!::allCategories.isInitialized) allCategories = api.browse.getCategoryList().getAllItemsNotNull()
+
+            if (categoryId !in allCategories.map { it.id }) {
+                NotFoundComponent(parent)
+                return@launch
+            }
+
             val playlistsForCategory =
                 api.browse.getPlaylistsForCategory(categoryId, limit = 10)
                     .map { simple -> async { simple?.toFullPlaylist()?.let { simple to it } } }
                     .awaitAll().filterNotNull()
 
             allCategories.find { it.id == categoryId }?.let { category ->
+                setTitle("View Spotify Category: ${category.name}")
                 div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
                     div(classes = nameSetOf(TextCenter, MarginMediumBottom)) {
                         h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
@@ -77,6 +86,8 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                     }
                 }
             } ?: NotFoundComponent(parent)
+
+            removeLoadingSpinner(state)
         }
     }
 })

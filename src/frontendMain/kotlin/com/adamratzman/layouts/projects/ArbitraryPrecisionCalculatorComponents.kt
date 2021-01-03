@@ -1,8 +1,7 @@
 package com.adamratzman.layouts.projects
 
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.layouts.setTitle
-import com.adamratzman.services.CalculatorService
+import com.adamratzman.services.CalculatorServiceFrontend
 import com.adamratzman.services.defaultCalculatorPrecision
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
@@ -21,7 +20,7 @@ import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.modal.Modal
 import pl.treksoft.kvision.remote.ServiceException
 
-class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { _ ->
+class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         h2(content = "Arbitrary* Precision Calculator", classes = nameSetOf(MarginRemoveBottom, TextCenter, "moderate-bold"))
         p(classes = nameSetOf(MarginSmallTop, MarginSmallBottom, TextCenter, "light")) {
@@ -29,8 +28,8 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
         }
         GlobalScope.launch {
             val initialRadix = 10
-            val constants = Calculator.getCalculatorConstants(defaultCalculatorPrecision, initialRadix)
-            val functionsGroups = Calculator.getCalculatorFunctions()
+            val constants = CalculatorServiceFrontend.getCalculatorConstants(defaultCalculatorPrecision, initialRadix)
+            val functionsGroups = CalculatorServiceFrontend.getCalculatorFunctions()
 
             p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
                 +"See what "
@@ -105,81 +104,72 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
 
                 div {
                     addBootstrap()
-                        formPanel<CalculatorParametersForm>(classes = nameSetOf(MarginMediumBottom.asString)) {
-                            add(
-                                    CalculatorParametersForm::input,
-                                    text(label = "Input").withPlaceholderAndMaxWidth(100 to perc, "Type a math expression here.."),
-                                    required = true,
-                                    requiredMessage = "Expression input is required.",
-                                    validatorMessage = { "Please enter a math expression." }
-                            ) { input -> input.getValue()?.isNotBlank() == true }
+                    formPanel<CalculatorParametersForm>(classes = nameSetOf(MarginMediumBottom.asString)) {
+                        add(
+                            CalculatorParametersForm::input,
+                            text(label = "Input").withPlaceholderAndMaxWidth(100 to perc, "Type a math expression here.."),
+                            required = true,
+                            requiredMessage = "Expression input is required.",
+                            validatorMessage = { "Please enter a math expression." }
+                        ) { input -> input.getValue()?.isNotBlank() == true }
 
-                            button("Calculate", classes = nameSetOf(MarginSmallBottom.asString)) {
-                                onClick {
-                                    if (this@formPanel.validate()) {
-                                        val data = this@formPanel.getData()
-                                        GlobalScope.launch {
-                                            try{
-                                                val input = data.input!!
-                                                val result = Calculator.calculate(input, data.precision, data.radix, data.useRadians)
-                                                if (results == 0) computationResults.removeAll()
-                                                results++
-                                                output.h4(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, "light")) {
-                                                    +"$input: $result"
-                                                    if (data.radix != 10) +" (base ${data.radix})"
-                                                }
-                                            } catch (exception: ServiceException) {
-                                                exception.showDefaultErrorToast("Error evaluating expression")
+                        button("Calculate", classes = nameSetOf(MarginSmallBottom.asString)) {
+                            onClick {
+                                if (this@formPanel.validate()) {
+                                    val data = this@formPanel.getData()
+                                    GlobalScope.launch {
+                                        try {
+                                            val input = data.input!!
+                                            val result =
+                                                CalculatorServiceFrontend.calculate(input, data.precision, data.radix, data.useRadians)
+                                            if (results == 0) computationResults.removeAll()
+                                            results++
+                                            output.h4(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, "light")) {
+                                                +"$input: $result"
+                                                if (data.radix != 10) +" (base ${data.radix})"
                                             }
+                                        } catch (exception: ServiceException) {
+                                            exception.showDefaultErrorToast("Error evaluating expression")
                                         }
                                     }
                                 }
                             }
+                        }
 
-                            add(
-                                    CalculatorParametersForm::radix,
-                                    spinner(label = "Result radix (Base)", value = 10, min = 2, max = 36) {
-                                        style { width = 100 to px }
-                                    }
-                            )
+                        add(
+                            CalculatorParametersForm::radix,
+                            spinner(label = "Result radix (Base)", value = 10, min = 2, max = 36) {
+                                style { width = 100 to px }
+                            }
+                        )
 
-                            add(
-                                    CalculatorParametersForm::precision,
-                                    spinner(label = "Precision", min = 1, max = 1000) {
-                                        style {
-                                            width = 100 to px
-                                            placeholder = defaultCalculatorPrecision.toString()
-                                        }
-                                    }
-                            )
+                        add(
+                            CalculatorParametersForm::precision,
+                            spinner(label = "Precision", min = 1, max = 1000) {
+                                style {
+                                    width = 100 to px
+                                    placeholder = defaultCalculatorPrecision.toString()
+                                }
+                            }
+                        )
 
-                            add(
-                                    CalculatorParametersForm::useRadians,
-                                    checkBox(label = "Use Radians?")
-                            )
+                        add(
+                            CalculatorParametersForm::useRadians,
+                            checkBox(label = "Use Radians?")
+                        )
                     }
                 }
             }
+
+            removeLoadingSpinner(state)
         }
     }
 })
 
-object Calculator {
-    private val calculatorService = CalculatorService()
-
-    suspend fun getCalculatorFunctions() = calculatorService.getCalculatorFunctions()
-            .groupBy { it.type }
-            .map { (type, mathFunctions) -> type to mathFunctions.sortedBy { it.token } }
-            .toMap()
-
-    suspend fun getCalculatorConstants(precision: Int, radix: Int) = calculatorService.getCalculatorConstants(precision, radix)
-    suspend fun calculate(input: String, precision: Int, radix: Int, useRadians: Boolean) = calculatorService.calculate(input, precision, radix, useRadians)
-}
-
 @Serializable
 data class CalculatorParametersForm(
-        val input: String? = null,
-        val precision: Int = defaultCalculatorPrecision,
-        val radix: Int = 10,
-        val useRadians: Boolean = false
+    val input: String? = null,
+    val precision: Int = defaultCalculatorPrecision,
+    val radix: Int = 10,
+    val useRadians: Boolean = false
 )
