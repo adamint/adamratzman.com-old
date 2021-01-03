@@ -10,7 +10,7 @@ fi
 if [[ $2 == "" ]]; then
   TAG="latest"
 else
-  TAG="$1"
+  TAG="$2"
 fi
 
 docker rm adamratzman-site --force
