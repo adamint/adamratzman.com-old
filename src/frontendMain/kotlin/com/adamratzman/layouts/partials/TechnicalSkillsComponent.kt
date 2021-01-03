@@ -10,7 +10,7 @@ import pl.treksoft.kvision.html.h3
 import pl.treksoft.kvision.html.h4
 
 class TechnicalSkillsComponent(parent:Container) : SiteStatefulComponent(parent=parent, buildStatefulComponent = {
-    div(className = MarginMediumBottom.asString) {
+    div(classes = nameSetOf(MarginMediumBottom.asString)) {
         id = "technical-skills"
 
         h3(content = "Technical Skills", classes = nameSetOf("bold", "solid-border-sm", MarginSmallBottom))
@@ -24,7 +24,7 @@ class TechnicalSkillsComponent(parent:Container) : SiteStatefulComponent(parent=
             val section = pair.first
             val skillsInSection = pair.second
 
-            h4(className = MarginRemoveVertical.asString) {
+            h4(classes = nameSetOf(MarginRemoveVertical.asString)) {
                 bold("$section:")
                 +" $skillsInSection"
             }

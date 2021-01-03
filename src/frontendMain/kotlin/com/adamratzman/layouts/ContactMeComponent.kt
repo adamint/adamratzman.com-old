@@ -8,8 +8,7 @@ import pl.treksoft.kvision.core.style
 import pl.treksoft.kvision.html.*
 
 class ContactMeComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
-    setTitle("Contact Me")
-    div(classes = nameSetOf("left-20", "right-20", MarginXLargeTop, PaddingSmall, PaddingRemoveHorizontal)) {
+    div(classes = nameSetOf(WidthTwoThirds, MarginAuto, MarginMediumTop, PaddingSmall, PaddingRemoveHorizontal)) {
         h2(classes = nameSetOf(MarginRemoveBottom, "light")) {
             style { fontSize = 2.5 to rem }
             +"So, you'd like to contact me. Here's how."
@@ -17,18 +16,18 @@ class ContactMeComponent(parent: Container) : SiteStatefulComponent(parent = par
 
         p(classes = nameSetOf(MarginMediumBottom, MarginSmallTop, "rem-1-2")) {
             +"Recruiters, you may be interested in my "
-            link(label = "LinkedIn →", url = "https://linkedin.com/in/aratzman", className = "light")
+            link(label = "LinkedIn →", url = "https://linkedin.com/in/aratzman", classes = nameSetOf("light"))
         }
 
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "Personal/Professional Inquiries", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
-            h4(className = MarginRemoveVertical.asString) {
+            h4(classes = nameSetOf(MarginRemoveVertical.asString)) {
                 +"My skills include application and web development, as well as DevOps and technical writing"
                 +"I am currently "
-                span(content = "not open", className = "dashed")
+                span(content = "not open", classes = nameSetOf("dashed"))
                 +" to considering job and/or business opportunities related to these."
             }
-            h4(className = MarginSmallTop.asString) {
+            h4(classes = nameSetOf(MarginSmallTop.asString)) {
                 +"Please contact me by email at "
                 link(label = "adam@adamratzman.com", url = "mailto:adam@adamratzman.com")
                 +"."

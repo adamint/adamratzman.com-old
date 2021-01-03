@@ -40,14 +40,20 @@ enum class UikitName(val cssClassOrAttributeName: String) {
 
 
     // Width
+    WidthOneOne("uk-width-1-1"),
     WidthOneHalf("uk-width-1-2"),
     WidthOneThird("uk-width-1-3"),
     WidthOneFourth("uk-width-1-4"),
+    WidthThreeFourths("uk-width-3-4"),
+    WidthTwoThirds("uk-width-2-3"),
     WidthAuto("uk-width-auto"),
+    WidthExpand("uk-width-expand"),
 
     // Height
     HeightMedium("uk-height-medium"),
 
+    // Align
+    UkAlignCenter("uk-align-center"),
 
     // NAVBAR
     NavbarContainer("uk-navbar-container"),
@@ -104,6 +110,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     CloseAttribute("uk-close"),
     IconAttribute("uk-icon"),
     UkTooltipAttribute("uk-tooltip"),
+    UkGridAttribute("uk-grid"),
 
     // Text
     TextCenter("uk-text-center"),
@@ -115,8 +122,37 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     // Input
     UkInput("uk-input"),
     UkSelect("uk-select"),
+    UkRange("uk-range"),
+
+    // UK headers
+    UkH1("uk-h1"),
+    UkH2("uk-h2"),
+    UkH3("uk-h3"),
+    UkH4("uk-h4"),
+    UkH5("uk-h5"),
+    UkH6("uk-h6"),
+
+    // Grid
+    GridCollapse("uk-grid-collapse"),
+    GridSmall("uk-grid-small"),
+
+    // Child width
+    ChildWidthExpand("uk-child-width-expand"),
+    ChildWidthOneThird("uk-child-width-1-3"),
+
+    // Card
+    UkCard("uk-card"),
+    UkCardDefault("uk-card-default"),
+    UkCardBody("uk-card-body"),
+    UkCardTitle("uk-card-title"),
+
+
     ;
 
     override fun toString(): String = cssClassOrAttributeName
+
     val asString get() = toString()
+    val small get() = "$asString@s"
+    val medium get() = "$asString@m"
+    val large get() = "$asString@l"
 }

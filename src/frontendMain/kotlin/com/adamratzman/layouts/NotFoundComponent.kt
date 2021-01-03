@@ -13,24 +13,21 @@ import pl.treksoft.kvision.html.h4
 import pl.treksoft.kvision.html.iframe
 
 class NotFoundComponent(parent: Container) : SiteStatefulComponent(parent = parent,buildStatefulComponent = {
-    setTitle("404 Not Found")
-
-    div(classes = nameSetOf(UkSection, MarginXlargeLeft, MarginXlargeRight)) {
-        div(className = TextCenter.asString) {
+    div(classes = nameSetOf(UkSection, WidthTwoThirds, MarginAuto)) {
+        div(classes = nameSetOf(TextCenter.asString)) {
             style {
                 background = Background(color = getRandomColor())
             }
 
-            div(className = "white") {
+            div(classes = nameSetOf("white")) {
                 h1(classes = nameSetOf("super-bold", MarginSmallBottom)) {
                     +"Oh no, page not found!"
                 }
-                h4(className = "moderate-bold") {
+                h4(classes = nameSetOf("moderate-bold")) {
                     +"Looks like you need some help"
                 }
 
-                iframe(src = "https://www.youtube.com/embed/dQw4w9WgXcQ", iframeWidth = 560,
-                        iframeHeight = 315, className = MarginSmallBottom.asString) {
+                iframe(src = "https://www.youtube.com/embed/dQw4w9WgXcQ", iframeHeight = 200, classes = nameSetOf(MarginSmallBottom.asString)) {
                     addAttributes("allow" to "autoplay; encrypted-media", "allowfullscreen" to "")
                 }
             }

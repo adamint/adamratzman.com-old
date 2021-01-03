@@ -11,26 +11,24 @@ import pl.treksoft.kvision.core.style
 import pl.treksoft.kvision.html.*
 
 class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
-    setTitle("Home")
-
-    div(classes = nameSetOf(MarginMediumTop, "left-20", "right-20")) {
+    div(classes = nameSetOf(MarginMediumTop, WidthTwoThirds, MarginAuto)) {
         h2(classes = nameSetOf(MarginRemoveBottom, "light")) {
             style { fontSize = 2.5 to rem }
             +"Hi. I'm "
-            span(content = "Adam Ratzman", className = "dashed")
+            span(content = "Adam Ratzman", classes = nameSetOf("dashed"))
             +", a junior at Indiana University Bloomington"
         }
         p(classes = nameSetOf(MarginMediumBottom, MarginSmallTop, "rem-1-2")) {
             +"You can read below to learn more about me or see some of my "
-            link(label = "interactive projects →", url = "/interactives".toDevOrProdUrl(), className = "light")
+            link(label = "interactive projects →", url = "/interactives".toDevOrProdUrl(), classes = nameSetOf("light"))
         }
 
         // about
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "About me", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
             h4(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, "experience-width")) {
                 +"I'm a "
-                span(content = "senior*", className = "dashed") {
+                span(content = "senior*", classes = nameSetOf("dashed")) {
                     setAttribute(
                             "uk-tooltip",
                             """title: My class status and graduation date are slightly complicated. 
@@ -52,7 +50,7 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
             }
         }
         // education
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "Education", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
 
             state.educationExperience.forEach { experienceWrapper ->
@@ -61,7 +59,7 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
         }
 
         // work experience
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "Work Experience", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
 
             state.workExperience.forEach { experienceWrapper ->
@@ -73,7 +71,7 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
         TechnicalSkillsComponent(this)
 
         // selected projects
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "Selected Projects", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
 
             state.selectedProjects.forEach { experienceWrapper ->
@@ -82,7 +80,7 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
         }
 
         // student involvement
-        div(className = MarginMediumBottom.asString) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             h3(content = "Student Involvement", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
 
             state.studentInvolvement.forEach { experienceWrapper ->

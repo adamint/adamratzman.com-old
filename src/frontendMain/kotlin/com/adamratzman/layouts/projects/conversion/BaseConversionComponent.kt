@@ -19,7 +19,6 @@ import pl.treksoft.kvision.panel.hPanel
 import pl.treksoft.kvision.remote.ServiceException
 
 class BaseConversionComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
-    setTitle("Base Converter")
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         h2(content = "Base Conversion Tool", classes = nameSetOf(MarginRemoveBottom, TextCenter, "moderate-bold"))
         p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
@@ -27,7 +26,7 @@ class BaseConversionComponent(parent: Container) : SiteStatefulComponent(parent 
         }
 
         div(classes = nameSetOf(MarginAuto, MarginSmallBottom, WidthOneHalf)) {
-            h3(content = "I want to convert...", className = MarginMediumBottom.asString)
+            h3(content = "I want to convert...", classes = nameSetOf(MarginMediumBottom.asString))
 
             val inputWidths = 160 to px
             div {
@@ -35,7 +34,7 @@ class BaseConversionComponent(parent: Container) : SiteStatefulComponent(parent 
                 GlobalScope.launch {
                     val range = BaseConverter.getBasesRange()
                     lateinit var outputElement: Tag
-                    formPanel<BaseConverterForm>(className = MarginMediumBottom.asString) {
+                    formPanel<BaseConverterForm>(classes = nameSetOf(MarginMediumBottom.asString)) {
                         add(
                                 BaseConverterForm::numberAsString,
                                 text(label = "Enter number..").withPlaceholderAndMaxWidth(inputWidths, "Number"),

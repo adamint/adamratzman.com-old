@@ -14,8 +14,8 @@ import pl.treksoft.kvision.html.link
 import pl.treksoft.kvision.html.p
 
 class FooterComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
-    div(className = TextCenter.asString) {
-        div(className = MarginMediumBottom.asString) {
+    div(classes = nameSetOf(TextCenter.asString)) {
+        div(classes = nameSetOf(MarginMediumBottom.asString)) {
             val links = listOf(
                     "About" to "/",
                     "Interactive Projects" to "/interactives",
@@ -24,7 +24,7 @@ class FooterComponent(parent: Container) : SiteStatefulComponent(parent = parent
             ).map { it.first to it.second.toDevOrProdUrl() }
 
             links.forEach { (name, url) ->
-                link(label = "", url = url, classes = nameSetOf("black", MarginMediumRight)) {
+                link(label = "", url = url, classes = nameSetOf("black", MarginMediumRight, "link-color")) {
                     bold(content = name)
                 }
             }
@@ -47,7 +47,7 @@ class FooterComponent(parent: Container) : SiteStatefulComponent(parent = parent
             }
         }
 
-        div(className=MarginSmallTop.asString) {
+        div(classes = nameSetOf(MarginSmallTop.asString)) {
             p {
                 +"Adam Ratzman - 2020"
             }

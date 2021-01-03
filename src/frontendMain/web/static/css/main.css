@@ -3,13 +3,14 @@
         size: 330mm 427mm;
         margin: 14mm;
     }
+
     .container {
         width: 1170px;
     }
 }
 
 #toast-container > div {
-    opacity:1;
+    opacity: 1;
 }
 
 html {
@@ -139,6 +140,10 @@ a, a:hover {
     position: absolute;
 }
 
+.block {
+    display: block;
+}
+
 .checked-list {
     list-style: none;
 }
@@ -215,4 +220,42 @@ ul.centered {
 
 .overflow-scroll-y {
     overflow-y: scroll;
+}
+
+.width-1-10 {
+    width: 10%;
+}
+
+.padding-remove-l {
+    padding-left: 0;
+}
+
+/* medium width and up */
+@media only screen and (min-width: 960px) {
+    .width-1-10\@m {
+        width: 10%;
+    }
+
+    .margin-right-10\@m {
+        margin-right: 10%
+    }
+
+    .margin-left-10\@m {
+        margin-left: 10%;
+    }
+
+    .margin-left-30\@m {
+        margin-left: 30%;
+    }
+
+    .width-1-2\@m {
+        width: 50%;
+    }
+}
+
+/* small width */
+@media only screen and (max-width: 640px) {
+    .padding-remove-l\@s {
+        padding-left: 0;
+    }
 }

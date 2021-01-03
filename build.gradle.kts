@@ -10,7 +10,7 @@ plugins {
     id("kvision") version kvisionVersion
 }
 
-version = "1.0.0-SNAPSHOT"
+version = "release"
 group = "com.adamratzman"
 
 repositories {
@@ -23,7 +23,7 @@ repositories {
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://jitpack.io") }
-   // mavenLocal()
+ //   mavenLocal()
 }
 
 // Versions
@@ -35,14 +35,14 @@ val jdbcNamedParametersVersion: String by project
 val mysqlConnectorVersion: String by project
 
 val webDir = file("src/frontendMain/web")
-val mainClassName = "io.ktor.server.netty.EngineMain"
+val mainClassName = "com.adamratzman.SiteKt"
 
 kotlin {
     jvm("backend") {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
-                freeCompilerArgs = listOf("-Xjsr305=strict")
+                freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
             }
         }
     }
@@ -117,6 +117,7 @@ kotlin {
                 implementation("pl.treksoft:kvision-bootstrap-spinner:$kvisionVersion")
                 implementation("pl.treksoft:kvision-bootstrap-upload:$kvisionVersion")
                 implementation("pl.treksoft:kvision-bootstrap-dialog:$kvisionVersion")
+                implementation("pl.treksoft:kvision-bootstrap-typeahead:$kvisionVersion")
                 implementation("pl.treksoft:kvision-fontawesome:$kvisionVersion")
                 implementation("pl.treksoft:kvision-i18n:$kvisionVersion")
                 implementation("pl.treksoft:kvision-richtext:$kvisionVersion")
@@ -128,7 +129,8 @@ kotlin {
                 implementation("pl.treksoft:kvision-pace:$kvisionVersion")
                 implementation("pl.treksoft:kvision-toast:$kvisionVersion")
                 implementation("pl.treksoft:kvision-moment:$kvisionVersion")
-                implementation("com.adamratzman:spotify-api-kotlin-core:3.3.0")
+                implementation("com.adamratzman:spotify-api-kotlin-core:3.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
             kotlin.srcDir("build/generated-src/frontend")

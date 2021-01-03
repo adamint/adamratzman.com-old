@@ -70,9 +70,13 @@ object SiteManager {
     fun shortenerViewAllShortenedLinks() = siteStore.dispatch(LoadUrlShortenerViewAllShortenedLinks)
     fun shortenerRedirectToShortenedLink(path: String) = siteStore.dispatch(LoadUrlShortenerRedirectToShortenedLink(path))
     fun calculatorPage() = siteStore.dispatch(LoadArbitraryPrecisionCalculatorPage)
-    fun spotifyRecommenderPage() = siteStore.dispatch(LoadSpotifyRecommenderPage)
-    fun spotifyRecommenderUriHelpPage() = siteStore.dispatch(LoadSpotifyRecommenderUriHelpPage)
+    fun spotifyPlaylistGeneratorPage() = siteStore.dispatch(LoadSpotifyPlaylistGeneratorPage)
     fun spotifyGenreListPage() = siteStore.dispatch(LoadSpotifyGenreListPage)
+    fun CategoryViewPage(genre: String) = siteStore.dispatch(LoadSpotifyCategoryViewPage(genre))
+    fun artistViewPage(artistId: String) = siteStore.dispatch(LoadSpotifyArtistViewPage(artistId))
+    fun trackViewPage(trackId: String) = siteStore.dispatch(LoadSpotifyTrackViewPage(trackId))
+    fun spotifyCategoryListPage() = siteStore.dispatch(LoadSpotifyCategoryListPage)
+
     fun redirectToSpotifyAuthentication(parent: Container) {
         try {
             redirectBackUrl = window.location.href

@@ -39,7 +39,7 @@ abstract class AbstractCustomComponent<S>(
 ) : Div(content, rich, align, classes) {
     init {
         bindState?.let {
-            bind(it, true) { state -> buildStatefulComponent?.invoke(this, state) }
+            bind(it, true) { state -> buildStatefulComponent?.invoke(this, state); if (state is SiteState) setTitle(state.view.name) }
         } ?: buildComponent?.invoke(this)
         parent?.add(this)
     }

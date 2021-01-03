@@ -7,7 +7,7 @@ import com.adamratzman.layouts.partials.FooterComponent
 import com.adamratzman.layouts.partials.HeaderComponent
 import com.adamratzman.layouts.projects.*
 import com.adamratzman.layouts.projects.conversion.BaseConversionComponent
-import com.adamratzman.layouts.projects.spotify.SpotifyGenreListComponent
+import com.adamratzman.layouts.projects.spotify.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.treksoft.kvision.Application
@@ -42,9 +42,12 @@ class App : Application() {
                     UrlShortenerViewAllShortenedLinks -> UrlShortenerViewAllShortenedLinksComponent(this)
                     is UrlShortenerRedirectToShortenedLink -> UrlShortenerRedirectToShortenedLinkComponent(this)
                     ArbitraryPrecisionCalculatorPage -> ArbitraryPrecisionCalculatorComponent(this)
-                    SpotifyRecommenderPage -> TODO()
-                    SpotifyRecommenderUriHelpPage -> TODO()
+                    SpotifyPlaylistGeneratorPage -> SpotifyPlaylistGeneratorComponent(this)
                     SpotifyGenreListPage -> SpotifyGenreListComponent(this)
+                    is SpotifyTrackViewPage -> SpotifyTrackViewComponent(state.view.trackId, this)
+                    is SpotifyCategoryViewPage -> SpotifyCategoryViewComponent(state.view.categoryName, this)
+                    is SpotifyArtistViewPage -> SpotifyArtistViewComponent(state.view.artistId, this)
+                    SpotifyCategoryListPage -> SpotifyCategoryListComponent(this)
                 }
 
             }

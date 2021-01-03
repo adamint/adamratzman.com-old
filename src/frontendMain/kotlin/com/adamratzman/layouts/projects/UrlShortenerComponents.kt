@@ -3,7 +3,6 @@ package com.adamratzman.layouts.projects
 import com.adamratzman.database.SiteManager
 import com.adamratzman.database.View.*
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.layouts.setTitle
 import com.adamratzman.services.*
 import com.adamratzman.services.ShortenedUrlDto
 import com.adamratzman.utils.*
@@ -25,7 +24,6 @@ import pl.treksoft.kvision.remote.ServiceException
 import kotlin.random.Random
 
 class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
-    setTitle("URL Shortener")
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         h2(content = "URL Shortener", classes = nameSetOf(MarginRemoveBottom, TextCenter, "moderate-bold"))
         p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
@@ -40,7 +38,7 @@ class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(p
                 h3(content = "Shorten a URL")
 
                 val inputWidths = 100 to perc
-                formPanel<ShortenedUrlDto>(className = MarginMediumBottom.asString) {
+                formPanel<ShortenedUrlDto>(classes = nameSetOf(MarginMediumBottom.asString)) {
                     add(
                             ShortenedUrlDto::url,
                             text(type = TextInputType.URL, label = "URL to shorten").withPlaceholderAndMaxWidth(inputWidths, "Enter URL here"),
@@ -79,7 +77,7 @@ class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(p
                 }
 
                 h3(content = "Get info for a shortened URL")
-                formPanel<FindUrlShortenerInfoForm>(className = MarginMediumBottom.asString) {
+                formPanel<FindUrlShortenerInfoForm>(classes = nameSetOf(MarginMediumBottom.asString)) {
                     add(
                             FindUrlShortenerInfoForm::url,
                             text(type = TextInputType.URL, label = "Shortened link").withPlaceholderAndMaxWidth(75 to perc, "Enter URL here"),
@@ -111,7 +109,7 @@ class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(p
 
             p {
                 +"See "
-                link(label = "all shortened links →", url = UrlShortenerViewAllShortenedLinks.devOrProdUrl())
+                link(label = "all shortened links →", url = UrlShortenerViewAllShortenedLinks.devOrProdUrl(), classes = nameSetOf("link-color"))
             }
 
         }
@@ -119,14 +117,12 @@ class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(p
 })
 
 class UrlShortenerViewAllShortenedLinksComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
-    setTitle("All Shortened URLs")
-
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         h2(content = "URL Shortener", classes = nameSetOf(MarginRemoveBottom, TextCenter, "moderate-bold"))
         p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
             goBackToProjectHome()
             +" or "
-            link(label = "go back →", url = UrlShortenerHomePage.devOrProdUrl())
+            link(label = "go back →", url = UrlShortenerHomePage.devOrProdUrl(), classes = nameSetOf("link-color"))
             +" to the shortener homepage."
         }
 
@@ -137,9 +133,9 @@ class UrlShortenerViewAllShortenedLinksComponent(parent: Container) : SiteStatef
                 GlobalScope.launch {
                     UrlShortener.getShortenedUrls().forEach { shortenedUrl ->
                         li {
-                            link(label = "/${shortenedUrl.path}", url = UrlShortenerViewSingleShortenedLink(shortenedUrl.path).devOrProdUrl())
+                            link(label = "/${shortenedUrl.path}", url = UrlShortenerViewSingleShortenedLink(shortenedUrl.path).devOrProdUrl(), classes = nameSetOf("link-color"))
                             +": leads to "
-                            link(label = shortenedUrl.url, url = shortenedUrl.url)
+                            link(label = shortenedUrl.url, url = shortenedUrl.url, classes = nameSetOf("link-color"))
                             +" (rickroll chance enabled: "
                             span(content = if (shortenedUrl.rickrollAllowed) "yes" else "no") {
                                 style { textDecoration = TextDecoration(line = TextDecorationLine.UNDERLINE) }
@@ -156,7 +152,6 @@ class UrlShortenerViewAllShortenedLinksComponent(parent: Container) : SiteStatef
 
 class UrlShortenerViewSingleShortenedLinkComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     state.view as UrlShortenerViewSingleShortenedLink
-    setTitle("Shortened Link - /${state.view.path}")
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         GlobalScope.launch {
             try {
@@ -166,7 +161,7 @@ class UrlShortenerViewSingleShortenedLinkComponent(parent: Container) : SiteStat
                 p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
                     goBackToProjectHome()
                     +" or "
-                    link(label = "go back →", url = UrlShortenerHomePage.devOrProdUrl())
+                    link(label = "go back →", url = UrlShortenerHomePage.devOrProdUrl(), classes = nameSetOf("link-color"))
                     +" to the shortener homepage."
                 }
 
@@ -174,17 +169,17 @@ class UrlShortenerViewSingleShortenedLinkComponent(parent: Container) : SiteStat
 
                     h4(classes = nameSetOf(MarginMediumBottom, "light")) {
                         +"URL: "
-                        link(label = "${SiteManager.domain}$urlPath", url = urlPath)
+                        link(label = "${SiteManager.domain}$urlPath", url = urlPath, classes = nameSetOf("link-color"))
                     }
 
                     div {
                         h3(classes = nameSetOf(MarginRemoveBottom, "moderate-bold")) {
                             +"Links to: "
-                            link(label = shortenedUrl.url, url = shortenedUrl.url)
+                            link(label = shortenedUrl.url, url = shortenedUrl.url, classes = nameSetOf("link-color"))
                         }
                         h3(classes = nameSetOf(MarginRemoveBottom, MarginRemoveTop, "moderate-bold")) {
                             +"Path: "
-                            link(label = urlPath, url = urlPath)
+                            link(label = urlPath, url = urlPath, classes = nameSetOf("link-color"))
                         }
                         h3(classes = nameSetOf(MarginRemoveTop, "moderate-bold")) {
                             +"Rickroll chance: "

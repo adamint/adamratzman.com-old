@@ -1,6 +1,8 @@
 package com.adamratzman.database
 
 import com.adamratzman.database.SiteAction.*
+import com.adamratzman.database.SiteManager.CategoryViewPage
+import com.adamratzman.database.SiteManager.artistViewPage
 import com.adamratzman.database.SiteManager.baseConverterPage
 import com.adamratzman.database.SiteManager.calculatorPage
 import com.adamratzman.database.SiteManager.contactPage
@@ -14,12 +16,12 @@ import com.adamratzman.database.SiteManager.shortenerHomePage
 import com.adamratzman.database.SiteManager.shortenerRedirectToShortenedLink
 import com.adamratzman.database.SiteManager.shortenerViewAllShortenedLinks
 import com.adamratzman.database.SiteManager.shortenerViewShortenedLink
+import com.adamratzman.database.SiteManager.spotifyCategoryListPage
 import com.adamratzman.database.SiteManager.spotifyGenreListPage
-import com.adamratzman.database.SiteManager.spotifyRecommenderPage
-import com.adamratzman.database.SiteManager.spotifyRecommenderUriHelpPage
+import com.adamratzman.database.SiteManager.spotifyPlaylistGeneratorPage
+import com.adamratzman.database.SiteManager.trackViewPage
 import com.adamratzman.database.View.*
 import com.adamratzman.layouts.projects.spotify.spotifyClientId
-import com.adamratzman.layouts.projects.spotify.spotifyRedirectUri
 import com.adamratzman.models.*
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.models.Token
@@ -49,19 +51,19 @@ class NavbarPage(val name: String, val url: String, val icon: String? = null, va
 
 // pages to their icons
 val defaultAccessibleNavbarPages: List<NavbarPage> = listOf(
-        NavbarPage(Home),
-        NavbarPage(ProjectsHome),
-        NavbarPage(Portfolio),
-        NavbarPage("Resume", "/static/files/resume.pdf"),
-        NavbarPage("Github", "https://github.com/adamint", "/static/icons/mbr/mbri-github.svg"),
-        NavbarPage(ContactMe, "/static/icons/mbr/mbri-paper-plane.svg")
+    NavbarPage(Home),
+    NavbarPage(ProjectsHome),
+    NavbarPage(Portfolio),
+    NavbarPage("Resume", "/static/files/resume.pdf"),
+    NavbarPage("Github", "https://github.com/adamint", "/static/icons/mbr/mbri-github.svg"),
+    NavbarPage(ContactMe, "/static/icons/mbr/mbri-paper-plane.svg")
 )
 
 data class SiteState(
-        val loading: Boolean = true,
-        val view: View = Home,
-        val accessibleNavbarPages: ObservableList<NavbarPage> = observableListOf(*defaultAccessibleNavbarPages.toTypedArray()),
-        val redirectAfterCallbackUri: String? = null
+    val loading: Boolean = true,
+    val view: View = Home,
+    val accessibleNavbarPages: ObservableList<NavbarPage> = observableListOf(*defaultAccessibleNavbarPages.toTypedArray()),
+    val redirectAfterCallbackUri: String? = null
 ) {
     val currentProjects = getPresentProjects()
     val pastProjects = getPastProjects()
@@ -81,7 +83,9 @@ data class SiteState(
                 }
             }
             val token = Json.decodeFromString(Token.serializer(), tokenString)
-            spotifyImplicitGrantApi(spotifyClientId, spotifyRedirectUri, token)
+            spotifyImplicitGrantApi(spotifyClientId, token) {
+                refreshTokenProducer = { throw IllegalStateException("API Token has expired and cannot be refreshed.") }
+            }
         }
 }
 
@@ -95,8 +99,8 @@ sealed class View(val name: String, val url: String) {
     object BaseConversionPage : View("Base Conversion Tool", "/projects/conversion/base-converter")
     object UrlShortenerHomePage : View("URL Shortener", "/projects/shortener")
     data class UrlShortenerViewSingleShortenedLink(val path: String) : View(
-            "URL Shortener - /$path",
-            "/projects/shortener/info/$path"
+        "URL Shortener - /$path",
+        "/projects/shortener/info/$path"
     ) {
         companion object {
             val regExp = RegExp("/projects/shortener/info/(.+)")
@@ -105,8 +109,8 @@ sealed class View(val name: String, val url: String) {
 
     object UrlShortenerViewAllShortenedLinks : View("All Shortened URLs", "/projects/shortener/all")
     data class UrlShortenerRedirectToShortenedLink(val path: String) : View(
-            "URL Shortener - Redirecting from $path",
-            "/u/$path"
+        "URL Shortener - Redirecting from $path",
+        "/u/$path"
     ) {
         companion object {
             val regExp = RegExp("/u/(.+)")
@@ -114,9 +118,27 @@ sealed class View(val name: String, val url: String) {
     }
 
     object ArbitraryPrecisionCalculatorPage : View("Calculator", "/projects/calculator")
-    object SpotifyRecommenderPage : View("Spotify Music Recommender", "/projects/spotify/recommender")
-    object SpotifyRecommenderUriHelpPage : View("How to find Spotify URIs", "${SpotifyRecommenderPage.url}/uris")
+    object SpotifyPlaylistGeneratorPage : View("Spotify Music Recommender", "/projects/spotify/recommend")
     object SpotifyGenreListPage : View("All Spotify Genres", "/projects/spotify/genres/list")
+    data class SpotifyTrackViewPage(val trackId: String) : View("Track Details", "/projects/spotify/tracks-view/$trackId") {
+        companion object {
+            val regExp = RegExp("/projects/spotify/tracks-view/(.+)")
+        }
+    }
+
+    data class SpotifyArtistViewPage(val artistId: String) : View("Artist Details", "/projects/spotify/artists-view/$artistId") {
+        companion object {
+            val regExp = RegExp("/projects/spotify/artists-view/(.+)")
+        }
+    }
+
+    data class SpotifyCategoryViewPage(val categoryName: String) : View("View category: $categoryName", "/projects/spotify/categories-view/$categoryName") {
+        companion object {
+            val regExp = RegExp("/projects/spotify/categories-view/(.+)")
+        }
+    }
+
+    object SpotifyCategoryListPage : View("Spotify Categories", "/projects/spotify/categories")
 
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class
@@ -138,10 +160,13 @@ sealed class SiteAction : RAction {
     object LoadUrlShortenerViewAllShortenedLinks : SiteAction()
     data class LoadUrlShortenerRedirectToShortenedLink(val path: String) : SiteAction()
     object LoadArbitraryPrecisionCalculatorPage : SiteAction()
-    object LoadSpotifyRecommenderPage : SiteAction()
-    object LoadSpotifyRecommenderUriHelpPage : SiteAction()
+    object LoadSpotifyPlaylistGeneratorPage : SiteAction()
     object LoadSpotifyGenreListPage : SiteAction()
     data class SetSpotifyApi(val token: Token) : SiteAction()
+    data class LoadSpotifyTrackViewPage(val trackId: String) : SiteAction()
+    data class LoadSpotifyArtistViewPage(val artistId: String) : SiteAction()
+    data class LoadSpotifyCategoryViewPage(val genre: String) : SiteAction()
+    object LoadSpotifyCategoryListPage : SiteAction()
 }
 
 fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (action) {
@@ -158,14 +183,18 @@ fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (ac
     LoadUrlShortenerViewAllShortenedLinks -> state.copy(view = UrlShortenerViewAllShortenedLinks)
     is LoadUrlShortenerRedirectToShortenedLink -> state.copy(view = UrlShortenerRedirectToShortenedLink(action.path))
     LoadArbitraryPrecisionCalculatorPage -> state.copy(view = ArbitraryPrecisionCalculatorPage)
-    LoadSpotifyRecommenderPage -> state.copy(view = SpotifyRecommenderPage)
-    LoadSpotifyRecommenderUriHelpPage -> state.copy(view = SpotifyRecommenderUriHelpPage)
+    LoadSpotifyPlaylistGeneratorPage -> state.copy(view = SpotifyPlaylistGeneratorPage)
     LoadSpotifyGenreListPage -> state.copy(view = SpotifyGenreListPage)
     is SetSpotifyApi -> {
         localStorage[spotifyTokenLocalStorageKey] = Json.encodeToString(action.token)
         localStorage[spotifyTokenExpiryLocalStorageKey] = action.token.expiresAt.toString()
         state
     }
+    LoadSpotifyPlaylistGeneratorPage -> state.copy(view = SpotifyPlaylistGeneratorPage)
+    is LoadSpotifyTrackViewPage -> state.copy(view = SpotifyTrackViewPage(action.trackId))
+    is LoadSpotifyArtistViewPage -> state.copy(view = SpotifyArtistViewPage(action.artistId))
+    is LoadSpotifyCategoryViewPage -> state.copy(view = SpotifyCategoryViewPage(action.genre))
+    LoadSpotifyCategoryListPage -> state.copy(view = SpotifyCategoryListPage)
 }
 
 fun Navigo.initialize(): Navigo {
@@ -175,21 +204,24 @@ fun Navigo.initialize(): Navigo {
             SiteManager.redirectBack(defaultUrl = Home.url)
         } else homePage()
     })
-            .on(Portfolio.url, { _ -> portfolioPage() })
-            .on("/interactives", { _ -> SiteManager.replaceWithUrl("/projects") })
-            .on(ContactMe.url, { _ -> contactPage() })
-            .on(ProjectsHome.url, { _ -> projectsHomePage() })
-            .on(FrenchLearningPage.url, { _ -> frenchResourcesPage() })
-            .on("/utils/convert/base", { _ -> SiteManager.replaceWithUrl("/projects/conversion/base-converter") })
-            .on(BaseConversionPage.url, { _ -> baseConverterPage() })
-            .on("/shortener", { _ -> SiteManager.replaceWithUrl("/projects/shortener") })
-            .on(UrlShortenerHomePage.url, { _ -> shortenerHomePage() })
-            .on(UrlShortenerViewAllShortenedLinks.url, { _ -> shortenerViewAllShortenedLinks() })
-            .on(UrlShortenerViewSingleShortenedLink.regExp, { path -> shortenerViewShortenedLink(path) })
-            .on(UrlShortenerRedirectToShortenedLink.regExp, { path -> shortenerRedirectToShortenedLink(path) })
-            .on(ArbitraryPrecisionCalculatorPage.url, { _ -> calculatorPage() })
-            .on(SpotifyRecommenderPage.url, { _ -> spotifyRecommenderPage() })
-            .on(SpotifyRecommenderUriHelpPage.url, { _ -> spotifyRecommenderUriHelpPage() })
-            .on(SpotifyGenreListPage.url, { _ -> spotifyGenreListPage() })
-            .apply { notFound({ _ -> notFoundPage() }) }
+        .on(Portfolio.url, { _ -> portfolioPage() })
+        .on("/interactives", { _ -> SiteManager.replaceWithUrl("/projects") })
+        .on(ContactMe.url, { _ -> contactPage() })
+        .on(ProjectsHome.url, { _ -> projectsHomePage() })
+        .on(FrenchLearningPage.url, { _ -> frenchResourcesPage() })
+        .on("/utils/convert/base", { _ -> SiteManager.replaceWithUrl("/projects/conversion/base-converter") })
+        .on(BaseConversionPage.url, { _ -> baseConverterPage() })
+        .on("/shortener", { _ -> SiteManager.replaceWithUrl("/projects/shortener") })
+        .on(UrlShortenerHomePage.url, { _ -> shortenerHomePage() })
+        .on(UrlShortenerViewAllShortenedLinks.url, { _ -> shortenerViewAllShortenedLinks() })
+        .on(UrlShortenerViewSingleShortenedLink.regExp, { path -> shortenerViewShortenedLink(path) })
+        .on(UrlShortenerRedirectToShortenedLink.regExp, { path -> shortenerRedirectToShortenedLink(path) })
+        .on(ArbitraryPrecisionCalculatorPage.url, { _ -> calculatorPage() })
+        .on(SpotifyPlaylistGeneratorPage.url, { _ -> spotifyPlaylistGeneratorPage() })
+        .on(SpotifyGenreListPage.url, { _ -> spotifyGenreListPage() })
+        .on(SpotifyCategoryViewPage.regExp, { genre -> CategoryViewPage(genre) })
+        .on(SpotifyArtistViewPage.regExp, { artistId -> artistViewPage(artistId) })
+        .on(SpotifyTrackViewPage.regExp, { trackId -> trackViewPage(trackId) })
+        .on(SpotifyCategoryListPage.url, { _ -> spotifyCategoryListPage() })
+        .apply { notFound({ _ -> notFoundPage() }) }
 }

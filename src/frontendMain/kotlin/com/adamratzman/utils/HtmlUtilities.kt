@@ -40,3 +40,8 @@ fun Container.addLineBreak() {
 fun Tag.noBorderRounding() {
     addCssClass("no-rounded-border")
 }
+
+fun Widget.unfocus() {
+    hide()
+    show()
+}

@@ -22,7 +22,6 @@ import pl.treksoft.kvision.modal.Modal
 import pl.treksoft.kvision.remote.ServiceException
 
 class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { _ ->
-    setTitle("Calculator")
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
         h2(content = "Arbitrary* Precision Calculator", classes = nameSetOf(MarginRemoveBottom, TextCenter, "moderate-bold"))
         p(classes = nameSetOf(MarginSmallTop, MarginSmallBottom, TextCenter, "light")) {
@@ -35,12 +34,12 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
 
             p(classes = nameSetOf(MarginSmallTop, MarginMediumBottom, TextCenter, "light")) {
                 +"See what "
-                link(label = "functions", className = "bold") {
+                link(label = "functions", classes = nameSetOf("bold", "link-color")) {
                     onClick {
                         val modal = Modal("Available Functions")
                         functionsGroups.keys.sortedBy { it.name }.forEach { group ->
                             val functions = functionsGroups.getValue(group)
-                            modal.add(h4(content = group.name, className = "light"))
+                            modal.add(h4(content = group.name, classes = nameSetOf("light")))
                             modal.add(ul {
                                 functions.forEach { function ->
                                     li {
@@ -64,7 +63,7 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
                     }
                 }
                 +" and "
-                link(label = "constants", className = "bold") {
+                link(label = "constants", classes = nameSetOf("bold", "link-color")) {
                     onClick {
                         val modal = Modal("Available Constants")
                         modal.add(ul {
@@ -94,7 +93,7 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
             div(classes = nameSetOf(MarginAuto, MarginSmallBottom, WidthOneHalf)) {
                 var results = 0
                 val computationResults = Div {
-                    h3(content = "Enter an expression below..", className = "light")
+                    h3(content = "Enter an expression below..", classes = nameSetOf("light"))
                 }
                 val output = div(classes = nameSetOf(MarginAuto, MarginSmallBottom, HeightMedium, "overflow-scroll-y")) {
                     style {
@@ -106,16 +105,16 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
 
                 div {
                     addBootstrap()
-                        formPanel<CalculatorParametersForm>(className = MarginMediumBottom.asString) {
+                        formPanel<CalculatorParametersForm>(classes = nameSetOf(MarginMediumBottom.asString)) {
                             add(
                                     CalculatorParametersForm::input,
-                                    text(label = "Input").withPlaceholderAndMaxWidth(70 to perc, "Type a math expression here.."),
+                                    text(label = "Input").withPlaceholderAndMaxWidth(100 to perc, "Type a math expression here.."),
                                     required = true,
                                     requiredMessage = "Expression input is required.",
                                     validatorMessage = { "Please enter a math expression." }
                             ) { input -> input.getValue()?.isNotBlank() == true }
 
-                            button("Calculate", className = MarginSmallBottom.asString) {
+                            button("Calculate", classes = nameSetOf(MarginSmallBottom.asString)) {
                                 onClick {
                                     if (this@formPanel.validate()) {
                                         val data = this@formPanel.getData()

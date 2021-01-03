@@ -12,7 +12,6 @@ import io.ktor.features.Compression
 import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
-import io.ktor.http.HttpMethod.Companion
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resolveResource
 import io.ktor.http.content.resources
@@ -21,11 +20,20 @@ import io.ktor.request.path
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.routing
+import io.ktor.server.engine.applicationEngineEnvironment
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.engine.sslConnector
+import io.ktor.server.netty.Netty
+import io.ktor.util.KtorExperimentalAPI
 import pl.treksoft.kvision.remote.ServiceException
 import pl.treksoft.kvision.remote.applyRoutes
 import pl.treksoft.kvision.remote.kvisionInit
+import java.io.File
+import java.security.KeyStore
 
-fun Application.main() {
+val isProd = System.getenv("IS_PROD").toBoolean()
+
+fun Application.module() {
     SiteDatabase.initialize()
 
     install(Compression)
@@ -42,8 +50,10 @@ fun Application.main() {
         exception<Throwable> { throwable ->
             if (throwable !is ServiceException) {
                 throwable.printStackTrace()
-                call.respondText(throwable.message
-                        ?: throwable.localizedMessage, ContentType.Any, HttpStatusCode.InternalServerError)
+                call.respondText(
+                    throwable.message
+                        ?: throwable.localizedMessage, ContentType.Any, HttpStatusCode.InternalServerError
+                )
             }
         }
 
@@ -66,5 +76,28 @@ fun Application.main() {
         applyRoutes(BaseConversionServiceManager)
         applyRoutes(UrlShortenerServiceManager)
         applyRoutes(CalculatorServiceManager)
+    }
+}
+
+@KtorExperimentalAPI
+fun main() {
+    if (isProd) {
+        embeddedServer(Netty, applicationEngineEnvironment {
+            modules.add(Application::module)
+
+            val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+            val keyStoreFile = File("/ssl/keystore-self-signed.jks")
+            val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyStore.load(keyStoreFile.inputStream(), keystorePassword.toCharArray())
+
+            sslConnector(
+                keyStore, "site", { keystorePassword.toCharArray() }, { keystorePassword.toCharArray() }
+            ) {
+                host = "0.0.0.0"
+                port = 443
+            }
+        }).start(wait = true)
+    } else {
+        embeddedServer(Netty, port = 8080, module = Application::module).start(wait = true)
     }
 }

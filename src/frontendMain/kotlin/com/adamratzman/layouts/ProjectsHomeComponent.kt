@@ -13,23 +13,21 @@ class ProjectsHomeComponent(parent: Container) : SiteStatefulComponent(parent = 
             .groupBy { it.category }.toList()
             .sortedBy { it.first }.asReversed()
 
-    setTitle("Projects")
-
-    div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
-        div(className = "left-25") {
+    div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom, MarginAuto, WidthTwoThirds)) {
+        div {
             h2(content = "Projects", classes = nameSetOf(MarginSmallBottom, "moderate-bold"))
             h3(content = "An incomplete list of online projects and utilities I've created.", classes = nameSetOf("light", MarginRemoveTop))
         }
 
-        div(className = "left-25") {
+        div {
             projectCategories.forEach { (category, projects) ->
                 h2(content = category.toString(), classes = nameSetOf(UkInline, MarginSmallBottom, MarginRemoveTop, "moderate-bold"))
                 dataContainer(projects.toMutableList(), { project, _, _ ->
-                    div(className = MarginSmallBottom.asString) {
-                        h4(className = MarginRemoveVertical.asString) {
+                    div(classes = nameSetOf(MarginSmallBottom.asString)) {
+                        h4(classes = nameSetOf(MarginRemoveVertical.asString)) {
                             link(label = project.name, url = project.url.toDevOrProdUrl())
                         }
-                        p(content = project.description, rich = true, classes = nameSetOf(MarginRemoveVertical, WidthOneHalf))
+                        p(content = project.description, rich = true, classes = nameSetOf(MarginRemoveVertical))
                     }
                 })
             }
