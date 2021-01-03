@@ -11,7 +11,10 @@ if [[ $2 == "" ]]; then
   TAG="latest"
 else
   TAG="$2"
+  docker pull adamratzman/site:"$TAG"
 fi
+
+docker pull adamratzman/site
 
 docker rm adamratzman-site --force
 
