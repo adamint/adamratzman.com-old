@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Socicon';
-  src:  url('/static/fonts/Socicon.eot?87visu');
-  src:  url('/static/fonts/Socicon.eot?87visu#iefix') format('embedded-opentype'),
-    url('/static/fonts/Socicon.woff2?87visu') format('woff2'),
-    url('/static/fonts/Socicon.ttf?87visu') format('truetype'),
-    url('/static/fonts/Socicon.woff?87visu') format('woff'),
-    url('/static/fonts/Socicon.svg?87visu#Socicon') format('svg');
+  src:  url('/static/fonts/Socicon.eot');
+  src:  url('/static/fonts/Socicon.eot#iefix') format('embedded-opentype'),
+    url('/static/fonts/Socicon.woff2') format('woff2'),
+    url('/static/fonts/Socicon.ttf') format('truetype'),
+    url('/static/fonts/Socicon.woff') format('woff'),
+    url('/static/fonts/Socicon.svg#Socicon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
