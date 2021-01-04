@@ -214,7 +214,7 @@ class UrlShortenerRedirectToShortenedLinkComponent(parent: Container) : SiteStat
             else SiteManager.redirectToUrl(shortenedUrl.url)
         } catch (exception: ServiceException) {
             // url wasn't found
-            SiteManager.redirect(UrlShortenerHomePage)
+            SiteManager.redirectToUrl(UrlShortenerHomePage.devOrProdUrl())
         }
     }
 })

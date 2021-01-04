@@ -1,12 +1,17 @@
 package com.adamratzman
 
+import com.adamratzman.database.SessionAuthName
 import com.adamratzman.database.SiteDatabase
-import com.adamratzman.services.BaseConversionServiceManager
-import com.adamratzman.services.CalculatorServiceManager
-import com.adamratzman.services.UrlShortenerServiceManager
+import com.adamratzman.database.UserPrincipal
+import com.adamratzman.routes.profileRoutes
+import com.adamratzman.services.*
+import com.adamratzman.utils.renderSiteIndex
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.principal
+import io.ktor.auth.session
 import io.ktor.features.CORS
 import io.ktor.features.Compression
 import io.ktor.features.StatusPages
@@ -18,25 +23,39 @@ import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.request.path
 import io.ktor.response.respond
+import io.ktor.response.respondRedirect
 import io.ktor.response.respondText
+import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
+import io.ktor.sessions.*
 import io.ktor.util.KtorExperimentalAPI
 import pl.treksoft.kvision.remote.ServiceException
 import pl.treksoft.kvision.remote.applyRoutes
 import pl.treksoft.kvision.remote.kvisionInit
 import java.io.File
 import java.security.KeyStore
+import kotlin.collections.set
 
-val isProd = System.getenv("IS_PROD").toBoolean()
+val isProd: Boolean = System.getenv("IS_PROD").toBoolean()
+val sessionsRootDir: String = System.getenv("SESSIONS_ROOT_DIR")
 
 fun Application.module() {
     SiteDatabase.initialize()
 
     install(Compression)
+    install(Sessions) {
+        cookie<UserPrincipal>(
+            SessionAuthName,
+            storage = if (isProd) directorySessionStorage(File(sessionsRootDir)) else SessionStorageMemory()
+        ) {
+            cookie.path = "/"
+            cookie.extensions["SameSite"] = "lax"
+        }
+    }
     install(CORS) {
         allowCredentials = true
         allowNonSimpleContentTypes = true
@@ -59,14 +78,41 @@ fun Application.module() {
 
         status(HttpStatusCode.NotFound) {
             println("Not found: ${call.request.path()}")
-            call.respond(this.context.resolveResource("assets/index.html")!!)
+            call.renderSiteIndex()
             // call.respondFile(File("/assets/index.html"))
 
         }
     }
+    install(Authentication) {
+        session<UserPrincipal>(SessionAuthName) {
+            challenge {
+                call.respondRedirect("/login")
+            }
+            validate { session: UserPrincipal ->
+                session
+            }
+        }
+    }
+
+
     routing {
         static("static") {
             resources("assets/static")
+        }
+
+        get("/login") {
+            if (call.principal<UserPrincipal>() != null) call.respondRedirect("/me")
+            else call.renderSiteIndex()
+        }
+
+        get("/register") {
+            if (call.principal<UserPrincipal>() != null) call.respondRedirect("/me")
+            else call.renderSiteIndex()
+        }
+
+        get("/logout") {
+            call.sessions.clear<UserPrincipal>()
+            call.respondRedirect("/login")
         }
     }
 
@@ -76,6 +122,9 @@ fun Application.module() {
         applyRoutes(BaseConversionServiceManager)
         applyRoutes(UrlShortenerServiceManager)
         applyRoutes(CalculatorServiceManager)
+        applyRoutes(AuthenticationServiceManager)
+        applyRoutes(DailySongServiceManager)
+        profileRoutes()
     }
 }
 

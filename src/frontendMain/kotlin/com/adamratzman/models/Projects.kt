@@ -50,7 +50,8 @@ enum class ProjectCategory {
     POLITICS,
     UTILITIES,
     SCHOOL,
-    SPOTIFY;
+    SPOTIFY,
+    FUN;
 
     override fun toString() = name.toLowerCase()
 }
@@ -71,7 +72,7 @@ fun getInteractives() = listOf(
     InteractiveProject(
         "URL Shortener (Rick Astley edition)",
         "URL Shortener.. with a twist",
-        "/shortener",
+        "/projects/shortener",
         ProjectCategory.UTILITIES
     ),
     InteractiveProject(
@@ -104,5 +105,11 @@ fun getInteractives() = listOf(
         "See all available Spotify categories",
         SpotifyCategoryListPage.url,
         ProjectCategory.SPOTIFY
+    ),
+    InteractiveProject(
+        "Daily Song Recommendation",
+        "A daily song recommendation for you",
+        ViewAllDailySongsPage.devOrProdUrl(),
+        ProjectCategory.FUN
     )
 ).toMutableSet()

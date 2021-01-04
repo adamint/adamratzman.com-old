@@ -76,6 +76,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("pl.treksoft:kvision-server-ktor:$kvisionVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
             }
             kotlin.srcDir("build/generated-src/common")
         }
@@ -91,12 +92,14 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
                 implementation("io.ktor:ktor-auth:$ktorVersion")
+                implementation("io.ktor:ktor-server-sessions:$ktorVersion")
                 implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
                 implementation("mysql:mysql-connector-java:$mysqlConnectorVersion")
                 implementation("commons-validator:commons-validator:1.7")
                 implementation("com.github.adamint:jmath:16bd4d546a")
+                implementation("org.apache.commons:commons-lang3:3.11")
             }
         }
         val backendTest by getting {
@@ -129,7 +132,6 @@ kotlin {
                 implementation("pl.treksoft:kvision-toast:$kvisionVersion")
                 implementation("pl.treksoft:kvision-moment:$kvisionVersion")
                 implementation("com.adamratzman:spotify-api-kotlin-core:3.4.03")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
             kotlin.srcDir("build/generated-src/frontend")

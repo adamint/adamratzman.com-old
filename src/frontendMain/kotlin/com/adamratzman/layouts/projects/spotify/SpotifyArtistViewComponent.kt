@@ -6,6 +6,7 @@ import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyCategoryViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.partials.guardValidSpotifyApi
 import com.adamratzman.layouts.setTitle
 import com.adamratzman.spotify.models.Album
 import com.adamratzman.spotify.models.Artist
@@ -21,7 +22,6 @@ import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.utils.Intl
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
-import kotlin.time.minutes
 
 @OptIn(ExperimentalTime::class)
 class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
@@ -99,12 +99,10 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                                     bottomComponent = { span("Popularity: ${it.popularity}. Duration: ${it.durationMs.milliseconds}") }
                                 )
                             }
-
+                            removeLoadingSpinner(state)
                         }
                     }
                 } ?: NotFoundComponent(this@div)
-
-                removeLoadingSpinner(state)
             }
         }
 

@@ -1,5 +1,7 @@
 package com.adamratzman.layouts.partials
 
+import com.adamratzman.database.SiteManager
+import com.adamratzman.database.View.*
 import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
@@ -54,6 +56,22 @@ class HeaderComponent(parent: Container) : SiteStatefulComponent(parent = parent
                                 }
                             }
                         }
+
+                        li(classes = nameSetOf(UkNavDivider.asString))
+
+                        if (!state.isLoggedIn()) {
+                            li(classes = if (LoginPage == state.view) nameSetOf(Active, "link-color") else null) {
+                                link(label = "Log in/Register", url = LoginPage.devOrProdUrl())
+                            }
+                        } else {
+                            li {
+                                link(label = "My Profile", url = ProfilePage.devOrProdUrl())
+                            }
+                            li {
+                                link(label = "Log out", url = LogoutPage.devOrProdUrl())
+                            }
+                        }
+
                     }
                 }
             }
@@ -71,10 +89,32 @@ class HeaderComponent(parent: Container) : SiteStatefulComponent(parent = parent
                                     link(label = navbarPage.name, url = navbarPage.url, classes = nameSetOf("black"))
                                 }
                             }
-
                         }
                     }
 
+                    if (!state.isLoggedIn()) {
+                        li {
+                            div(classes = nameSetOf(NavbarItem, "bold", "rem-1")) {
+                                link(label = "Log in/Register", url = LoginPage.devOrProdUrl(), classes = nameSetOf("black"))
+                            }
+                        }
+                    } else {
+                        li {
+                            div(classes = nameSetOf(NavbarItem, "bold", "rem-1")) {
+                                link(label = "My Profile", url = ProfilePage.devOrProdUrl(), classes = nameSetOf("black"))
+                            }
+                        }
+                        li {
+                            div(classes = nameSetOf(NavbarItem, "bold", "rem-1")) {
+                                link(label = "Log out", classes = nameSetOf("black")) {
+                                    onClick {
+                                        state.clientSideData = null
+                                        SiteManager.redirectToUrl(LogoutPage.devOrProdUrl())
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

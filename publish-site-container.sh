@@ -8,4 +8,5 @@ else
   docker build -t adamratzman/site:"$TAG" -t adamratzman/site .
 fi
 
-docker push adamratzman/site --all-tags
+docker push adamratzman/site:"$TAG"
+docker push adamratzman/site:latest

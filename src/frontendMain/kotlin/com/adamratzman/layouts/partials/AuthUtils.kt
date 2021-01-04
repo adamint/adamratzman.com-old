@@ -1,9 +1,11 @@
-package com.adamratzman.layouts.projects.spotify
+package com.adamratzman.layouts.partials
 
 import com.adamratzman.database.SiteManager
 import com.adamratzman.database.SiteState
+import com.adamratzman.database.View.LoginPage
 import com.adamratzman.database.spotifyTokenExpiryLocalStorageKey
 import com.adamratzman.database.spotifyTokenLocalStorageKey
+import com.adamratzman.services.ClientSideData
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.getSpotifyAuthorizationUrl
@@ -38,4 +40,8 @@ fun Container.guardValidSpotifyApi(state: SiteState, block: (SpotifyImplicitGran
 
     if (state.spotifyImplicitGrantApi?.token?.shouldRefresh() == false) block(state.spotifyImplicitGrantApi!!)
     else SiteManager.redirectToSpotifyAuthentication(this)
+}
+
+fun Container.guardLoggedIn(state: SiteState, block: (ClientSideData) -> Unit) {
+    state.clientSideData?.let(block) ?: SiteManager.redirectToUrl(LoginPage.devOrProdUrl())
 }

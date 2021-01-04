@@ -2,8 +2,8 @@ package com.adamratzman.layouts.projects.spotify
 
 import com.adamratzman.database.View.SpotifyCategoryViewPage
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.partials.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
-import com.adamratzman.layouts.setTitle
 import com.adamratzman.spotify.models.SpotifyCategory
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addUikitAttributes
@@ -28,7 +28,7 @@ class SpotifyCategoryListComponent(parent: Container) : SiteStatefulComponent(pa
                     h2(content = "Spotify Category List", classes = nameSetOf(MarginRemoveBottom, "moderate-bold"))
                     goBackToProjectHome()
 
-                    div(classes = nameSetOf(GridSmall, ChildWidthOneThird, MarginMediumTop, MarginMediumBottom)) {
+                    div(classes = nameSetOf(GridSmall, ChildWidthOneThird.medium, MarginMediumTop, MarginMediumBottom)) {
                         addUikitAttributes(UkGridAttribute)
 
                         allCategories.forEach { category ->

@@ -8,9 +8,12 @@ import com.adamratzman.database.SiteManager.calculatorPage
 import com.adamratzman.database.SiteManager.contactPage
 import com.adamratzman.database.SiteManager.frenchResourcesPage
 import com.adamratzman.database.SiteManager.homePage
+import com.adamratzman.database.SiteManager.loginPage
 import com.adamratzman.database.SiteManager.notFoundPage
 import com.adamratzman.database.SiteManager.portfolioPage
+import com.adamratzman.database.SiteManager.profilePage
 import com.adamratzman.database.SiteManager.projectsHomePage
+import com.adamratzman.database.SiteManager.registerPage
 import com.adamratzman.database.SiteManager.setSpotifyApi
 import com.adamratzman.database.SiteManager.shortenerHomePage
 import com.adamratzman.database.SiteManager.shortenerRedirectToShortenedLink
@@ -20,9 +23,13 @@ import com.adamratzman.database.SiteManager.spotifyCategoryListPage
 import com.adamratzman.database.SiteManager.spotifyGenreListPage
 import com.adamratzman.database.SiteManager.spotifyPlaylistGeneratorPage
 import com.adamratzman.database.SiteManager.trackViewPage
+import com.adamratzman.database.SiteManager.viewAllDailySongsPage
+import com.adamratzman.database.SiteManager.viewDailySongPage
 import com.adamratzman.database.View.*
-import com.adamratzman.layouts.projects.spotify.spotifyClientId
+import com.adamratzman.layouts.partials.spotifyClientId
 import com.adamratzman.models.*
+import com.adamratzman.services.ClientSideData
+import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.models.Token
 import com.adamratzman.spotify.spotifyImplicitGrantApi
@@ -30,6 +37,7 @@ import com.adamratzman.spotify.utils.getCurrentTimeMs
 import com.adamratzman.utils.toDevOrProdUrl
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
@@ -44,6 +52,7 @@ import kotlin.js.RegExp
 const val spotifyTokenLocalStorageKey = "spotifyToken"
 const val spotifyTokenExpiryLocalStorageKey = "spotifyTokenExpirationMillis"
 const val redirectBackToLocalStorageKey = "redirectBackTo"
+const val clientSideDataLocalStorageKey = "clientSideData"
 val isDevServer = window.location.host == "localhost:3000"
 
 class NavbarPage(val name: String, val url: String, val icon: String? = null, val view: View? = null) {
@@ -52,7 +61,6 @@ class NavbarPage(val name: String, val url: String, val icon: String? = null, va
 
 // pages to their icons
 val defaultAccessibleNavbarPages: List<NavbarPage> = listOf(
-    NavbarPage(Home),
     NavbarPage(ProjectsHome),
     NavbarPage(Portfolio),
     NavbarPage("Resume", "/static/files/resume.pdf"),
@@ -90,6 +98,21 @@ data class SiteState(
         }
 
     var loadingDiv: Div? = null
+    var clientSideData
+        get(): ClientSideData? = localStorage[clientSideDataLocalStorageKey]?.let {
+            try {
+                Json.decodeFromString<ClientSideData>(it)
+            } catch (e: Exception) {
+                localStorage.removeItem(clientSideDataLocalStorageKey)
+                null
+            }
+        }
+        set(data) {
+            if (data == null) localStorage.removeItem(clientSideDataLocalStorageKey)
+            else localStorage[clientSideDataLocalStorageKey] = Json.encodeToString(data)
+        }
+
+    fun isLoggedIn() = clientSideData != null
 }
 
 sealed class View(val name: String, val url: String, val needsInitialLoadingSpinner: Boolean = false) {
@@ -146,6 +169,21 @@ sealed class View(val name: String, val url: String, val needsInitialLoadingSpin
     }
 
     object SpotifyCategoryListPage : View("Spotify Categories", "/projects/spotify/categories", needsInitialLoadingSpinner = true)
+    object LoginPage : View("Log in", "/login")
+    object ProfilePage : View("My Profile", "/me", needsInitialLoadingSpinner = true)
+    object LogoutPage : View("Log out", "/logout")
+    object RegisterPage : View("Register", "/register")
+    object ViewAllDailySongsPage : View("Daily Songs", "/projects/daily-songs", needsInitialLoadingSpinner = true)
+    data class ViewDailySongPage(val date: SerializableDate) :
+        View(
+            "Daily Song - ${date.monthNumber + 1}/${date.dayOfMonth}/${date.year}",
+            "/projects/daily-songs/${date.year}/${date.monthNumber + 1}/${date.dayOfMonth}",
+            needsInitialLoadingSpinner = true
+        ) {
+        companion object {
+            val regExp = RegExp("/projects/daily-songs/(\\d+)/(\\d+)/(\\d+)")
+        }
+    }
 
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class
@@ -174,6 +212,11 @@ sealed class SiteAction : RAction {
     data class LoadSpotifyArtistViewPage(val artistId: String) : SiteAction()
     data class LoadSpotifyCategoryViewPage(val genre: String) : SiteAction()
     object LoadSpotifyCategoryListPage : SiteAction()
+    object LoadLoginPage : SiteAction()
+    object LoadRegisterPage : SiteAction()
+    object LoadProfilePage : SiteAction()
+    object LoadViewAllDailySongsPage : SiteAction()
+    data class LoadViewDailySongPage(val date: SerializableDate) : SiteAction()
 }
 
 fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (action) {
@@ -202,14 +245,24 @@ fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (ac
     is LoadSpotifyArtistViewPage -> state.copy(view = SpotifyArtistViewPage(action.artistId))
     is LoadSpotifyCategoryViewPage -> state.copy(view = SpotifyCategoryViewPage(action.genre))
     LoadSpotifyCategoryListPage -> state.copy(view = SpotifyCategoryListPage)
+    LoadLoginPage -> state.copy(view = LoginPage)
+    LoadRegisterPage -> state.copy(view = RegisterPage)
+    LoadProfilePage -> state.copy(view = ProfilePage)
+    LoadViewAllDailySongsPage -> state.copy(view = ViewAllDailySongsPage)
+    is LoadViewDailySongPage -> state.copy(view = ViewDailySongPage(action.date))
 }
 
 fun Navigo.initialize(): Navigo {
+    println(window.location.pathname)
     return on(Home.url, { _ ->
-        if (window.location.hash.startsWith("#access_token")) {
-            setSpotifyApi()
-            SiteManager.redirectBack(defaultUrl = Home.url)
-        } else homePage()
+        when {
+            window.location.hash.startsWith("#access_token") -> {
+                setSpotifyApi()
+                SiteManager.redirectBack(defaultUrl = Home.url)
+            }
+            window.location.pathname.length <= 1 -> homePage()
+            else -> notFoundPage()
+        }
     })
         .on(Portfolio.url, { _ -> portfolioPage() })
         .on("/interactives", { _ -> SiteManager.replaceWithUrl("/projects") })
@@ -223,6 +276,7 @@ fun Navigo.initialize(): Navigo {
         .on(UrlShortenerViewAllShortenedLinks.url, { _ -> shortenerViewAllShortenedLinks() })
         .on(UrlShortenerViewSingleShortenedLink.regExp, { path -> shortenerViewShortenedLink(path) })
         .on(UrlShortenerRedirectToShortenedLink.regExp, { path -> shortenerRedirectToShortenedLink(path) })
+        .on("/u/(.+)", { _ -> println("path found") })
         .on(ArbitraryPrecisionCalculatorPage.url, { _ -> calculatorPage() })
         .on(SpotifyPlaylistGeneratorPage.url, { _ -> spotifyPlaylistGeneratorPage() })
         .on(SpotifyGenreListPage.url, { _ -> spotifyGenreListPage() })
@@ -230,5 +284,11 @@ fun Navigo.initialize(): Navigo {
         .on(SpotifyArtistViewPage.regExp, { artistId -> artistViewPage(artistId) })
         .on(SpotifyTrackViewPage.regExp, { trackId -> trackViewPage(trackId) })
         .on(SpotifyCategoryListPage.url, { _ -> spotifyCategoryListPage() })
+        .on(LoginPage.url, { _ -> loginPage() })
+        .on(RegisterPage.url, { _ -> registerPage() })
+        .on(ProfilePage.url, { _ -> profilePage() })
+        .on(ViewAllDailySongsPage.url, { _ -> viewAllDailySongsPage() })
+        .on(ViewDailySongPage.regExp, { year, month, day -> viewDailySongPage(SerializableDate(year.toInt(), month.toInt(), day.toInt())) })
+
         .apply { notFound({ _ -> notFoundPage() }) }
 }

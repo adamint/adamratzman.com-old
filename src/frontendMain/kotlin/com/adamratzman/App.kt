@@ -8,12 +8,12 @@ import com.adamratzman.layouts.partials.HeaderComponent
 import com.adamratzman.layouts.projects.*
 import com.adamratzman.layouts.projects.conversion.BaseConversionComponent
 import com.adamratzman.layouts.projects.spotify.*
+import com.adamratzman.layouts.user.ProfilePageComponent
 import com.adamratzman.utils.UikitName.UkSpinnerAttribute
 import com.adamratzman.utils.addAttributes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.treksoft.kvision.Application
-import pl.treksoft.kvision.core.PosFloat
 import pl.treksoft.kvision.core.Position
 import pl.treksoft.kvision.core.UNIT.perc
 import pl.treksoft.kvision.core.UNIT.px
@@ -70,16 +70,17 @@ class App : Application() {
                     is SpotifyCategoryViewPage -> SpotifyCategoryViewComponent(state.view.categoryName, this)
                     is SpotifyArtistViewPage -> SpotifyArtistViewComponent(state.view.artistId, this)
                     SpotifyCategoryListPage -> SpotifyCategoryListComponent(this)
+                    LoginPage -> LoginComponent(this)
+                    ProfilePage -> ProfilePageComponent(this)
+                    LogoutPage -> throw NotImplementedError()
+                    RegisterPage -> RegisterComponent(this)
+                    ViewAllDailySongsPage -> ViewAllDailySongsComponent(this)
+                    is ViewDailySongPage -> ViewDailySongComponent(state.view.date.copy(monthNumber = state.view.date.monthNumber - 1),this)
                 }
 
             }
 
             FooterComponent(this)
-
-
-            GlobalScope.launch {
-
-            }
         }
     }
 }

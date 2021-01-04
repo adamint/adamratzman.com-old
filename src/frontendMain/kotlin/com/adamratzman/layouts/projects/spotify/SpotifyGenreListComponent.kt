@@ -2,8 +2,8 @@ package com.adamratzman.layouts.projects.spotify
 
 import com.adamratzman.database.View.SpotifyCategoryViewPage
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.partials.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
-import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner

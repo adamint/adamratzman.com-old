@@ -1,7 +1,8 @@
 package com.adamratzman.database
 
 import com.adamratzman.database.SiteAction.*
-import com.adamratzman.layouts.projects.spotify.spotifyAuthRedirectUri
+import com.adamratzman.layouts.partials.spotifyAuthRedirectUri
+import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.utils.parseSpotifyCallbackHashToToken
 import com.adamratzman.utils.toDevOrProdUrl
 import kotlinx.browser.localStorage
@@ -76,6 +77,11 @@ object SiteManager {
     fun artistViewPage(artistId: String) = siteStore.dispatch(LoadSpotifyArtistViewPage(artistId))
     fun trackViewPage(trackId: String) = siteStore.dispatch(LoadSpotifyTrackViewPage(trackId))
     fun spotifyCategoryListPage() = siteStore.dispatch(LoadSpotifyCategoryListPage)
+    fun loginPage() = siteStore.dispatch(LoadLoginPage)
+    fun registerPage() = siteStore.dispatch(LoadRegisterPage)
+    fun profilePage() = siteStore.dispatch(LoadProfilePage)
+    fun viewAllDailySongsPage() = siteStore.dispatch(LoadViewAllDailySongsPage)
+    fun viewDailySongPage(date: SerializableDate) = siteStore.dispatch(LoadViewDailySongPage(date))
 
     fun redirectToSpotifyAuthentication(parent: Container) {
         try {

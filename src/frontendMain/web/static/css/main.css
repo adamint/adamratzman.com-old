@@ -78,6 +78,10 @@ html, a, nav, li {
     font-size: 1.8rem;
 }
 
+em {
+    color: black;
+}
+
 .rem-1-5 {
     font-size: 1.5rem;
 }
@@ -88,6 +92,10 @@ html, a, nav, li {
 
 .rem-1-2 {
     font-size: 1.2rem;
+}
+
+.width-100 {
+    width: 100%;
 }
 
 .dashed {
@@ -251,11 +259,23 @@ ul.centered {
     .width-1-2\@m {
         width: 50%;
     }
+
+    .max-width-1-2\@m {
+        max-width: 50%;
+    }
+
+    .margin-medium-bottom\@m {
+        margin-bottom: 40px;
+    }
 }
 
 /* small width */
 @media only screen and (max-width: 640px) {
     .padding-remove-l\@s {
         padding-left: 0;
+    }
+
+    .margin-small-bottom\@s {
+        margin-bottom: 10px;
     }
 }

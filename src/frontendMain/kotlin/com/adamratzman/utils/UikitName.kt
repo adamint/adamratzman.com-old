@@ -25,6 +25,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     MarginRemoveBottom("uk-margin-remove-bottom"),
     MarginRemoveVertical("uk-margin-remove-vertical"),
     MarginAuto("uk-margin-auto"),
+    UkMargin("uk-margin"),
 
     // Padding
     PaddingRemoveLeft("uk-padding-remove-left"),
@@ -140,12 +141,17 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     // Child width
     ChildWidthExpand("uk-child-width-expand"),
     ChildWidthOneThird("uk-child-width-1-3"),
+    ChildWidthOneHalf("uk-child-width-1-2"),
 
     // Card
     UkCard("uk-card"),
     UkCardDefault("uk-card-default"),
     UkCardBody("uk-card-body"),
     UkCardTitle("uk-card-title"),
+
+    // Form
+    UkFormIcon("uk-form-icon"),
+
 
     ;
 

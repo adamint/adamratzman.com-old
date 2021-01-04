@@ -2,7 +2,6 @@ package com.adamratzman.utils
 
 import com.adamratzman.database.SiteState
 import com.adamratzman.database.isDevServer
-import kotlinx.browser.document
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Tag
 import pl.treksoft.kvision.html.link
@@ -25,6 +24,8 @@ fun nameSetOf(vararg name: Any) = name.map { it.toString() }.toSet()
 fun String.prependSpace() = " $this"
 
 fun String.toDevOrProdUrl() = if (isDevServer) "/#!$this" else this
+    .replace("url.adamratzman.com", "adamratzman.com")
+    .replace("projects.adamratzman.com", "adamratzman.com")
 
 fun getRandomColor() = Color.name(Col.values().random())
 
@@ -36,7 +37,7 @@ fun Container.textWithLinkedIcon(textBefore: String, link: String, iconName: Str
 }
 
 fun Container.addLineBreak() {
-    textNode("<br/>", rich=true)
+    textNode("<br/>", rich = true)
 }
 
 fun Tag.noBorderRounding() {
