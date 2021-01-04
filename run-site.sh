@@ -27,5 +27,5 @@ docker rm adamratzman-site --force
 # SITE_KEYSTORE_PASSWORD
 
 docker run --name adamratzman-site -ti -d --network site-network -p "$SITE_PORT":"$SITE_PORT" -e DB_USER="$SITE_DB_USER" -e DB_PASS="$SITE_DB_PASS" \
-  -e DB_URL_WITH_PORT="$SITE_DB_URL_WITH_PORT" -e IS_PROD="$SITE_IS_PROD" -e KEYSTORE_PASSWORD="$SITE_KEYSTORE_PASSWORD" \
+  -e DB_URL_WITH_PORT="$SITE_DB_URL_WITH_PORT" -e IS_PROD="$SITE_IS_PROD" -e KEYSTORE_PASSWORD="$SITE_KEYSTORE_PASSWORD" -e SESSIONS_ROOT_DIR="/sessions" \
   -v "$HOME/ssl":/ssl -v "$SESSIONS_ROOT_DIR":/sessions adamratzman/site:"$TAG"
