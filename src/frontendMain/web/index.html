@@ -36,5 +36,22 @@
 </head>
 <body>
 <div id="kvapp"></div>
+
+<!-- Fixes issue where clicking a typeahead dropdown on mobile causes a page reload -->
+<!-- Code taken from https://stackoverflow.com/a/52449822 -->
+<script>
+    $(".dropdown-select").on('click', '.dropdown-menu a', function () {
+        var $this = $(this);
+        var $dropdownCtrl = $this.closest(".dropdown-select");
+        var $selectCtrl = $dropdownCtrl.find("select");
+        $selectCtrl.empty();
+        var $selectedOption = $("<option value='" + $this.data("value") + "' selected='selected'>" + $this.text() + "</option>");
+        $selectCtrl.append($selectedOption);
+        $selectCtrl.trigger("change");
+        $dropdownCtrl.find(".selected-value").html($this.html());
+        $dropdownCtrl.removeClass("open");
+        return false;
+    });
+</script>
 </body>
 </html>

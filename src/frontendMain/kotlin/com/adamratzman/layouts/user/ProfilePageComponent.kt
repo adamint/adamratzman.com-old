@@ -37,11 +37,11 @@ class ProfilePageComponent(parent: Container) : SiteStatefulComponent(parent = p
                 style { fontSize = 2.5 to rem }
                 +"Hi, "
                 span(content = clientSideData.username, className = "bold")
+                +"."
             }
             p {
                 +"You're a "
                 span(clientSideData.role.readable, className = "dashed")
-                +"."
             }
 
             if (clientSideData.role == UserRole.ADMIN) {

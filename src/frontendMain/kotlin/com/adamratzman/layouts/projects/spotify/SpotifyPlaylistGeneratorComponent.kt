@@ -4,9 +4,9 @@ import com.adamratzman.database.SiteManager
 import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyGenreListPage
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
 import com.adamratzman.layouts.setTitle
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.endpoints.public.TuneableTrackAttribute
 import com.adamratzman.spotify.models.Artist
