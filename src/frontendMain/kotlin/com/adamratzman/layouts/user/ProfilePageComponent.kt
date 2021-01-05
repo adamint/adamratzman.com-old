@@ -6,8 +6,8 @@ import com.adamratzman.database.SiteManager
 import com.adamratzman.database.View.LogoutPage
 import com.adamratzman.database.View.ViewAllDailySongsPage
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.layouts.partials.guardLoggedIn
-import com.adamratzman.layouts.partials.guardValidSpotifyApi
+import com.adamratzman.security.guardLoggedIn
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.services.*
 import com.adamratzman.spotify.models.SpotifyUri
 import com.adamratzman.utils.UikitName.*
@@ -20,12 +20,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseContextualSerialization
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.core.UNIT.rem
+import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.core.style
 import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.form.text.richText
 import pl.treksoft.kvision.form.text.text
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.remote.ServiceException
 import kotlin.js.Date
 
 class ProfilePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
@@ -57,15 +59,51 @@ private class InsertDailySongComponent(parent: Container) : SiteStatefulComponen
     guardValidSpotifyApi(state) { api ->
         h2("Add a daily song (or replace an existing day)", classes = nameSetOf("light"))
 
-        val protectedNotePassword = (1..16).joinToString("") { (('a'..'z') + ('A'..'Z') + ('0'..'9')).random().toString() }
+        var protectedNotePassword = (1..16).joinToString("") { (('a'..'z') + ('A'..'Z') + ('0'..'9')).random().toString() }
 
         addBootstrap()
+        var autofilledDate: Date? = null
         formPanel<InsertDailySongForm> {
             add(
                 InsertDailySongForm::date,
                 dateTime(format = "YYYY-MM-DD", label = "Date").apply {
                     placeholder = "Enter date"
                     showTodayButton = true
+                }.apply {
+                    onEvent {
+                        change = {
+                            val data = getData()
+                            if (data.date != null &&
+                                (data.date.getFullYear() != autofilledDate?.getFullYear() || data.date.getMonth() != autofilledDate?.getMonth()
+                                        || data.date.getDate() != autofilledDate?.getDate())) {
+                                data.date.let { date ->
+                                    GlobalScope.launch {
+                                        try {
+                                            val dailySong = DailySongServiceFrontend.getDay(
+                                                SerializableDate(
+                                                    date.getFullYear(),
+                                                    date.getMonth(),
+                                                    date.getDate()
+                                                )
+                                            )
+                                            autofilledDate = date
+                                            if (data.trackUri?.let { SpotifyUri(it).id } != dailySong.trackId) {
+                                                setData(
+                                                    data.copy(
+                                                        trackUri = "spotify:track:${dailySong.trackId}",
+                                                        note = dailySong.note,
+                                                        protectedNote = dailySong.protectedNote
+                                                    )
+                                                )
+                                                protectedNotePassword = dailySong.protectedNotePassword
+                                            }
+                                        } catch (ignored: ServiceException) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 required = true
             )

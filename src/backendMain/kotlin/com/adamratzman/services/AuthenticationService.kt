@@ -8,6 +8,7 @@ import io.ktor.auth.principal
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import pl.treksoft.kvision.remote.ServiceException
@@ -44,15 +45,16 @@ actual class AuthenticationService : IAuthenticationService {
             UserRole.USER
         )
 
-        call.sessions.set(newUserPrincipal)
+            call.sessions.set(newUserPrincipal)
 
-        return transaction {
-            Users.insert {
-                newUserPrincipal.addTo(it)
+            return transaction {
+                Users.insert {
+                    newUserPrincipal.addTo(it)
+                }
+
+                true
             }
 
-            true
-        }
     }
 
     override suspend fun getClientSideData(): ClientSideData {

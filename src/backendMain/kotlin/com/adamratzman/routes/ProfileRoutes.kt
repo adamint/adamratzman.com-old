@@ -1,6 +1,7 @@
 package com.adamratzman.routes
 
-import com.adamratzman.database.SessionAuthName
+import com.adamratzman.database.FormAuth
+import com.adamratzman.database.SessionAuth
 import com.adamratzman.utils.renderSiteIndex
 import io.ktor.application.call
 import io.ktor.auth.authenticate
@@ -12,7 +13,7 @@ fun Routing.profileRoutes() {
 }
 
 fun Routing.profileHomeRoute() {
-    authenticate(SessionAuthName) {
+    authenticate(SessionAuth) {
         get("/me") {
             call.renderSiteIndex()
         }

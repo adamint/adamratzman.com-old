@@ -1,7 +1,8 @@
 package com.adamratzman.database
 
 import com.adamratzman.database.SiteAction.*
-import com.adamratzman.layouts.partials.spotifyAuthRedirectUri
+import com.adamratzman.database.View.LoginPage
+import com.adamratzman.security.spotifyAuthRedirectUri
 import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.utils.parseSpotifyCallbackHashToToken
 import com.adamratzman.utils.toDevOrProdUrl
@@ -87,6 +88,19 @@ object SiteManager {
         try {
             redirectBackUrl = window.location.href
             window.location.href = spotifyAuthRedirectUri
+        } catch (exception: Exception) {
+            parent.h2 {
+                style { color = Color.name(Col.RED) }
+                +"Your browser does not support localStorage. Please exit incognito mode."
+            }
+        }
+    }
+
+    fun redirectToAuthentication(parent: Container) {
+        try {
+            siteStore.getState().clientSideData = null
+            redirectBackUrl = window.location.href
+            redirectToUrl(LoginPage.devOrProdUrl())
         } catch (exception: Exception) {
             parent.h2 {
                 style { color = Color.name(Col.RED) }

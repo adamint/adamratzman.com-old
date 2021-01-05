@@ -26,7 +26,8 @@ import com.adamratzman.database.SiteManager.trackViewPage
 import com.adamratzman.database.SiteManager.viewAllDailySongsPage
 import com.adamratzman.database.SiteManager.viewDailySongPage
 import com.adamratzman.database.View.*
-import com.adamratzman.layouts.partials.spotifyClientId
+import com.adamratzman.layouts.logInClientSide
+import com.adamratzman.security.spotifyClientId
 import com.adamratzman.models.*
 import com.adamratzman.services.ClientSideData
 import com.adamratzman.services.SerializableDate
@@ -260,6 +261,7 @@ fun Navigo.initialize(): Navigo {
                 setSpotifyApi()
                 SiteManager.redirectBack(defaultUrl = Home.url)
             }
+            SiteManager.redirectBackUrl != null -> SiteManager.redirectBack(defaultUrl = Home.url)
             window.location.pathname.length <= 1 -> homePage()
             else -> notFoundPage()
         }
@@ -276,7 +278,6 @@ fun Navigo.initialize(): Navigo {
         .on(UrlShortenerViewAllShortenedLinks.url, { _ -> shortenerViewAllShortenedLinks() })
         .on(UrlShortenerViewSingleShortenedLink.regExp, { path -> shortenerViewShortenedLink(path) })
         .on(UrlShortenerRedirectToShortenedLink.regExp, { path -> shortenerRedirectToShortenedLink(path) })
-        .on("/u/(.+)", { _ -> println("path found") })
         .on(ArbitraryPrecisionCalculatorPage.url, { _ -> calculatorPage() })
         .on(SpotifyPlaylistGeneratorPage.url, { _ -> spotifyPlaylistGeneratorPage() })
         .on(SpotifyGenreListPage.url, { _ -> spotifyGenreListPage() })
@@ -289,6 +290,7 @@ fun Navigo.initialize(): Navigo {
         .on(ProfilePage.url, { _ -> profilePage() })
         .on(ViewAllDailySongsPage.url, { _ -> viewAllDailySongsPage() })
         .on(ViewDailySongPage.regExp, { year, month, day -> viewDailySongPage(SerializableDate(year.toInt(), month.toInt(), day.toInt())) })
-
+        .on("/loggedIn", { _ -> logInClientSide() })
+        .on("/logout", { _ -> SiteManager.redirectToAuthentication(Div())})
         .apply { notFound({ _ -> notFoundPage() }) }
 }

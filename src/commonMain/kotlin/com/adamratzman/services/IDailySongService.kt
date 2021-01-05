@@ -37,5 +37,5 @@ data class SerializableDate(
     val monthNumber: Int,
     val dayOfMonth: Int
 ) {
-    fun toLocalDate() = LocalDate(year, monthNumber, dayOfMonth)
+    fun toLocalDate() = LocalDate(year, monthNumber + 1, dayOfMonth)
 }

@@ -18,9 +18,14 @@ data class UserPrincipal(
     val role: UserRole
 ) : Principal {
     fun toClientSideData() = ClientSideData(username, role)
+
+    companion object {
+        const val cookieName = "UserPrincipal"
+    }
 }
 
-const val SessionAuthName = "session"
+const val FormAuth = "session"
+const val SessionAuth = "UserPrincipalSessionAuth"
 
 object Users : Table() {
     val username = varchar("username", 64)

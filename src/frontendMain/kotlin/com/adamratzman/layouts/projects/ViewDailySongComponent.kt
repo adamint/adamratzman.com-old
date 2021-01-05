@@ -8,13 +8,12 @@ import com.adamratzman.services.DailySongServiceFrontend
 import com.adamratzman.services.SerializableDate
 import com.adamratzman.services.UserRole
 import com.adamratzman.utils.UikitName.*
+import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import com.adamratzman.utils.showDefaultErrorToast
-import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.w3c.dom.url.URLSearchParams
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.remote.ServiceException
@@ -26,7 +25,7 @@ class ViewDailySongComponent(date: SerializableDate, parent: Container) : SiteSt
                 val dailySong = DailySongServiceFrontend.getDay(date)
                 h3(classes = nameSetOf(MarginRemoveBottom, "moderate-bold")) {
                     +"Daily Song ${date.monthNumber + 1}/${date.dayOfMonth}/${date.year} ("
-                    link(label="Go back", url = ViewAllDailySongsPage.devOrProdUrl())
+                    link(label = "Go back", url = ViewAllDailySongsPage.devOrProdUrl())
                     +")"
                 }
                 h2(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, MarginAuto, "moderate-bold", "max-width-1-2@m")) {
@@ -56,16 +55,15 @@ class ViewDailySongComponent(date: SerializableDate, parent: Container) : SiteSt
                     }
                 }
 
-                val search = if (!window.location.search.isBlank()) window.location.search
-                else window.location.hash.substringAfter("?")
+                val searchParams = getSearchParams()
 
-                if (dailySong.protectedNote != null && URLSearchParams(search).get("protected") == dailySong.protectedNotePassword) {
+                if (dailySong.protectedNote != null && searchParams.get("protected") == dailySong.protectedNotePassword) {
                     div(classes = nameSetOf(MarginAuto, "margin-medium-bottom@m", "margin-small-bottom@s", "max-width-1-2@m")) {
                         div(content = "Special note: ${dailySong.protectedNote}", rich = true)
                     }
                 }
 
-                if (state.clientSideData?.role == UserRole.ADMIN || URLSearchParams(search).get("protected") == dailySong.protectedNotePassword) {
+                if (state.clientSideData?.role == UserRole.ADMIN || searchParams.get("protected") == dailySong.protectedNotePassword) {
                     val protectedUrl = "${ViewDailySongPage(date).devOrProdUrl()}?protected=${dailySong.protectedNotePassword}"
                     p(className = MarginLargeTop.asString) {
                         +"The URL for this daily song, including the special note, is "

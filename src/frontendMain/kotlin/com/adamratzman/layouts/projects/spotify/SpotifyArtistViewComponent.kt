@@ -6,7 +6,7 @@ import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyCategoryViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.layouts.partials.guardValidSpotifyApi
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.setTitle
 import com.adamratzman.spotify.models.Album
 import com.adamratzman.spotify.models.Artist

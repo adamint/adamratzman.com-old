@@ -3,7 +3,7 @@ package com.adamratzman.layouts.projects.spotify
 import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.layouts.partials.guardValidSpotifyApi
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf

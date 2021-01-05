@@ -1,12 +1,14 @@
 package com.adamratzman.layouts
 
 import com.adamratzman.database.SiteManager
-import com.adamratzman.database.View.ProfilePage
-import com.adamratzman.database.View.RegisterPage
+import com.adamratzman.database.View.*
+import com.adamratzman.database.isDevServer
 import com.adamratzman.services.*
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addCssClasses
+import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.nameSetOf
+import com.adamratzman.utils.showDefaultErrorToast
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.treksoft.kvision.core.Container
@@ -31,10 +33,10 @@ class LoginComponent(parent: Container) : SiteStatefulComponent(parent = parent,
             }
             p {
                 +"Need to create an account? "
-                link(label="Register →", url= RegisterPage.devOrProdUrl(), className = "link-color")
+                link(label = "Register →", url = RegisterPage.devOrProdUrl(), className = "link-color")
             }
 
-            formPanel<Credentials>(className = MarginMediumTop.asString) {
+            formPanel<Credentials>(className = MarginMediumTop.asString, method = FormMethod.POST, action = "/login") {
                 val usernameComponent = Text(label = "Username", name = "username").apply {
                     style { width = 80 to perc }
                     addCssClasses(UkInline, MarginSmallBottom)
@@ -75,24 +77,32 @@ class LoginComponent(parent: Container) : SiteStatefulComponent(parent = parent,
                             form.clearData()
                             return@onClick
                         }
-                        val credentials = form.getData()
+                        val formJQuery: dynamic = this@formPanel.getElementJQuery() ?: return@onClick
 
-                        GlobalScope.launch {
-                            try {
-                                if (AuthenticationServiceFrontend.login(credentials.username!!, credentials.password!!)) {
-                                    val clientSideData = AuthenticationServiceFrontend.getClientSideData()
-                                    state.clientSideData = clientSideData
-                                    SiteManager.redirectToUrl(ProfilePage.devOrProdUrl())
+                        if (!isDevServer) {
+                            formJQuery.submit()
+                            return@onClick
+                        }
+                        else {
+                            GlobalScope.launch {
+                                try {
+                                    val data = getData()
+                                    if (AuthenticationServiceFrontend.login(data.username!!, data.password!!)) {
+                                        logInClientSide()
+                                    }
+                                } catch (exception: ServiceException) {
+                                    exception.showDefaultErrorToast()
                                 }
-                            } catch (exception: ServiceException) {
-                                disabled = false
-                                form.clearData()
-                                usernameComponent.validatorError = exception.message
-                                passwordComponent.validatorError = exception.message
                             }
                         }
                     }
                 }
+
+                if (getSearchParams().has("error")) {
+                    usernameComponent.validatorError = "Invalid username or password supplied."
+                    passwordComponent.validatorError = "Invalid username or password supplied."
+                }
+
             }
         }
 
@@ -175,3 +185,16 @@ class RegisterComponent(parent: Container) : SiteStatefulComponent(parent = pare
 
     }
 })
+
+fun logInClientSide() {
+    GlobalScope.launch {
+        try {
+            val clientSideData = AuthenticationServiceFrontend.getClientSideData()
+            SiteManager.siteStore.getState().clientSideData = clientSideData
+            SiteManager.redirectBack(defaultUrl = ProfilePage.devOrProdUrl())
+            SiteManager.redirectToUrl(ProfilePage.devOrProdUrl())
+        } catch (exception: ServiceException) {
+            SiteManager.redirectToUrl(LoginPage.devOrProdUrl())
+        }
+    }
+}

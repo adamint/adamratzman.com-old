@@ -1,18 +1,22 @@
-package com.adamratzman.layouts.partials
+package com.adamratzman.security
 
 import com.adamratzman.database.SiteManager
 import com.adamratzman.database.SiteState
-import com.adamratzman.database.View.LoginPage
 import com.adamratzman.database.spotifyTokenExpiryLocalStorageKey
 import com.adamratzman.database.spotifyTokenLocalStorageKey
+import com.adamratzman.services.AuthenticationServiceFrontend
 import com.adamratzman.services.ClientSideData
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.getSpotifyAuthorizationUrl
 import com.adamratzman.spotify.utils.getCurrentTimeMs
 import kotlinx.browser.localStorage
+import kotlinx.browser.window
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.w3c.dom.get
 import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.remote.ServiceException
 
 const val spotifyClientId = "4341dad364794fbaa97a37fd4739b088"
 val spotifyRedirectUri = encodeURIComponent(SiteManager.domain)
@@ -43,5 +47,17 @@ fun Container.guardValidSpotifyApi(state: SiteState, block: (SpotifyImplicitGran
 }
 
 fun Container.guardLoggedIn(state: SiteState, block: (ClientSideData) -> Unit) {
-    state.clientSideData?.let(block) ?: SiteManager.redirectToUrl(LoginPage.devOrProdUrl())
+    if (state.clientSideData != null) {
+        state.clientSideData!!.let(block)
+    } else {
+        GlobalScope.launch {
+            try {
+                state.clientSideData = AuthenticationServiceFrontend.getClientSideData()
+                state.clientSideData!!.let(block)
+                window.location.href = window.location.href
+            } catch (exception: ServiceException) {
+                SiteManager.redirectToAuthentication(this@guardLoggedIn)
+            }
+        }
+    }
 }

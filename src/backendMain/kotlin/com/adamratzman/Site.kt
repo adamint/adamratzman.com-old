@@ -1,28 +1,24 @@
 package com.adamratzman
 
-import com.adamratzman.database.SessionAuthName
-import com.adamratzman.database.SiteDatabase
-import com.adamratzman.database.UserPrincipal
+import com.adamratzman.database.*
+import com.adamratzman.routes.authRoutes
 import com.adamratzman.routes.profileRoutes
 import com.adamratzman.services.*
 import com.adamratzman.utils.renderSiteIndex
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.auth.principal
-import io.ktor.auth.session
+import io.ktor.auth.*
+import io.ktor.auth.AuthenticationFailedCause.InvalidCredentials
 import io.ktor.features.CORS
 import io.ktor.features.Compression
 import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.resolveResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.request.path
-import io.ktor.response.respond
 import io.ktor.response.respondRedirect
 import io.ktor.response.respondText
 import io.ktor.routing.get
@@ -38,10 +34,8 @@ import pl.treksoft.kvision.remote.applyRoutes
 import pl.treksoft.kvision.remote.kvisionInit
 import java.io.File
 import java.security.KeyStore
-import kotlin.collections.set
 
 val isProd: Boolean = System.getenv("IS_PROD").toBoolean()
-val sessionsRootDir: String = System.getenv("SESSIONS_ROOT_DIR")
 
 fun Application.module() {
     SiteDatabase.initialize()
@@ -49,12 +43,13 @@ fun Application.module() {
     install(Compression)
     install(Sessions) {
         cookie<UserPrincipal>(
-            SessionAuthName,
-            storage = if (isProd) directorySessionStorage(File(sessionsRootDir)) else SessionStorageMemory()
+            UserPrincipal.cookieName,
+            storage = SessionStorageMemory()
         ) {
             cookie.path = "/"
             cookie.extensions["SameSite"] = "lax"
         }
+
     }
     install(CORS) {
         allowCredentials = true
@@ -79,12 +74,10 @@ fun Application.module() {
         status(HttpStatusCode.NotFound) {
             println("Not found: ${call.request.path()}")
             call.renderSiteIndex()
-            // call.respondFile(File("/assets/index.html"))
-
         }
     }
     install(Authentication) {
-        session<UserPrincipal>(SessionAuthName) {
+        session<UserPrincipal>(SessionAuth) {
             challenge {
                 call.respondRedirect("/login")
             }
@@ -92,10 +85,28 @@ fun Application.module() {
                 session
             }
         }
+
+        form(FormAuth) {
+            userParamName = "username"
+            passwordParamName = "password"
+            challenge {
+                val errors: List<AuthenticationFailedCause> = call.authentication.allFailures
+                when (errors.singleOrNull()) {
+                    InvalidCredentials -> call.respondRedirect("/login?error=invalid_credentials")
+                    else -> call.respondRedirect("/login")
+                }
+            }
+            validate { cred: UserPasswordCredential ->
+                val user = getUser(cred.name) ?: return@validate null
+                return@validate if (user.passwordSaltHash == getSaltedPassword(cred.password, user.salt)) user
+                else null
+            }
+        }
     }
 
 
     routing {
+        authRoutes()
         static("static") {
             resources("assets/static")
         }
@@ -112,7 +123,7 @@ fun Application.module() {
 
         get("/logout") {
             call.sessions.clear<UserPrincipal>()
-            call.respondRedirect("/login")
+            call.authentication.call.respondRedirect("/login?logout=true")
         }
     }
 

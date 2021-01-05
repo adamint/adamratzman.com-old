@@ -11,8 +11,7 @@ import com.adamratzman.layouts.projects.spotify.*
 import com.adamratzman.layouts.user.ProfilePageComponent
 import com.adamratzman.utils.UikitName.UkSpinnerAttribute
 import com.adamratzman.utils.addAttributes
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.adamratzman.utils.getSearchParams
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.core.Position
 import pl.treksoft.kvision.core.UNIT.perc
@@ -32,6 +31,10 @@ class App : Application() {
     override fun start(state: Map<String, Any>) {
         SiteManager.initialize()
         root("kvapp", addRow = false) {
+            if (getSearchParams().get("logout") != null) {
+                SiteManager.redirectToAuthentication(this)
+            }
+
             HeaderComponent(this)
 
             main(SiteManager.siteStore) { state ->
@@ -75,7 +78,7 @@ class App : Application() {
                     LogoutPage -> throw NotImplementedError()
                     RegisterPage -> RegisterComponent(this)
                     ViewAllDailySongsPage -> ViewAllDailySongsComponent(this)
-                    is ViewDailySongPage -> ViewDailySongComponent(state.view.date.copy(monthNumber = state.view.date.monthNumber - 1),this)
+                    is ViewDailySongPage -> ViewDailySongComponent(state.view.date.copy(monthNumber = state.view.date.monthNumber - 1), this)
                 }
 
             }

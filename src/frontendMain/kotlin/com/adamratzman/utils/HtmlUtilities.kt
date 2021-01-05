@@ -2,6 +2,8 @@ package com.adamratzman.utils
 
 import com.adamratzman.database.SiteState
 import com.adamratzman.database.isDevServer
+import kotlinx.browser.window
+import org.w3c.dom.url.URLSearchParams
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Tag
 import pl.treksoft.kvision.html.link
@@ -52,3 +54,5 @@ fun Widget.unfocus() {
 fun removeLoadingSpinner(state: SiteState) {
     state.loadingDiv?.removeAll()
 }
+
+fun getSearchParams() = URLSearchParams(if (!window.location.search.isBlank()) window.location.search  else window.location.hash.substringAfter("?"))

@@ -15,6 +15,9 @@ import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.core.UNIT.perc
 import pl.treksoft.kvision.core.UNIT.px
@@ -25,8 +28,14 @@ class ViewAllDailySongsComponent(parent: Container) : SiteStatefulComponent(pare
     div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
         div(classes = nameSetOf(WidthTwoThirds, MarginAuto)) {
             GlobalScope.launch {
+                val currentLocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val currentLocalDateAsNum = currentLocalDateTime.year + currentLocalDateTime.monthNumber * currentLocalDateTime.dayOfMonth
                 val dailySongs = DailySongServiceFrontend
                     .getAllDays()
+                    .filter { dailySong ->
+                        val localDate = dailySong.date.toLocalDate()
+                        localDate.year + localDate.monthNumber * localDate.dayOfMonth <= currentLocalDateAsNum
+                    }
 
                 h2(content = "Daily Song Recommendation", classes = nameSetOf(MarginRemoveBottom, "moderate-bold"))
                 goBackToProjectHome()

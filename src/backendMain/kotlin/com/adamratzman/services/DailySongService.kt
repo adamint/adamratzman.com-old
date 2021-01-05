@@ -27,7 +27,7 @@ actual class DailySongService : IDailySongService {
     }
 
     override suspend fun getDay(date: SerializableDate): DailySong {
-        return getDailySongForDay(date) ?: throw ServiceException("A song with this date was found.")
+        return getDailySongForDay(date) ?: throw ServiceException("A song with this date was not found.")
     }
 
     override suspend fun deleteDay(date: SerializableDate): Boolean {
