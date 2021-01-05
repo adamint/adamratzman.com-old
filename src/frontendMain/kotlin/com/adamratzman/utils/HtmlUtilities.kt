@@ -2,7 +2,9 @@ package com.adamratzman.utils
 
 import com.adamratzman.database.SiteState
 import com.adamratzman.database.isDevServer
+import kotlinx.browser.document
 import kotlinx.browser.window
+import org.w3c.dom.asList
 import org.w3c.dom.url.URLSearchParams
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Tag
@@ -56,3 +58,15 @@ fun removeLoadingSpinner(state: SiteState) {
 }
 
 fun getSearchParams() = URLSearchParams(if (!window.location.search.isBlank()) window.location.search  else window.location.hash.substringAfter("?"))
+
+/*
+window.matchMedia("only screen and (max-width: 760px)").matches;
+ */
+
+fun isMobile() = window.matchMedia("only screen and (max-width: 760px)").matches
+
+fun fixDropdownMobile() {
+    document.getElementsByClassName("dropdown-item").asList().forEach { dropdownItem ->
+        dropdownItem.removeAttribute("href")
+    }
+}

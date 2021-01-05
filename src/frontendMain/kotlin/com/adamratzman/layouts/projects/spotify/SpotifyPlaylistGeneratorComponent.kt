@@ -4,9 +4,9 @@ import com.adamratzman.database.SiteManager
 import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyGenreListPage
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
 import com.adamratzman.layouts.setTitle
-import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.endpoints.public.TuneableTrackAttribute
 import com.adamratzman.spotify.models.Artist
@@ -15,11 +15,13 @@ import com.adamratzman.spotify.models.Track
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.UikitName.Icon
+import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.w3c.dom.asList
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.core.UNIT.*
 import pl.treksoft.kvision.form.range.rangeInput
@@ -82,6 +84,7 @@ class SpotifyPlaylistGeneratorComponent(parent: Container) : SiteStatefulCompone
 
                             val matches = getMatches(input, api)
                             updateFunction(matches.flatten().toTypedArray())
+                            fixDropdownMobile()
                         }
                     }) {
                         placeholder = "Enter a song, artist, or genre uri.."
