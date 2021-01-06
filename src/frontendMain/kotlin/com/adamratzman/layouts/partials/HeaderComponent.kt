@@ -13,6 +13,7 @@ class HeaderComponent(parent: Container) : SiteStatefulComponent(parent = parent
     header {
         nav(classes = nameSetOf(NavbarContainer, MarginLargeRight, NavbarTransparent, MarginSmallTop, MarginSmallBottom)) {
             if (!isMobile()) addCssClasses(MarginLargeLeft)
+            else addCssClasses(MarginMediumLeft)
             addUikitAttributes(NavbarAttribute)
 
             div(classes = nameSetOf(NavbarLeft.asString)) {
