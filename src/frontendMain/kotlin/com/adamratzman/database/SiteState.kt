@@ -1,34 +1,11 @@
 package com.adamratzman.database
 
 import com.adamratzman.database.SiteAction.*
-import com.adamratzman.database.SiteManager.CategoryViewPage
-import com.adamratzman.database.SiteManager.artistViewPage
-import com.adamratzman.database.SiteManager.baseConverterPage
-import com.adamratzman.database.SiteManager.calculatorPage
-import com.adamratzman.database.SiteManager.contactPage
-import com.adamratzman.database.SiteManager.frenchResourcesPage
-import com.adamratzman.database.SiteManager.homePage
-import com.adamratzman.database.SiteManager.loginPage
-import com.adamratzman.database.SiteManager.notFoundPage
-import com.adamratzman.database.SiteManager.portfolioPage
-import com.adamratzman.database.SiteManager.profilePage
-import com.adamratzman.database.SiteManager.projectsHomePage
-import com.adamratzman.database.SiteManager.registerPage
 import com.adamratzman.database.SiteManager.setSpotifyApi
-import com.adamratzman.database.SiteManager.shortenerHomePage
-import com.adamratzman.database.SiteManager.shortenerRedirectToShortenedLink
-import com.adamratzman.database.SiteManager.shortenerViewAllShortenedLinks
-import com.adamratzman.database.SiteManager.shortenerViewShortenedLink
-import com.adamratzman.database.SiteManager.spotifyCategoryListPage
-import com.adamratzman.database.SiteManager.spotifyGenreListPage
-import com.adamratzman.database.SiteManager.spotifyPlaylistGeneratorPage
-import com.adamratzman.database.SiteManager.trackViewPage
-import com.adamratzman.database.SiteManager.viewAllDailySongsPage
-import com.adamratzman.database.SiteManager.viewDailySongPage
 import com.adamratzman.database.View.*
 import com.adamratzman.layouts.logInClientSide
-import com.adamratzman.security.spotifyClientId
 import com.adamratzman.models.*
+import com.adamratzman.security.spotifyClientId
 import com.adamratzman.services.ClientSideData
 import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
@@ -186,6 +163,8 @@ sealed class View(val name: String, val url: String, val needsInitialLoadingSpin
         }
     }
 
+    object MyTopTracksAndArtistsPage : View("My Spotify Top Tracks and Artists", "/projects/spotify/mytop", needsInitialLoadingSpinner = true)
+
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class
     val baseUrl: String = url.toDevOrProdUrl()
@@ -218,6 +197,7 @@ sealed class SiteAction : RAction {
     object LoadProfilePage : SiteAction()
     object LoadViewAllDailySongsPage : SiteAction()
     data class LoadViewDailySongPage(val date: SerializableDate) : SiteAction()
+    object LoadMyTopTracksAndArtistsPage : SiteAction()
 }
 
 fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (action) {
@@ -251,6 +231,7 @@ fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (ac
     LoadProfilePage -> state.copy(view = ProfilePage)
     LoadViewAllDailySongsPage -> state.copy(view = ViewAllDailySongsPage)
     is LoadViewDailySongPage -> state.copy(view = ViewDailySongPage(action.date))
+    LoadMyTopTracksAndArtistsPage -> state.copy(view = MyTopTracksAndArtistsPage)
 }
 
 fun Navigo.initialize(): Navigo {
@@ -291,6 +272,7 @@ fun Navigo.initialize(): Navigo {
         .on(ViewAllDailySongsPage.url, { _ -> viewAllDailySongsPage() })
         .on(ViewDailySongPage.regExp, { year, month, day -> viewDailySongPage(SerializableDate(year.toInt(), month.toInt(), day.toInt())) })
         .on("/loggedIn", { _ -> logInClientSide() })
-        .on("/logout", { _ -> SiteManager.redirectToAuthentication(Div())})
+        .on("/logout", { _ -> SiteManager.redirectToAuthentication(Div()) })
+        .on(MyTopTracksAndArtistsPage.url, { _ -> myTopTracksAndArtistsPage() })
         .apply { notFound({ _ -> notFoundPage() }) }
 }

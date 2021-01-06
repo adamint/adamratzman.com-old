@@ -54,7 +54,11 @@ fun Widget.unfocus() {
 }
 
 fun removeLoadingSpinner(state: SiteState) {
-    state.loadingDiv?.removeAll()
+    state.loadingDiv?.hide()
+}
+
+fun showLoadingSpinner(state: SiteState) {
+    state.loadingDiv?.show()
 }
 
 fun getSearchParams() = URLSearchParams(if (!window.location.search.isBlank()) window.location.search  else window.location.hash.substringAfter("?"))
@@ -69,4 +73,11 @@ fun fixDropdownMobile() {
     document.getElementsByClassName("dropdown-item").asList().forEach { dropdownItem ->
         dropdownItem.removeAttribute("href")
     }
+}
+
+fun Container.selectOuterContainerIfMobile(mobileContainer: Container, desktopContainer: Container, inner: Container.() -> Unit) {
+    add(
+        if (isMobile()) mobileContainer.apply(inner)
+        else desktopContainer.apply(inner)
+    )
 }

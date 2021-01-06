@@ -24,7 +24,7 @@ class BaseConversionComponent(parent: Container) : SiteStatefulComponent(parent 
             goBackToProjectHome()
         }
 
-        div(classes = nameSetOf(MarginAuto, MarginSmallBottom, WidthOneHalf)) {
+        div(classes = nameSetOf(MarginAuto, MarginSmallBottom, WidthTwoThirds)) {
             h3(content = "I want to convert...", classes = nameSetOf(MarginMediumBottom.asString))
 
             div {

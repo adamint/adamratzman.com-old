@@ -242,10 +242,13 @@ private data class FoundSongNameAndArtist(
     val artistsNames: List<String>
 )
 
-private fun TuneableTrackAttribute<*>.min() = if (this == TuneableTrackAttribute.Loudness) -70 else min!!
+private fun TuneableTrackAttribute<*>.min() = when (this) {
+    TuneableTrackAttribute.Loudness -> -70
+    else -> min!!
+}
 
 private fun TuneableTrackAttribute<*>.max() = when (this) {
-    TuneableTrackAttribute.DurationInMilliseconds -> 60
+    TuneableTrackAttribute.DurationInMilliseconds -> 60 * 60 // one hour
     TuneableTrackAttribute.Loudness -> 10
     TuneableTrackAttribute.Tempo -> 300
     else -> max!!
@@ -255,14 +258,14 @@ private fun TuneableTrackAttribute<*>.step() =
     if (!integerOnly || this == TuneableTrackAttribute.DurationInMilliseconds) 0.01 else null
 
 private fun TuneableTrackAttribute<*>.defaultValue() = when (this) {
-    is TuneableTrackAttribute.DurationInMilliseconds -> 3
+    is TuneableTrackAttribute.DurationInMilliseconds -> 3 * 60 // three minutes
     is TuneableTrackAttribute.Tempo -> 120
     is TuneableTrackAttribute.Loudness -> -8
     else -> (max().toFloat() - min().toFloat()) / 2
 }.toFloat()
 
 private fun TuneableTrackAttribute<*>.name() = when (this) {
-    TuneableTrackAttribute.DurationInMilliseconds -> "Duration (minutes)"
+    TuneableTrackAttribute.DurationInMilliseconds -> "Duration (seconds)"
     else -> attribute.replace("_", " ").capitalize()
 }
 
@@ -327,6 +330,7 @@ private class RequestAttributesComponent(formInputs: AssociatedFormInputs, reque
             }
             GlobalScope.launch {
                 try {
+                    println(requestInfo.attributes)
                     val recommendationResponse = formInputs.api.browse.getTrackRecommendations(
                         requestInfo.artistsToSearch.map { it.id },
                         requestInfo.genresToSearch.toList(),
@@ -334,9 +338,10 @@ private class RequestAttributesComponent(formInputs: AssociatedFormInputs, reque
                         targetAttributes = requestInfo.attributes.map { entry ->
                             val trackAttribute = TuneableTrackAttribute.values().first { it.attribute == entry.key }
                             when {
+                                trackAttribute == TuneableTrackAttribute.DurationInMilliseconds -> trackAttribute.asTrackAttribute(entry.value.toInt() * 1000)
                                 trackAttribute.integerOnly -> trackAttribute.asTrackAttribute(entry.value.toInt())
                                 else -> trackAttribute.asTrackAttribute(entry.value)
-                            }
+                            }.apply { println(this) }
                         },
                         limit = 20
                     )
@@ -467,7 +472,7 @@ private class RecommendedPlaylistComponent(formInputs: AssociatedFormInputs, rec
         div {
             recommendationResponse.tracks.forEach { track ->
                 TrackPreviewComponent(
-                    track,
+                    track.asTrackPreview(),
                     this,
                     target = "_blank",
                     bottomComponent = {

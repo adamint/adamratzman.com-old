@@ -12,6 +12,7 @@ import com.adamratzman.spotify.models.Album
 import com.adamratzman.spotify.models.Artist
 import com.adamratzman.spotify.models.Track
 import com.adamratzman.utils.UikitName.*
+import com.adamratzman.utils.isMobile
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.*
@@ -20,6 +21,7 @@ import pl.treksoft.kvision.core.UNIT.px
 import pl.treksoft.kvision.core.style
 import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.utils.Intl
+import pl.treksoft.kvision.utils.perc
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
@@ -57,7 +59,8 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                         }
                     }
 
-                    div(classes = nameSetOf("margin-left-30@m", "width-1-2@m")) {
+                    div(classes = nameSetOf("width-1-2@m")) {
+                        if (!isMobile()) style { marginLeft = 25.perc }
                         div(classes = nameSetOf(MarginMediumLeft)) {
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
                                 bold("Popularity: ")
@@ -94,9 +97,9 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                                 bold("Top ${topTracks.size} tracks: ")
                             }
                             topTracks.forEach { track ->
-                                TrackPreviewComponent(track,
+                                TrackPreviewComponent(track.asTrackPreview(),
                                     this,
-                                    bottomComponent = { span("Popularity: ${it.popularity}. Duration: ${it.durationMs.milliseconds}") }
+                                    bottomComponent = { span("Popularity: ${track.popularity}. Duration: ${track.durationMs.milliseconds}") }
                                 )
                             }
                             removeLoadingSpinner(state)

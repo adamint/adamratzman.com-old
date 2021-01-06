@@ -11,7 +11,8 @@ import pl.treksoft.kvision.html.*
 
 class HeaderComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     header {
-        nav(classes = nameSetOf(NavbarContainer, MarginLargeRight, NavbarTransparent, MarginLargeLeft, MarginSmallTop, MarginSmallBottom)) {
+        nav(classes = nameSetOf(NavbarContainer, MarginLargeRight, NavbarTransparent, MarginSmallTop, MarginSmallBottom)) {
+            if (!isMobile()) addCssClasses(MarginLargeLeft)
             addUikitAttributes(NavbarAttribute)
 
             div(classes = nameSetOf(NavbarLeft.asString)) {

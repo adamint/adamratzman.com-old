@@ -7,6 +7,7 @@ import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
 import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
+import com.adamratzman.utils.isMobile
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
@@ -18,6 +19,7 @@ import pl.treksoft.kvision.core.UNIT.px
 import pl.treksoft.kvision.core.style
 import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.utils.Intl
+import pl.treksoft.kvision.utils.perc
 
 class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     guardValidSpotifyApi(state) { api ->
@@ -57,7 +59,8 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
 
                     }
 
-                    div(classes = nameSetOf("margin-left-30@m", "width-1-2@m")) {
+                    div(classes = nameSetOf("width-1-2@m")) {
+                        if (!isMobile()) style { marginLeft = 25.perc }
                         div(classes = nameSetOf(MarginMediumLeft)) {
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
                                 bold("Top playlists:")

@@ -109,7 +109,13 @@ fun getInteractives() = listOf(
     InteractiveProject(
         "Daily Song Recommendation",
         "A daily song recommendation for you",
-        ViewAllDailySongsPage.devOrProdUrl(),
+        ViewAllDailySongsPage.url,
         ProjectCategory.FUN
-    )
+    ),
+    InteractiveProject(
+        "My Top Tracks and Artists",
+        "See what your short, medium, and long-term Spotify top tracks and artists are",
+        MyTopTracksAndArtistsPage.url,
+        ProjectCategory.SPOTIFY
+    ),
 ).toMutableSet()

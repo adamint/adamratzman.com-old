@@ -279,3 +279,11 @@ ul.centered {
         margin-bottom: 10px;
     }
 }
+
+.tabulator-cell {
+    height: auto !important;
+}
+
+.tabulator-table-Holder {
+    height: auto !important;
+}

@@ -41,16 +41,15 @@ class App : Application() {
                 id = "main"
                 println(state.view.name)
 
-                if (state.view.needsInitialLoadingSpinner) {
-                    state.loadingDiv = div {
-                        div {
-                            style {
-                                right = 0 to px
-                                position = Position.ABSOLUTE
-                                marginRight = 10 to perc
-                            }
-                            addAttributes(UkSpinnerAttribute to "ratio: 2;")
+                state.loadingDiv = div {
+                    div {
+                        if (!state.view.needsInitialLoadingSpinner) hide()
+                        style {
+                            right = 0 to px
+                            position = Position.ABSOLUTE
+                            marginRight = 10 to perc
                         }
+                        addAttributes(UkSpinnerAttribute to "ratio: 2;")
                     }
                 }
 
@@ -79,8 +78,10 @@ class App : Application() {
                     RegisterPage -> RegisterComponent(this)
                     ViewAllDailySongsPage -> ViewAllDailySongsComponent(this)
                     is ViewDailySongPage -> ViewDailySongComponent(state.view.date.copy(monthNumber = state.view.date.monthNumber - 1), this)
-                }
+                    MyTopTracksAndArtistsPage -> MyTopTracksAndArtistsComponent(this)
 
+
+                }
             }
 
             FooterComponent(this)

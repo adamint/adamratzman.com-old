@@ -1,7 +1,9 @@
 package com.adamratzman.layouts.projects.spotify
 
+import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.database.View.SpotifyTrackViewPage
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.spotify.models.Artist
 import com.adamratzman.spotify.models.SimpleAlbum
 import com.adamratzman.spotify.models.Track
 import com.adamratzman.utils.UikitName.*
@@ -16,27 +18,27 @@ import pl.treksoft.kvision.html.image
 import pl.treksoft.kvision.html.link
 import pl.treksoft.kvision.html.p
 
-class TrackPreviewComponent(track: TrackPreviewInfo, parent: Container, bottomComponent: (Container.() -> Unit)? = null, target: String? = null) :
+class ArtistPreviewComponent(artist: ArtistPreviewInfo, parent: Container, bottomComponent: (Container.() -> Unit)? = null, target: String? = null) :
     SiteStatefulComponent(parent = parent, buildStatefulComponent = {
         div(classes = nameSetOf(MarginSmallBottom, GridCollapse)) {
             addUikitAttributes(UkGridAttribute)
-            link(label = "", url = SpotifyTrackViewPage(track.id).devOrProdUrl(), target = target) {
-                image(src = track.album.images.first().url, classes = nameSetOf("smallPreviewImg"))
+            link(label = "", url = SpotifyArtistViewPage(artist.id).devOrProdUrl(), target = target) {
+                image(src = artist.imageUrl, classes = nameSetOf("smallPreviewImg"))
             }
             div(classes = nameSetOf(MarginSmallLeft, MarginSmallTop, WidthExpand, "black")) {
                 p(classes = nameSetOf("songTitle", "bold", MarginRemoveBottom)) {
                     style { fontSize = 20 to px; lineHeight = 1 to normal }
-                    link(label = track.name, url = SpotifyTrackViewPage(track.id).devOrProdUrl(), target = target, classes = nameSetOf("link-color"))
+                    link(label = artist.name, url = SpotifyArtistViewPage(artist.id).devOrProdUrl(), target = target, classes = nameSetOf("link-color"))
                 }
                 bottomComponent?.invoke(this)
             }
         }
     })
 
-data class TrackPreviewInfo(
+data class ArtistPreviewInfo(
     val name: String,
     val id: String,
-    val album: SimpleAlbum
+    val imageUrl: String?
 )
 
-fun Track.asTrackPreview() = TrackPreviewInfo(name, id, album)
+fun Artist.asArtistPreview() = ArtistPreviewInfo(name, id, images.firstOrNull()?.url)
