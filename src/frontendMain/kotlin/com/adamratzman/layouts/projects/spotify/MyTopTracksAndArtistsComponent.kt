@@ -38,7 +38,7 @@ class MyTopTracksAndArtistsComponent(parent: Container) : SiteStatefulComponent(
                     addBootstrap()
                     GlobalScope.launch {
                         delay(2000)
-                        val range = BaseConverterServiceFrontend.getBasesRange()
+                        @Suppress("JoinDeclarationAndAssignment")
                         lateinit var outputDiv: Div
                         form(classes = nameSetOf(MarginMediumBottom.asString)) {
                             select(
@@ -73,9 +73,6 @@ class MyTopTracksAndArtistsComponent(parent: Container) : SiteStatefulComponent(
     }
 })
 
-data class Book(val title: String, val author: String, val year: Int, val rating: Int)
-
-
 @OptIn(ExperimentalTime::class)
 fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: TimeRange, state: SiteState) {
     outputDiv.removeAll()
@@ -88,7 +85,7 @@ fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: T
             val paginationSize = 10
 
             tabPanel {
-                tab("Top Tracks", "fas fa-play-circle") {
+                tab("Top Tracks", "fas icon-play-circle") {
                     tabulator(
                         topTracks.map { it.asTrackPreview() },
                         options = TabulatorOptions(
@@ -120,7 +117,7 @@ fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: T
                     )
                 }
 
-                tab("Top Artists", "fas fa-user") {
+                tab("Top Artists", "fas icon-user") {
                     tabulator(
                         topArtists.map { it.asArtistPreview() },
                         options = TabulatorOptions(
@@ -153,6 +150,7 @@ fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: T
                 }
             }
 
+            addIconsToFasElements()
             removeLoadingSpinner(state)
         }
     }
@@ -163,10 +161,3 @@ fun TimeRange.toReadable() = when (this) {
     TimeRange.MEDIUM_TERM -> "Medium Term (past 6 months)"
     TimeRange.LONG_TERM -> "Long Term (past several years, including recently played)"
 }
-
-@Serializable
-data class BaseConverterForm(
-    val baseFrom: String? = null,
-    val baseTo: String? = null,
-    val numberAsString: String? = null
-)

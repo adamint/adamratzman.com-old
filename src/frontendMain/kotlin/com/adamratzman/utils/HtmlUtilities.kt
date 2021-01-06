@@ -4,6 +4,7 @@ import com.adamratzman.database.SiteState
 import com.adamratzman.database.isDevServer
 import kotlinx.browser.document
 import kotlinx.browser.window
+import kotlinx.dom.removeClass
 import org.w3c.dom.asList
 import org.w3c.dom.url.URLSearchParams
 import pl.treksoft.kvision.core.*
@@ -80,4 +81,12 @@ fun Container.selectOuterContainerIfMobile(mobileContainer: Container, desktopCo
         if (isMobile()) mobileContainer.apply(inner)
         else desktopContainer.apply(inner)
     )
+}
+
+fun addIconsToFasElements() {
+    document.getElementsByClassName("fas").asList().forEach { element ->
+        element.classList.asList().filter { it.startsWith("icon-") }
+            .map { element.removeClass(it); it.removePrefix("icon-") }
+            .forEach { uikitIconName -> element.setAttribute("uk-icon", "icon: $uikitIconName;") }
+    }
 }
