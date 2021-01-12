@@ -97,6 +97,7 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
                 implementation("mysql:mysql-connector-java:$mysqlConnectorVersion")
+                implementation("com.microsoft.sqlserver:mssql-jdbc:8.4.1.jre8")
                 implementation("commons-validator:commons-validator:1.7")
                 implementation("com.github.adamint:jmath:16bd4d546a")
                 implementation("org.apache.commons:commons-lang3:3.11")
