@@ -31,6 +31,7 @@ const val spotifyTokenLocalStorageKey = "spotifyToken"
 const val spotifyTokenExpiryLocalStorageKey = "spotifyTokenExpirationMillis"
 const val redirectBackToLocalStorageKey = "redirectBackTo"
 const val clientSideDataLocalStorageKey = "clientSideData"
+const val clientSideDataInvalidationTimeKey = "clientSideDataInvalidationTime"
 val isDevServer = window.location.host == "localhost:3000"
 
 class NavbarPage(val name: String, val url: String, val icon: String? = null, val view: View? = null) {
@@ -88,6 +89,13 @@ data class SiteState(
         set(data) {
             if (data == null) localStorage.removeItem(clientSideDataLocalStorageKey)
             else localStorage[clientSideDataLocalStorageKey] = Json.encodeToString(data)
+        }
+
+    var clientSideDataInvalidationTime
+        get(): Long? = localStorage[clientSideDataInvalidationTimeKey]?.toLongOrNull()
+        set(value) {
+            if (value == null) localStorage.removeItem(clientSideDataInvalidationTimeKey)
+            else localStorage[clientSideDataInvalidationTimeKey] = (value + 1000 * 60 * 5).toString() // 5 minutes invalidation time
         }
 
     fun isLoggedIn() = clientSideData != null

@@ -47,15 +47,19 @@ fun Container.guardValidSpotifyApi(state: SiteState, block: (SpotifyImplicitGran
 }
 
 fun Container.guardLoggedIn(state: SiteState, block: (ClientSideData) -> Unit) {
-    if (state.clientSideData != null) {
+    val clientSideDataInvalidationTime = state.clientSideDataInvalidationTime
+    if (state.clientSideData != null && (clientSideDataInvalidationTime == null || clientSideDataInvalidationTime < getCurrentTimeMs())) {
         state.clientSideData!!.let(block)
+
     } else {
         GlobalScope.launch {
             try {
                 state.clientSideData = AuthenticationServiceFrontend.getClientSideData()
+                state.clientSideDataInvalidationTime = getCurrentTimeMs()
                 state.clientSideData!!.let(block)
                 window.location.href = window.location.href
             } catch (exception: ServiceException) {
+                state.clientSideDataInvalidationTime = null
                 SiteManager.redirectToAuthentication(this@guardLoggedIn)
             }
         }
