@@ -46,7 +46,7 @@ class BlogPostEntity(id: EntityID<String>) : Entity<String>(id), UpdateableWithF
         lastEditMillis,
         deleted,
         serverTimeString = DateFormat.getDateInstance().format(lastEditMillis ?: creationMillis),
-        serverSnippet = Jsoup.parse(richText).text().take(20) + "..",
+        serverSnippet = Jsoup.parse(richText).text().take(50) + "..",
         serverCategoriesHtml = categories.toList().joinToString(", ") { "<a href='/blog?category=${it.category}'>${it.category}</a>" }
     )
 
