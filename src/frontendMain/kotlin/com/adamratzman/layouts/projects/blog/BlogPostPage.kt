@@ -2,6 +2,7 @@ package com.adamratzman.layouts.projects.blog
 
 import com.adamratzman.database.View.ViewBlogHomePage
 import com.adamratzman.layouts.SiteStatefulComponent
+import com.adamratzman.layouts.setTitle
 import com.adamratzman.services.BlogServiceFrontend
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.isMobile
@@ -50,6 +51,7 @@ class BlogPostPage(id: String, parent: Container) : SiteStatefulComponent(parent
      */
     GlobalScope.launch {
         val post = BlogServiceFrontend.blogService.getBlogPost(id.trim())
+        setTitle("Blog - ${post.title}")
         try {
             div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
                 div(classes = nameSetOf(MarginAuto, TextLeft, if (!isMobile()) WidthThreeFifths else "")) {
