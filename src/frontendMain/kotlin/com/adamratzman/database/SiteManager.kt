@@ -5,6 +5,7 @@ import com.adamratzman.database.View.LoginPage
 import com.adamratzman.security.spotifyAuthRedirectUri
 import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.utils.parseSpotifyCallbackHashToToken
+import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.toDevOrProdUrl
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
@@ -114,3 +115,5 @@ fun profilePage() = SiteManager.siteStore.dispatch(LoadProfilePage)
 fun viewAllDailySongsPage() = SiteManager.siteStore.dispatch(LoadViewAllDailySongsPage)
 fun viewDailySongPage(date: SerializableDate) = SiteManager.siteStore.dispatch(LoadViewDailySongPage(date))
 fun myTopTracksAndArtistsPage() = SiteManager.siteStore.dispatch(LoadMyTopTracksAndArtistsPage)
+fun blogHomePage() = SiteManager.siteStore.dispatch(LoadBlogHomePage(getSearchParams().get("category")?.split(",") ?: listOf()))
+fun blogPostPage(postId: String) = SiteManager.siteStore.dispatch(LoadBlogPostPage(postId))

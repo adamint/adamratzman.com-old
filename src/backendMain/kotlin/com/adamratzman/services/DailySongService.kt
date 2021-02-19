@@ -14,15 +14,14 @@ actual class DailySongService : IDailySongService {
     lateinit var call: ApplicationCall
 
     private fun getDailySongForDay(date: SerializableDate): DailySong? = transaction {
-        DailySongs.select {
-            DailySongs.year.eq(date.year) and DailySongs.month.eq(date.monthNumber) and
-                    DailySongs.dayOfMonth.eq(date.dayOfMonth)
-        }.firstOrNull()?.toDailySong()
+        DailySongEntity.find {
+            DailySongs.year.eq(date.year) and DailySongs.month.eq(date.monthNumber) and DailySongs.dayOfMonth.eq(date.dayOfMonth)
+        }.firstOrNull()?.toFrontendObject()
     }
 
     override suspend fun getAllDays(): List<DailySong> {
         return transaction {
-            DailySongs.selectAll().map { it.toDailySong() }
+            DailySongEntity.all().map { it.toFrontendObject() }
         }
     }
 
@@ -31,7 +30,7 @@ actual class DailySongService : IDailySongService {
     }
 
     override suspend fun deleteDay(date: SerializableDate): Boolean {
-        if (call.sessions.get<UserPrincipal>()?.role != UserRole.ADMIN) return false
+        if (call.sessions.get<UserPrincipal>()?.getUser()?.role != UserRole.Admin) return false
         if (getDailySongForDay(date) != null) {
             transaction {
                 DailySongs.deleteWhere {
@@ -44,19 +43,19 @@ actual class DailySongService : IDailySongService {
     }
 
     override suspend fun addOrUpdate(dailySong: DailySong): Boolean {
-        if (call.sessions.get<UserPrincipal>()?.role != UserRole.ADMIN) return false
+        if (call.sessions.get<UserPrincipal>()?.getUser()?.role != UserRole.Admin) return false
         val date = dailySong.date
         if (getDailySongForDay(date) != null) {
             transaction {
-                DailySongs.update({
-                    DailySongs.year.eq(date.year) and DailySongs.month.eq(date.monthNumber) and
-                            DailySongs.dayOfMonth.eq(date.dayOfMonth)
-                }) { dailySong updateTo it }
+                val entity = DailySongEntity.find {
+                    DailySongs.year.eq(date.year) and DailySongs.month.eq(date.monthNumber) and DailySongs.dayOfMonth.eq(date.dayOfMonth)
+                }.first()
+                entity.mutate(dailySong)
             }
         } else {
             transaction {
-                DailySongs.insert {
-                    dailySong addTo it
+                DailySongEntity.new {
+                    this.mutate(dailySong)
                 }
             }
         }

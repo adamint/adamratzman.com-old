@@ -101,6 +101,7 @@ kotlin {
                 implementation("commons-validator:commons-validator:1.7")
                 implementation("com.github.adamint:jmath:16bd4d546a")
                 implementation("org.apache.commons:commons-lang3:3.11")
+                implementation("org.jsoup:jsoup:1.13.1")
             }
         }
         val backendTest by getting {
@@ -269,13 +270,12 @@ afterEvaluate {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
         create("backendRun", JavaExec::class) {
-            dependsOn("frontendDevelopmentArchive", "compileKotlinBackend")
+            dependsOn("compileKotlinBackend")
             group = "run"
             main = mainClassName
             classpath =
                     configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
-                            project.tasks["backendProcessResources"].outputs.files +
-                            project.tasks["frontendDevelopmentArchive"].outputs.files
+                            project.tasks["backendProcessResources"].outputs.files
             workingDir = buildDir
         }
         create("backendRunProd", JavaExec::class) {

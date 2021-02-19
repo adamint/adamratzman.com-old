@@ -23,6 +23,6 @@ data class ClientSideData(
 )
 
 enum class UserRole(val readable: String) {
-    USER("user"),
-    ADMIN("site admin")
+    User("user"),
+    Admin("site admin")
 }

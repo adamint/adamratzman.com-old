@@ -49,6 +49,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
     WidthTwoThirds("uk-width-2-3"),
     WidthAuto("uk-width-auto"),
     WidthExpand("uk-width-expand"),
+    WidthThreeFifths("uk-width-3-5"),
 
     // Height
     HeightMedium("uk-height-medium"),
@@ -116,6 +117,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
 
     // Text
     TextCenter("uk-text-center"),
+    TextLeft("uk-text-left"),
 
     // Miscellaneous
     Active("uk-active"),

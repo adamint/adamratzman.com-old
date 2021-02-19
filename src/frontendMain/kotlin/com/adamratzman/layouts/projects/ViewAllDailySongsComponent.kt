@@ -52,7 +52,7 @@ class ViewAllDailySongsComponent(parent: Container) : SiteStatefulComponent(pare
                                         label = "${date.monthNumber + 1}/${date.dayOfMonth}/${date.year.toString().takeLast(2)}",
                                         url = ViewDailySongPage(date).devOrProdUrl()
                                     )
-                                    if (state.clientSideData?.role == UserRole.ADMIN) {
+                                    if (state.clientSideData?.role == UserRole.Admin) {
                                         link(label = " ", classes = nameSetOf(Icon, MarginSmallLeft)) {
                                             addAttributes(IconAttribute to "close")
                                             onClick {

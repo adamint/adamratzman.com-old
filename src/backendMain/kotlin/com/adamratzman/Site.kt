@@ -42,10 +42,7 @@ fun Application.module() {
 
     install(Compression)
     install(Sessions) {
-        cookie<UserPrincipal>(
-            UserPrincipal.cookieName,
-            storage = SessionStorageMemory()
-        ) {
+        cookie<UserPrincipal>(UserPrincipalCookieName) {
             cookie.path = "/"
             cookie.extensions["SameSite"] = "lax"
         }
@@ -98,8 +95,10 @@ fun Application.module() {
             }
             validate { cred: UserPasswordCredential ->
                 val user = getUser(cred.name) ?: return@validate null
-                return@validate if (user.passwordSaltHash == getSaltedPassword(cred.password, user.salt)) user
-                else null
+                return@validate (if (user.passwordSaltHash == getSaltedPassword(cred.password, user.salt)) {
+                    UserPrincipal.generate(user)
+                }
+                else null)
             }
         }
     }
@@ -135,6 +134,7 @@ fun Application.module() {
         applyRoutes(CalculatorServiceManager)
         applyRoutes(AuthenticationServiceManager)
         applyRoutes(DailySongServiceManager)
+        applyRoutes(BlogServiceManager)
         profileRoutes()
     }
 }

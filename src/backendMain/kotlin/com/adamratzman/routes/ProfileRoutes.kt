@@ -1,6 +1,5 @@
 package com.adamratzman.routes
 
-import com.adamratzman.database.FormAuth
 import com.adamratzman.database.SessionAuth
 import com.adamratzman.utils.renderSiteIndex
 import io.ktor.application.call

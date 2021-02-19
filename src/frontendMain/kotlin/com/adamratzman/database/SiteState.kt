@@ -41,7 +41,7 @@ class NavbarPage(val name: String, val url: String, val icon: String? = null, va
 val defaultAccessibleNavbarPages: List<NavbarPage> = listOf(
     NavbarPage(ProjectsHome),
     NavbarPage(Portfolio),
-    NavbarPage("Resume", "/static/files/resume.pdf"),
+    NavbarPage(ViewBlogHomePage(listOf())),
     NavbarPage("Github", "https://github.com/adamint", "/static/icons/mbr/mbri-github.svg"),
     NavbarPage(ContactMe, "/static/icons/mbr/mbri-paper-plane.svg")
 )
@@ -165,6 +165,29 @@ sealed class View(val name: String, val url: String, val needsInitialLoadingSpin
 
     object MyTopTracksAndArtistsPage : View("My Spotify Top Tracks and Artists", "/projects/spotify/mytop", needsInitialLoadingSpinner = true)
 
+    data class ViewBlogHomePage(val filterCategories: List<String>) :
+        View(
+            if (filterCategories.isEmpty()) "Blog" else "Blog - Categories ${filterCategories.joinToString(", ")}",
+            "/blog",
+            needsInitialLoadingSpinner = true
+        ) {
+        companion object {
+            val regExp = RegExp("/projects/daily-songs/(\\d+)/(\\d+)/(\\d+)")
+        }
+    }
+
+    data class ViewBlogPostPage(val id: String) :
+        View(
+            "Blog",
+            "/blog/posts/$id",
+            needsInitialLoadingSpinner = true
+        ) {
+        companion object {
+            val regExp = RegExp("/blog/posts/(.+)")
+        }
+    }
+
+
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class
     val baseUrl: String = url.toDevOrProdUrl()
@@ -198,6 +221,9 @@ sealed class SiteAction : RAction {
     object LoadViewAllDailySongsPage : SiteAction()
     data class LoadViewDailySongPage(val date: SerializableDate) : SiteAction()
     object LoadMyTopTracksAndArtistsPage : SiteAction()
+    data class LoadBlogHomePage(val filterCategories: List<String>) : SiteAction()
+    data class LoadBlogPostPage(val id: String) : SiteAction()
+
 }
 
 fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (action) {
@@ -232,6 +258,8 @@ fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (ac
     LoadViewAllDailySongsPage -> state.copy(view = ViewAllDailySongsPage)
     is LoadViewDailySongPage -> state.copy(view = ViewDailySongPage(action.date))
     LoadMyTopTracksAndArtistsPage -> state.copy(view = MyTopTracksAndArtistsPage)
+    is LoadBlogHomePage -> state.copy(view = ViewBlogHomePage(action.filterCategories))
+    is LoadBlogPostPage -> state.copy(view = ViewBlogPostPage(action.id))
 }
 
 fun Navigo.initialize(): Navigo {
@@ -274,5 +302,7 @@ fun Navigo.initialize(): Navigo {
         .on("/loggedIn", { _ -> logInClientSide() })
         .on("/logout", { _ -> SiteManager.redirectToAuthentication(Div()) })
         .on(MyTopTracksAndArtistsPage.url, { _ -> myTopTracksAndArtistsPage() })
+        .on("/blog", { _ -> blogHomePage() })
+        .on(ViewBlogPostPage.regExp, { postId -> blogPostPage(postId) })
         .apply { notFound({ _ -> notFoundPage() }) }
 }

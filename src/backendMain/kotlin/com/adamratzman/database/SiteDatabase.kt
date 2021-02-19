@@ -18,7 +18,18 @@ object SiteDatabase {
         )
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(ShortenedUrls, Users, DailySongs)
+            SchemaUtils.createMissingTablesAndColumns(
+                ShortenedUrls, Users, DailySongs
+            )
+            SchemaUtils.createMissingTablesAndColumns(
+                BlogPosts
+            )
+            SchemaUtils.createMissingTablesAndColumns(
+                BlogPostComments
+            )
+            SchemaUtils.createMissingTablesAndColumns(
+                BlogPostCategories
+            )
         }
     }
 }

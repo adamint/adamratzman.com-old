@@ -330,7 +330,6 @@ private class RequestAttributesComponent(formInputs: AssociatedFormInputs, reque
             }
             GlobalScope.launch {
                 try {
-                    println(requestInfo.attributes)
                     val recommendationResponse = formInputs.api.browse.getTrackRecommendations(
                         requestInfo.artistsToSearch.map { it.id },
                         requestInfo.genresToSearch.toList(),
@@ -341,7 +340,7 @@ private class RequestAttributesComponent(formInputs: AssociatedFormInputs, reque
                                 trackAttribute == TuneableTrackAttribute.DurationInMilliseconds -> trackAttribute.asTrackAttribute(entry.value.toInt() * 1000)
                                 trackAttribute.integerOnly -> trackAttribute.asTrackAttribute(entry.value.toInt())
                                 else -> trackAttribute.asTrackAttribute(entry.value)
-                            }.apply { println(this) }
+                            }
                         },
                         limit = 20
                     )

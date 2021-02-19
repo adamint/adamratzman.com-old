@@ -28,7 +28,6 @@ actual class CalculatorService : ICalculatorService {
     }
 
     override suspend fun calculate(input: String, precision: Int, radix: Int, useRadians: Boolean): String {
-        println("starting calculation")
         if (input.isEmpty()) throw ServiceException("The input was empty")
         if (precision !in 1..1000) throw ServiceException("Precision has to be between 1 and 1,000")
         if (radix !in 2..36) throw ServiceException("Radix has to be between 2 and 36")

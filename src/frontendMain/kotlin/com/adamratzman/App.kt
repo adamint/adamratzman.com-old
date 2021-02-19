@@ -6,6 +6,8 @@ import com.adamratzman.layouts.*
 import com.adamratzman.layouts.partials.FooterComponent
 import com.adamratzman.layouts.partials.HeaderComponent
 import com.adamratzman.layouts.projects.*
+import com.adamratzman.layouts.projects.blog.BlogHomePage
+import com.adamratzman.layouts.projects.blog.BlogPostPage
 import com.adamratzman.layouts.projects.conversion.BaseConversionComponent
 import com.adamratzman.layouts.projects.spotify.*
 import com.adamratzman.layouts.user.ProfilePageComponent
@@ -79,6 +81,8 @@ class App : Application() {
                     ViewAllDailySongsPage -> ViewAllDailySongsComponent(this)
                     is ViewDailySongPage -> ViewDailySongComponent(state.view.date.copy(monthNumber = state.view.date.monthNumber - 1), this)
                     MyTopTracksAndArtistsPage -> MyTopTracksAndArtistsComponent(this)
+                    is ViewBlogHomePage -> BlogHomePage(state.view.filterCategories, this)
+                    is ViewBlogPostPage -> BlogPostPage(state.view.id, this)
 
 
                 }

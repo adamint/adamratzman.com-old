@@ -63,7 +63,7 @@ class ViewDailySongComponent(date: SerializableDate, parent: Container) : SiteSt
                     }
                 }
 
-                if (state.clientSideData?.role == UserRole.ADMIN || searchParams.get("protected") == dailySong.protectedNotePassword) {
+                if (state.clientSideData?.role == UserRole.Admin || searchParams.get("protected") == dailySong.protectedNotePassword) {
                     val protectedUrl = "${ViewDailySongPage(date).devOrProdUrl()}?protected=${dailySong.protectedNotePassword}"
                     p(className = MarginLargeTop.asString) {
                         +"The URL for this daily song, including the special note, is "

@@ -3,30 +3,37 @@
 package com.adamratzman.layouts.user
 
 import com.adamratzman.database.SiteManager
-import com.adamratzman.database.View.LogoutPage
-import com.adamratzman.database.View.ViewAllDailySongsPage
+import com.adamratzman.database.View.*
 import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.security.guardLoggedIn
 import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.services.*
 import com.adamratzman.spotify.models.SpotifyUri
+import com.adamratzman.spotify.utils.getCurrentTimeMs
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addBootstrap
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
+import kotlinx.browser.document
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseContextualSerialization
+import org.w3c.dom.get
 import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.UNIT.px
 import pl.treksoft.kvision.core.UNIT.rem
 import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.form.check.checkBox
 import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.form.text.richText
 import pl.treksoft.kvision.form.text.text
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.panel.tab
+import pl.treksoft.kvision.panel.tabPanel
 import pl.treksoft.kvision.remote.ServiceException
 import kotlin.js.Date
 
@@ -44,9 +51,19 @@ class ProfilePageComponent(parent: Container) : SiteStatefulComponent(parent = p
                 span(clientSideData.role.readable, className = "dashed")
             }
 
-            if (clientSideData.role == UserRole.ADMIN) {
-                div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
-                    InsertDailySongComponent(this)
+            if (clientSideData.role == UserRole.Admin) {
+                tabPanel {
+                    tab(label = "Blog") {
+                        div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
+                            InsertBlogPostComponent(clientSideData, this)
+                        }
+                    }
+
+                    tab(label = "Daily Songs") {
+                        div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {
+                            InsertDailySongComponent(this)
+                        }
+                    }
                 }
             }
         }
@@ -64,6 +81,12 @@ private class InsertDailySongComponent(parent: Container) : SiteStatefulComponen
         addBootstrap()
         var autofilledDate: Date? = null
         formPanel<InsertDailySongForm> {
+            onEvent {
+                submit = {
+                    it.preventDefault()
+                    it.stopPropagation()
+                }
+            }
             add(
                 InsertDailySongForm::date,
                 dateTime(format = "YYYY-MM-DD", label = "Date").apply {
@@ -75,7 +98,8 @@ private class InsertDailySongComponent(parent: Container) : SiteStatefulComponen
                             val data = getData()
                             if (data.date != null &&
                                 (data.date.getFullYear() != autofilledDate?.getFullYear() || data.date.getMonth() != autofilledDate?.getMonth()
-                                        || data.date.getDate() != autofilledDate?.getDate())) {
+                                        || data.date.getDate() != autofilledDate?.getDate())
+                            ) {
                                 data.date.let { date ->
                                     GlobalScope.launch {
                                         try {
@@ -167,10 +191,171 @@ private class InsertDailySongComponent(parent: Container) : SiteStatefulComponen
     }
 })
 
+private class InsertBlogPostComponent(clientSideData: ClientSideData, parent: Container) :
+    SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
+        h2("Add a blog post (or edit or delete an existing one)", classes = nameSetOf("light"))
+        h4("Posts:")
+        GlobalScope.launch {
+            val blogPosts = BlogServiceFrontend.blogService.getBlogPosts(listOf())
+            ul {
+                blogPosts.forEach { post ->
+                    li {
+                        link("${post.title} (${post.id})")
+                    }
+                }
+            }
+            addBootstrap()
+            var autofilledBlogPost: BlogPost? = null
+            formPanel<InsertBlogPostForm> {
+                onEvent {
+                    submit = {
+                        it.preventDefault()
+                        it.stopPropagation()
+                    }
+                }
+
+                add(
+                    InsertBlogPostForm::id,
+                    text(label = "Post ID") {
+                        placeholder = "Enter post id"
+
+                        onEvent {
+                            change = {
+                                val enteredId = this@text.value
+                                if (enteredId != null && autofilledBlogPost?.id != enteredId) {
+                                    GlobalScope.launch {
+                                        try {
+                                            val blogPost = BlogServiceFrontend.blogService.getBlogPost(enteredId)
+                                            autofilledBlogPost = blogPost
+                                            setData(
+                                                InsertBlogPostForm(
+                                                    blogPost.id,
+                                                    blogPost.title,
+                                                    blogPost.categories.joinToString(","),
+                                                    blogPost.richText,
+                                                    blogPost.creationMillis,
+                                                    blogPost.lastEditMillis,
+                                                    blogPost.deleted
+                                                )
+                                            )
+                                        } catch (ignored: ServiceException) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    required = true
+                )
+
+                add(
+                    InsertBlogPostForm::title,
+                    text(label = "Title"),
+                    required = true
+                )
+
+                add(
+                    InsertBlogPostForm::categoriesText,
+                    text(label = "Categories (comma-separated)") {
+                        placeholder = "Enter comma-separated categories for this post."
+                    }
+                )
+
+                val textInput = richText(label = "Post content") {
+                    removeCssClass("form-control")
+                    input.removeCssClass("form-control")
+
+
+
+                    onEvent {
+                        change = {
+                            val input = this@richText.input
+                            GlobalScope.launch {
+                            }
+                        }
+                    }
+                }
+                add(
+                    InsertBlogPostForm::richText,
+                    textInput,
+                    required = true
+                )
+
+                val imgInput = text(label = "IMG url to enter")
+                button("Add img") {
+                    marginBottom = 10 to px
+                    onClick {
+                        val editor = document.getElementsByTagName("trix-editor")[0].asDynamic().editor
+                        if (editor != undefined) {
+                            editor.insertHTML("<img src='${imgInput.value}' />")
+                            imgInput.value = null
+                        }
+                    }
+                }
+
+
+                add(
+                    InsertBlogPostForm::deleted,
+                    checkBox(label = "Mark as deleted?")
+                )
+
+                val preview = div()
+                button("Toggle preview") {
+                    onClick {
+                        if (preview.getChildren().isNotEmpty()) preview.removeAll()
+                        else preview.div(rich = true, content = textInput.value)
+                    }
+                }
+
+
+                button("Submit") {
+                    onClick {
+                        GlobalScope.launch {
+                            val data = getData()
+                            if (data.categoriesText?.isNotBlank() != true) return@launch
+
+                            val prevPost = try {
+                                BlogServiceFrontend.blogService.getBlogPost(data.id!!)
+                            } catch (ignored: Exception) {
+                                null
+                            }
+
+                            val blogPost = BlogPost(
+                                data.id!!,
+                                data.title!!,
+                                clientSideData.username,
+                                data.categoriesText.split(",").filter { it.isNotBlank() }.toMutableList(),
+                                textInput.value!!,
+                                prevPost?.creationMillis ?: getCurrentTimeMs(),
+                                if (prevPost != null) getCurrentTimeMs() else null,
+                                data.deleted
+                            )
+
+                            BlogServiceFrontend.blogService.createOrUpdateBlogPost(blogPost)
+
+                            SiteManager.redirect(ViewBlogPostPage(blogPost.id))
+                        }
+                    }
+                }
+            }
+        }
+    })
+
 @Serializable
 data class InsertDailySongForm(
-    val date: Date? = null,
+    @Contextual val date: Date? = null,
     val trackUri: String? = null,
     val note: String? = null,
     val protectedNote: String? = null
+)
+
+@Serializable
+data class InsertBlogPostForm(
+    val id: String? = null,
+    val title: String? = null,
+    val categoriesText: String? = null,
+    var richText: String? = null,
+    val creationMillis: Long? = null,
+    var lastEditMillis: Long? = null,
+    var deleted: Boolean = false
 )
