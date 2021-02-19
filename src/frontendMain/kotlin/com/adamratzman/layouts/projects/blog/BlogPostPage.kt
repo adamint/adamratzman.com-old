@@ -26,7 +26,7 @@ class BlogPostPage(id: String, parent: Container) : SiteStatefulComponent(parent
             div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
                 div(classes = nameSetOf(MarginAuto, TextLeft, if (!isMobile()) WidthThreeFifths else WidthThreeFourths)) {
                     h1(classes = nameSetOf(MarginSmallBottom), content=post.title)
-                    p(classes = nameSetOf("time", MarginRemoveTop, MarginRemoveBottom), content = "Published ${post.serverTimeString}")
+                    p(classes = nameSetOf("time", MarginRemoveTop, MarginRemoveBottom), content = "Published ${post.serverTimeString} by Adam Ratzman")
                     p(classes = nameSetOf("time", MarginRemoveTop, MarginMediumBottom)) {
                         +"Go back to "
                         link(label = "blog home →", ViewBlogHomePage(listOf()).devOrProdUrl())
