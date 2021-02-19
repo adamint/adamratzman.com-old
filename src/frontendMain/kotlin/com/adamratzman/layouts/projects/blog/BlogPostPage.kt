@@ -24,7 +24,7 @@ class BlogPostPage(id: String, parent: Container) : SiteStatefulComponent(parent
         setTitle("Blog - ${post.title}")
         try {
             div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
-                div(classes = nameSetOf(MarginAuto, TextLeft, if (!isMobile()) WidthThreeFifths else "")) {
+                div(classes = nameSetOf(MarginAuto, TextLeft, if (!isMobile()) WidthThreeFifths else WidthThreeFourths)) {
                     h1(classes = nameSetOf(MarginSmallBottom), content=post.title)
                     p(classes = nameSetOf("time", MarginRemoveTop, MarginRemoveBottom), content = "Published ${post.serverTimeString}")
                     p(classes = nameSetOf("time", MarginRemoveTop, MarginMediumBottom)) {
