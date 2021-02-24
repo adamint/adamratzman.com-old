@@ -2,7 +2,7 @@ package com.adamratzman.services
 
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
-import io.kvision.annotations.KVService
+import pl.treksoft.kvision.annotations.KVService
 
 @KVService
 interface IDailySongService {

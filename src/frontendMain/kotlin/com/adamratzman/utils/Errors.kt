@@ -1,9 +1,9 @@
 package com.adamratzman.utils
 
-import io.kvision.remote.ServiceException
-import io.kvision.toast.Toast
-import io.kvision.toast.ToastOptions
-import io.kvision.toast.ToastPosition.TOPRIGHT
+import pl.treksoft.kvision.remote.ServiceException
+import pl.treksoft.kvision.toast.Toast
+import pl.treksoft.kvision.toast.ToastOptions
+import pl.treksoft.kvision.toast.ToastPosition.TOPRIGHT
 
 fun Exception.getErrorMessage() = message ?: "There was an error processing your request."
 

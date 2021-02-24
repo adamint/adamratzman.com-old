@@ -14,31 +14,20 @@ import com.adamratzman.utils.addBootstrap
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeAbcCheckbox
 import com.adamratzman.utils.removeLoadingSpinner
-import io.kvision.core.*
-import io.kvision.core.UNIT.px
-import io.kvision.form.check.checkBox
-import io.kvision.html.*
-import io.kvision.panel.flexPanel
-import io.kvision.state.observableListOf
-import io.kvision.toast.Toast
-import io.kvision.toast.ToastOptions
-import io.kvision.toast.ToastPosition.TOPRIGHT
 import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.form.check.checkBox
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.panel.flexPanel
+import pl.treksoft.kvision.state.observableListOf
+import pl.treksoft.kvision.toast.Toast
+import pl.treksoft.kvision.toast.ToastOptions
+import pl.treksoft.kvision.toast.ToastPosition.TOPRIGHT
 
 private val generateTokenRedirectUri = domain + GenerateSpotifyClientTokenPage().devOrProdUrl()
-
-private fun Container.getTokenInfo(scopes: List<SpotifyScope>, api: SpotifyClientApi) {
-    +"This API token contains the following scopes: "
-    scopes.forEachIndexed { i, scope ->
-        b(scope.uri)
-        if (i != requiredSpotifyScopes.lastIndex) +", "
-    }
-    +". It expires in "
-    b((api.token.expiresIn / 60).toString())
-    +" minutes."
-}
 
 private fun copyToken(token: Token) {
     window.navigator.clipboard.writeText(token.accessToken).then {
@@ -54,6 +43,17 @@ private fun copyToken(token: Token) {
 }
 
 class GenerateSpotifyTokenComponent(val code: String?, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
+    fun Container.getTokenInfo(scopes: List<SpotifyScope>, api: SpotifyClientApi) {
+        +"This API token contains the following scopes: "
+        scopes.forEachIndexed { i, scope ->
+            bold(scope.uri)
+            if (i != requiredSpotifyScopes.lastIndex) +", "
+        }
+        +". It expires in "
+        bold((api.token.expiresIn / 60).toString())
+        +" minutes."
+    }
+
     if (code == null) removeLoadingSpinner(state)
 
     guardValidSpotifyApi(state) { api ->

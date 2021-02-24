@@ -5,20 +5,20 @@ import com.adamratzman.services.CalculatorServiceFrontend
 import com.adamratzman.services.defaultCalculatorPrecision
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
-import io.kvision.core.*
-import io.kvision.core.FontStyle.ITALIC
-import io.kvision.core.UNIT.perc
-import io.kvision.core.UNIT.px
-import io.kvision.form.check.checkBox
-import io.kvision.form.formPanel
-import io.kvision.form.spinner.spinner
-import io.kvision.form.text.text
-import io.kvision.html.*
-import io.kvision.modal.Modal
-import io.kvision.remote.ServiceException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.FontStyle.ITALIC
+import pl.treksoft.kvision.core.UNIT.perc
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.form.check.checkBox
+import pl.treksoft.kvision.form.formPanel
+import pl.treksoft.kvision.form.spinner.spinner
+import pl.treksoft.kvision.form.text.text
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.modal.Modal
+import pl.treksoft.kvision.remote.ServiceException
 
 class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {
@@ -42,7 +42,7 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
                             modal.add(ul {
                                 functions.forEach { function ->
                                     li {
-                                        b {
+                                        bold {
                                             +function.token
                                             if (function.aliases.isNotEmpty()) +" [${function.aliases.joinToString(", ")}]"
                                         }
@@ -68,7 +68,7 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
                         modal.add(ul {
                             constants.forEach { constant ->
                                 li {
-                                    b(constant.name)
+                                    bold(constant.name)
                                     +": ${constant.value}"
                                 }
                             }

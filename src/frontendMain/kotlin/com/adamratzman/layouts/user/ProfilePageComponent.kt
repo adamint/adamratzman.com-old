@@ -22,20 +22,20 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseContextualSerialization
 import org.w3c.dom.get
-import io.kvision.core.Container
-import io.kvision.core.UNIT.px
-import io.kvision.core.UNIT.rem
-import io.kvision.core.onEvent
-import io.kvision.core.style
-import io.kvision.form.check.checkBox
-import io.kvision.form.formPanel
-import io.kvision.form.text.richText
-import io.kvision.form.text.text
-import io.kvision.form.time.dateTime
-import io.kvision.html.*
-import io.kvision.panel.tab
-import io.kvision.panel.tabPanel
-import io.kvision.remote.ServiceException
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.core.UNIT.rem
+import pl.treksoft.kvision.core.onEvent
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.form.check.checkBox
+import pl.treksoft.kvision.form.formPanel
+import pl.treksoft.kvision.form.text.richText
+import pl.treksoft.kvision.form.text.text
+import pl.treksoft.kvision.form.time.dateTime
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.panel.tab
+import pl.treksoft.kvision.panel.tabPanel
+import pl.treksoft.kvision.remote.ServiceException
 import kotlin.js.Date
 
 class ProfilePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->

@@ -4,10 +4,10 @@ import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.layouts.setTitle
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
-import io.kvision.core.Container
-import io.kvision.core.FontStyle.ITALIC
-import io.kvision.core.style
-import io.kvision.html.*
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.FontStyle.ITALIC
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.html.*
 
 class FrenchLearningComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom, WidthTwoThirds, MarginAuto)) {

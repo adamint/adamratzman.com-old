@@ -13,10 +13,6 @@ import com.adamratzman.spotify.models.Token
 import com.adamratzman.spotify.spotifyImplicitGrantApi
 import com.adamratzman.spotify.utils.getCurrentTimeMs
 import com.adamratzman.utils.toDevOrProdUrl
-import io.kvision.html.Div
-import io.kvision.navigo.Navigo
-import io.kvision.state.ObservableList
-import io.kvision.state.observableListOf
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
@@ -24,6 +20,10 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
 import org.w3c.dom.set
+import pl.treksoft.kvision.html.Div
+import pl.treksoft.kvision.state.ObservableList
+import pl.treksoft.kvision.state.observableListOf
+import pl.treksoft.navigo.Navigo
 import redux.RAction
 import kotlin.js.RegExp
 

@@ -9,8 +9,8 @@ import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import io.kvision.core.Container
-import io.kvision.html.*
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.html.*
 
 lateinit var allGenres: List<String>
 

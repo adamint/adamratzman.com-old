@@ -22,13 +22,13 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.w3c.dom.asList
-import io.kvision.core.*
-import io.kvision.core.UNIT.*
-import io.kvision.form.range.rangeInput
-import io.kvision.form.select.Select
-import io.kvision.form.select.select
-import io.kvision.form.text.typeahead
-import io.kvision.html.*
+import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.UNIT.*
+import pl.treksoft.kvision.form.range.rangeInput
+import pl.treksoft.kvision.form.select.Select
+import pl.treksoft.kvision.form.select.select
+import pl.treksoft.kvision.form.text.typeahead
+import pl.treksoft.kvision.html.*
 
 private lateinit var allSpotifyGenres: List<String>
 
@@ -366,7 +366,7 @@ private class SearchTuneableTrackAttributesComponent(
                     val trackAttribute = TuneableTrackAttribute.values().first { it.attribute == attribute }
                     li {
                         +"${trackAttribute.name()}: "
-                        val attributeValueBold = b()
+                        val attributeValueBold = bold()
 
                         fun setAttributeValue() {
                             attributeValueBold.apply {

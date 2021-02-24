@@ -1,6 +1,6 @@
 package com.adamratzman.services
 
-import io.kvision.remote.ServiceException
+import pl.treksoft.kvision.remote.ServiceException
 
 actual open class BaseConversionService : IBaseConversionService {
     override suspend fun convert(baseFrom: Int, baseTo: Int, numberAsString: String): String {

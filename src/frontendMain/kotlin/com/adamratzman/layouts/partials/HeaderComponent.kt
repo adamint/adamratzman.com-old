@@ -6,8 +6,8 @@ import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.UikitName.Icon
-import io.kvision.core.Container
-import io.kvision.html.*
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.html.*
 
 class HeaderComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     header {

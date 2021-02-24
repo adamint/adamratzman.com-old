@@ -1,7 +1,7 @@
 package com.adamratzman.services
 
 import kotlinx.serialization.Serializable
-import io.kvision.annotations.KVService
+import pl.treksoft.kvision.annotations.KVService
 
 const val passwordRequirementValidationErrorMessage = "The password must be at least 8 characters and contain a number."
 fun doesPasswordMeetRequirements(password: String) = password.length >= 8 && password.any { it in '0'..'9' }

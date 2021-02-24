@@ -5,14 +5,14 @@ import com.adamratzman.spotify.models.SimplePlaylist
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addUikitAttributes
 import com.adamratzman.utils.nameSetOf
-import io.kvision.core.Container
-import io.kvision.core.UNIT.normal
-import io.kvision.core.UNIT.px
-import io.kvision.core.style
-import io.kvision.html.div
-import io.kvision.html.image
-import io.kvision.html.link
-import io.kvision.html.p
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.UNIT.normal
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.html.div
+import pl.treksoft.kvision.html.image
+import pl.treksoft.kvision.html.link
+import pl.treksoft.kvision.html.p
 
 class PlaylistPreviewComponent(
     playlist: SimplePlaylist,

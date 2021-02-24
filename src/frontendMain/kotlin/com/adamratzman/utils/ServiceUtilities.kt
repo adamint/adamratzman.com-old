@@ -1,7 +1,7 @@
 package com.adamratzman.utils
 
-import io.kvision.jquery.JQueryAjaxSettings
-import io.kvision.jquery.JQueryXHR
+import pl.treksoft.jquery.JQueryAjaxSettings
+import pl.treksoft.jquery.JQueryXHR
 
 internal fun fixServiceRoutingWithOptionalBeforeSending(additionalBeforeSend: ((JQueryXHR, JQueryAjaxSettings) -> Boolean)? = null): ((JQueryXHR, JQueryAjaxSettings) -> Boolean) {
     return { jqueryXHR: JQueryXHR, jQueryAjaxSettings: JQueryAjaxSettings ->

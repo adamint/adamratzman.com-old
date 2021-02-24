@@ -3,11 +3,11 @@ package com.adamratzman.layouts.partials
 import com.adamratzman.layouts.SiteStatefulComponent
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
-import io.kvision.core.Container
-import io.kvision.html.b
-import io.kvision.html.div
-import io.kvision.html.h3
-import io.kvision.html.h4
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.html.bold
+import pl.treksoft.kvision.html.div
+import pl.treksoft.kvision.html.h3
+import pl.treksoft.kvision.html.h4
 
 class TechnicalSkillsComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
     div(classes = nameSetOf(MarginMediumBottom.asString)) {
@@ -25,7 +25,7 @@ class TechnicalSkillsComponent(parent: Container) : SiteStatefulComponent(parent
             val skillsInSection = pair.second
 
             h4(classes = nameSetOf(MarginRemoveVertical.asString)) {
-                b("$section:")
+                bold("$section:")
                 +" $skillsInSection"
             }
         }

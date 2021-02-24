@@ -5,13 +5,13 @@ import com.adamratzman.layouts.projects.goBackToProjectHome
 import com.adamratzman.services.BaseConverterServiceFrontend
 import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
-import io.kvision.core.Container
-import io.kvision.form.formPanel
-import io.kvision.form.select.select
-import io.kvision.form.text.text
-import io.kvision.html.*
-import io.kvision.panel.hPanel
-import io.kvision.remote.ServiceException
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.form.formPanel
+import pl.treksoft.kvision.form.select.select
+import pl.treksoft.kvision.form.text.text
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.panel.hPanel
+import pl.treksoft.kvision.remote.ServiceException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -80,7 +80,7 @@ class BaseConversionComponent(parent: Container) : SiteStatefulComponent(parent 
                                             val convertedNumber = BaseConverterServiceFrontend.convert(baseFrom, baseTo, numberAsString)
                                             outputElement.apply {
                                                 removeAll()
-                                                b(content = "Result: ")
+                                                bold(content = "Result: ")
                                                 span(convertedNumber)
                                             }
                                         } catch (exception: ServiceException) {

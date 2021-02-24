@@ -15,12 +15,12 @@ import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.isMobile
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
-import io.kvision.core.Container
-import io.kvision.core.UNIT.px
-import io.kvision.core.style
-import io.kvision.html.*
-import io.kvision.utils.Intl
-import io.kvision.utils.perc
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.utils.Intl
+import pl.treksoft.kvision.utils.perc
 import kotlinx.coroutines.*
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
@@ -45,7 +45,7 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                     div(classes = nameSetOf(TextCenter, MarginMediumBottom)) {
                         h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
                             +"Artist "
-                            b(content = artist.name)
+                            bold(content = artist.name)
                         }
                         p(classes = nameSetOf(MarginRemoveTop, "light")) {
                             link(label = artist.uri.uri, url = artist.externalUrls.find { it.name == "spotify" }?.url)
@@ -63,21 +63,21 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                         if (!isMobile()) style { marginLeft = 25.perc }
                         div(classes = nameSetOf(MarginMediumLeft)) {
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                b("Popularity: ")
+                                bold("Popularity: ")
                                 +"${artist.popularity}/100"
                             }
 
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                b("Followers: ")
+                                bold("Followers: ")
                                 +Intl.NumberFormat().format(artist.followers.total ?: 0)
                             }
 
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                b("Total albums: ")
+                                bold("Total albums: ")
                                 +totalAlbums.toString()
                             }
 
-                            h3(classes = nameSetOf(MarginSmallTop, MarginRemoveBottom)) { b("Associated genres:") }
+                            h3(classes = nameSetOf(MarginSmallTop, MarginRemoveBottom)) { bold("Associated genres:") }
                             p(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom)) {
                                 artist.genres.forEachIndexed { i, genre ->
                                     link(label = genre, url = SpotifyCategoryViewPage(genre).devOrProdUrl())
@@ -85,7 +85,7 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                                 }
                             }
 
-                            h3(classes = nameSetOf(MarginSmallTop, MarginRemoveBottom)) { b("Related artists:") }
+                            h3(classes = nameSetOf(MarginSmallTop, MarginRemoveBottom)) { bold("Related artists:") }
                             p(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom)) {
                                 relatedArtists.forEachIndexed { i, relatedArtist ->
                                     link(label = relatedArtist.name, url = SpotifyArtistViewPage(relatedArtist.id).devOrProdUrl())
@@ -94,7 +94,7 @@ class SpotifyArtistViewComponent(artistId: String, parent: Container) : SiteStat
                             }
 
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                b("Top ${topTracks.size} tracks: ")
+                                bold("Top ${topTracks.size} tracks: ")
                             }
                             topTracks.forEach { track ->
                                 TrackPreviewComponent(track.asTrackPreview(),

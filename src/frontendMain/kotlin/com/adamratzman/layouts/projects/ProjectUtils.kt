@@ -2,8 +2,8 @@ package com.adamratzman.layouts.projects
 
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.toDevOrProdUrl
-import io.kvision.core.Container
-import io.kvision.html.link
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.html.link
 
 fun Container.goBackToProjectHome() {
     +"Not what you're looking for? Check the "

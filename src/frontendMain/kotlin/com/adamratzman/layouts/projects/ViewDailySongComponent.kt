@@ -12,9 +12,9 @@ import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import com.adamratzman.utils.showDefaultErrorToast
-import io.kvision.core.Container
-import io.kvision.html.*
-import io.kvision.remote.ServiceException
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.remote.ServiceException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,7 @@ class ViewDailySongComponent(date: SerializableDate, parent: Container) : SiteSt
                     +")"
                 }
                 h2(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, MarginAuto, "moderate-bold", "max-width-1-2@m")) {
-                    b(content = dailySong.trackName)
+                    bold(content = dailySong.trackName)
                 }
                 p(classes = nameSetOf(MarginRemoveTop, "light")) {
                     +"By "

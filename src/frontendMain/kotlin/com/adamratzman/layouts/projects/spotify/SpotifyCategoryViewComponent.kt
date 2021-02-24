@@ -10,12 +10,12 @@ import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.isMobile
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
-import io.kvision.core.Container
-import io.kvision.core.UNIT.px
-import io.kvision.core.style
-import io.kvision.html.*
-import io.kvision.utils.Intl
-import io.kvision.utils.perc
+import pl.treksoft.kvision.core.Container
+import pl.treksoft.kvision.core.UNIT.px
+import pl.treksoft.kvision.core.style
+import pl.treksoft.kvision.html.*
+import pl.treksoft.kvision.utils.Intl
+import pl.treksoft.kvision.utils.perc
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -43,7 +43,7 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                         h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
                             link(label = "Category", url = SpotifyCategoryListPage.devOrProdUrl())
                             +" "
-                            b(content = category.name, rich = true)
+                            bold(content = category.name, rich = true)
                         }
 
                         category.icons.firstOrNull()?.let { image ->
@@ -63,7 +63,7 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                         if (!isMobile()) style { marginLeft = 25.perc }
                         div(classes = nameSetOf(MarginMediumLeft)) {
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                b("Top playlists:")
+                                bold("Top playlists:")
                             }
 
                             playlistsForCategory.forEach { playlistPair ->
