@@ -3,23 +3,23 @@ package com.adamratzman.layouts.projects.spotify
 import com.adamratzman.database.View.SpotifyCategoryListPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.projects.goBackToProjectHome
 import com.adamratzman.layouts.setTitle
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.isMobile
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
+import io.kvision.core.Container
+import io.kvision.core.UNIT.px
+import io.kvision.core.style
+import io.kvision.html.*
+import io.kvision.utils.Intl
+import io.kvision.utils.perc
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.utils.Intl
-import pl.treksoft.kvision.utils.perc
 
 class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     guardValidSpotifyApi(state) { api ->
@@ -43,7 +43,7 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                         h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
                             link(label = "Category", url = SpotifyCategoryListPage.devOrProdUrl())
                             +" "
-                            bold(content = category.name, rich = true)
+                            b(content = category.name, rich = true)
                         }
 
                         category.icons.firstOrNull()?.let { image ->
@@ -63,7 +63,7 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                         if (!isMobile()) style { marginLeft = 25.perc }
                         div(classes = nameSetOf(MarginMediumLeft)) {
                             h3(classes = nameSetOf(MarginSmallTop, MarginSmallBottom)) {
-                                bold("Top playlists:")
+                                b("Top playlists:")
                             }
 
                             playlistsForCategory.forEach { playlistPair ->
@@ -79,7 +79,7 @@ class SpotifyCategoryViewComponent(categoryId: String, parent: Container) : Site
                                                 label = playlist.owner.displayName ?: playlist.owner.id,
                                                 url = "https://open.spotify.com/user/${playlist.owner.id}"
                                             )
-                                            +". ${Intl.NumberFormat().format(playlist.followers.total)} followers"
+                                            +". ${Intl.NumberFormat().format(playlist.followers.total ?: 0)} followers"
                                             +". ${playlist.tracks.total} total songs"
                                             playlist.description?.let { span(". $it", rich = true) }
                                         }

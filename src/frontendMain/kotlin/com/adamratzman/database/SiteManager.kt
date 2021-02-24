@@ -11,14 +11,14 @@ import kotlinx.browser.localStorage
 import kotlinx.browser.window
 import org.w3c.dom.get
 import org.w3c.dom.set
-import pl.treksoft.kvision.core.Col
-import pl.treksoft.kvision.core.Color
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.h2
-import pl.treksoft.kvision.redux.createReduxStore
-import pl.treksoft.kvision.routing.routing
-import pl.treksoft.navigo.Navigo
+import io.kvision.core.Col
+import io.kvision.core.Color
+import io.kvision.core.Container
+import io.kvision.core.style
+import io.kvision.html.h2
+import io.kvision.redux.createReduxStore
+import io.kvision.routing.routing
+import io.kvision.navigo.Navigo
 
 object SiteManager {
     var redirectBackUrl: String?

@@ -4,11 +4,11 @@ import com.adamratzman.database.SiteManager
 import com.adamratzman.database.SiteState
 import kotlinx.browser.document
 import org.w3c.dom.get
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.html.Align
-import pl.treksoft.kvision.html.Div
-import pl.treksoft.kvision.state.ObservableState
-import pl.treksoft.kvision.state.bind
+import io.kvision.core.Container
+import io.kvision.html.Align
+import io.kvision.html.Div
+import io.kvision.state.ObservableState
+import io.kvision.state.bind
 
 abstract class SiteStatefulComponent(
         content: String? = null,

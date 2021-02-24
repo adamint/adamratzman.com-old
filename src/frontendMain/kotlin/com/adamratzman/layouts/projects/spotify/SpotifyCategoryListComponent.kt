@@ -11,11 +11,11 @@ import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.html.div
-import pl.treksoft.kvision.html.h2
-import pl.treksoft.kvision.html.h3
-import pl.treksoft.kvision.html.link
+import io.kvision.core.Container
+import io.kvision.html.div
+import io.kvision.html.h2
+import io.kvision.html.h3
+import io.kvision.html.link
 
 lateinit var allCategories: List<SpotifyCategory>
 

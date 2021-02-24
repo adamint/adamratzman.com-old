@@ -13,15 +13,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.onEvent
-import pl.treksoft.kvision.form.form
-import pl.treksoft.kvision.form.select.select
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.panel.tab
-import pl.treksoft.kvision.panel.tabPanel
-import pl.treksoft.kvision.tabulator.*
-import pl.treksoft.kvision.utils.px
+import io.kvision.core.Container
+import io.kvision.core.onEvent
+import io.kvision.form.form
+import io.kvision.form.select.select
+import io.kvision.html.*
+import io.kvision.panel.tab
+import io.kvision.panel.tabPanel
+import io.kvision.tabulator.*
+import io.kvision.utils.px
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
@@ -98,7 +98,7 @@ fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: T
                                 ColumnDefinition(
                                     "Track",
                                     "name",
-                                    formatterComponentFunction = { cellComponent, f, trackPreview ->
+                                    formatterComponentFunction = { cellComponent, _, trackPreview ->
                                         Div {
                                             cellComponent.getRow().normalizeHeight
                                             val track = topTracks.first { it.id == trackPreview.id }
@@ -130,7 +130,7 @@ fun populateOutputDiv(api: SpotifyImplicitGrantApi, outputDiv: Div, timeRange: T
                                 ColumnDefinition(
                                     "Track",
                                     "name",
-                                    formatterComponentFunction = { cellComponent, f, artistPreview ->
+                                    formatterComponentFunction = { cellComponent, _, artistPreview ->
                                         Div {
                                             cellComponent.getRow().normalizeHeight
                                             val artist = topArtists.first { it.id == artistPreview.id }

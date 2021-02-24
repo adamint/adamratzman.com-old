@@ -9,18 +9,18 @@ import com.adamratzman.utils.*
 import com.adamratzman.utils.UikitName.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.TextDecoration
-import pl.treksoft.kvision.core.TextDecorationLine
-import pl.treksoft.kvision.core.UNIT.perc
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.form.check.checkBox
-import pl.treksoft.kvision.form.formPanel
-import pl.treksoft.kvision.form.text.TextInputType
-import pl.treksoft.kvision.form.text.text
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.panel.hPanel
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.Container
+import io.kvision.core.TextDecoration
+import io.kvision.core.TextDecorationLine
+import io.kvision.core.UNIT.perc
+import io.kvision.core.style
+import io.kvision.form.check.checkBox
+import io.kvision.form.formPanel
+import io.kvision.form.text.TextInputType
+import io.kvision.form.text.text
+import io.kvision.html.*
+import io.kvision.panel.hPanel
+import io.kvision.remote.ServiceException
 import kotlin.random.Random
 
 class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {

@@ -3,17 +3,17 @@ package com.adamratzman.layouts.projects.spotify
 import com.adamratzman.database.View.SpotifyArtistViewPage
 import com.adamratzman.layouts.NotFoundComponent
 import com.adamratzman.layouts.SiteStatefulComponent
-import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.layouts.setTitle
+import com.adamratzman.security.guardValidSpotifyApi
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
+import io.kvision.core.Container
+import io.kvision.core.UNIT.px
+import io.kvision.core.style
+import io.kvision.html.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
 
 class SpotifyTrackViewComponent(trackId: String, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     guardValidSpotifyApi(state) { api ->
@@ -24,7 +24,7 @@ class SpotifyTrackViewComponent(trackId: String, parent: Container) : SiteStatef
 
                     h2(classes = nameSetOf(MarginSmallBottom, "moderate-bold")) {
                         +"Track "
-                        bold(content = track.name)
+                        b(content = track.name)
                     }
                     p(classes = nameSetOf(MarginRemoveTop, "light")) {
                         +"By "

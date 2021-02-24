@@ -21,20 +21,20 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseContextualSerialization
 import org.w3c.dom.get
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.core.UNIT.rem
-import pl.treksoft.kvision.core.onEvent
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.form.check.checkBox
-import pl.treksoft.kvision.form.formPanel
-import pl.treksoft.kvision.form.text.richText
-import pl.treksoft.kvision.form.text.text
-import pl.treksoft.kvision.form.time.dateTime
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.panel.tab
-import pl.treksoft.kvision.panel.tabPanel
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.Container
+import io.kvision.core.UNIT.px
+import io.kvision.core.UNIT.rem
+import io.kvision.core.onEvent
+import io.kvision.core.style
+import io.kvision.form.check.checkBox
+import io.kvision.form.formPanel
+import io.kvision.form.text.richText
+import io.kvision.form.text.text
+import io.kvision.form.time.dateTime
+import io.kvision.html.*
+import io.kvision.panel.tab
+import io.kvision.panel.tabPanel
+import io.kvision.remote.ServiceException
 import kotlin.js.Date
 
 class ProfilePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
@@ -192,7 +192,7 @@ private class InsertDailySongComponent(parent: Container) : SiteStatefulComponen
 })
 
 private class InsertBlogPostComponent(clientSideData: ClientSideData, parent: Container) :
-    SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
+    SiteStatefulComponent(parent = parent, buildStatefulComponent = {
         h2("Add a blog post (or edit or delete an existing one)", classes = nameSetOf("light"))
         h4("Posts:")
         GlobalScope.launch {
@@ -265,15 +265,6 @@ private class InsertBlogPostComponent(clientSideData: ClientSideData, parent: Co
                     removeCssClass("form-control")
                     input.removeCssClass("form-control")
 
-
-
-                    onEvent {
-                        change = {
-                            val input = this@richText.input
-                            GlobalScope.launch {
-                            }
-                        }
-                    }
                 }
                 add(
                     InsertBlogPostForm::richText,
@@ -310,9 +301,9 @@ private class InsertBlogPostComponent(clientSideData: ClientSideData, parent: Co
 
                 button("Submit") {
                     onClick {
-                        GlobalScope.launch {
+                        GlobalScope.launch onClickSubmit@ {
                             val data = getData()
-                            if (data.categoriesText?.isNotBlank() != true) return@launch
+                            if (data.categoriesText?.isNotBlank() != true) return@onClickSubmit
 
                             val prevPost = try {
                                 BlogServiceFrontend.blogService.getBlogPost(data.id!!)

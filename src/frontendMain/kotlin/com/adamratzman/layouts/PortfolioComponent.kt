@@ -3,11 +3,10 @@ package com.adamratzman.layouts
 import com.adamratzman.layouts.partials.TechnicalSkillsComponent
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.rem
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.data.dataContainer
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.UNIT.rem
+import io.kvision.core.style
+import io.kvision.html.*
 
 class PortfolioComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginAuto, WidthTwoThirds)) {
@@ -24,8 +23,8 @@ class PortfolioComponent(parent: Container) : SiteStatefulComponent(parent = par
                 h3(content = "Selected Projects", classes = nameSetOf("bold", "solid-border-sm", MarginSmallBottom))
 
                 listOf(
-                        "current" to state.currentProjects,
-                        "past" to state.pastProjects
+                    "current" to state.currentProjects,
+                    "past" to state.pastProjects
                 ).forEach { pair ->
                     val name = pair.first
                     val projects = pair.second
@@ -33,14 +32,14 @@ class PortfolioComponent(parent: Container) : SiteStatefulComponent(parent = par
                     div(classes = nameSetOf(MarginMediumBottom.asString)) {
                         h3(content = "$name projects", classes = nameSetOf(UkInline, MarginSmallBottom, MarginRemoveTop, "moderate-bold"))
 
-                        projects.forEach { project,  ->
+                        projects.forEach { project ->
                             div(classes = nameSetOf(MarginSmallBottom.asString)) {
                                 h4(classes = nameSetOf(MarginRemoveVertical.asString)) {
                                     link(label = project.name, target = "_blank", url = project.url)
                                 }
                                 h5(content = project.description, classes = nameSetOf(MarginRemoveVertical.asString))
                                 h5(classes = nameSetOf(MarginRemoveVertical.asString)) {
-                                    bold(content = "Categories:")
+                                    b(content = "Categories:")
                                     +" ${project.codeCategories}"
                                 }
                             }
@@ -50,7 +49,7 @@ class PortfolioComponent(parent: Container) : SiteStatefulComponent(parent = par
             }
         }
 
-       TechnicalSkillsComponent(this)
+        TechnicalSkillsComponent(this)
     }
 
 })

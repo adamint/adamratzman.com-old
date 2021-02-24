@@ -2,8 +2,8 @@ package com.adamratzman.services
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.annotations.KVService
-import pl.treksoft.kvision.types.Decimal
+import io.kvision.annotations.KVService
+import io.kvision.types.Decimal
 
 const val defaultCalculatorPrecision = 10
 

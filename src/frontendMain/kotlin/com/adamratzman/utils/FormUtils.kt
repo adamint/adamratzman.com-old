@@ -1,9 +1,9 @@
 package com.adamratzman.utils
 
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.form.text.AbstractText
-import pl.treksoft.kvision.html.textNode
+import io.kvision.core.Container
+import io.kvision.core.CssSize
+import io.kvision.form.text.AbstractText
+import io.kvision.html.textNode
 
 fun <T : AbstractText> T.withPlaceholderAndMaxWidth(maxWidth: CssSize, placeholder: String): T {
     input.apply {

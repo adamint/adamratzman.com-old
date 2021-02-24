@@ -29,9 +29,9 @@ import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.sessions.*
 import io.ktor.util.KtorExperimentalAPI
-import pl.treksoft.kvision.remote.ServiceException
-import pl.treksoft.kvision.remote.applyRoutes
-import pl.treksoft.kvision.remote.kvisionInit
+import io.kvision.remote.ServiceException
+import io.kvision.remote.applyRoutes
+import io.kvision.remote.kvisionInit
 import java.io.File
 import java.security.KeyStore
 

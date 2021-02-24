@@ -2,10 +2,10 @@ package com.adamratzman.layouts
 
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.rem
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.UNIT.rem
+import io.kvision.core.style
+import io.kvision.html.*
 
 class ContactMeComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = {
     div(classes = nameSetOf(WidthTwoThirds, MarginAuto, MarginMediumTop, PaddingSmall, PaddingRemoveHorizontal)) {

@@ -5,7 +5,7 @@ import com.adamratzman.database.ShortenedUrls
 import org.apache.commons.validator.routines.UrlValidator
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.remote.ServiceException
 
 actual class UrlShortenerService : IUrlShortenerService {
     override suspend fun insertShortenedUrl(shortenedUrlDto: ShortenedUrlDto): ShortenedUrl {

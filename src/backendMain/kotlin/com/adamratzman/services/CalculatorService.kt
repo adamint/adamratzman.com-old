@@ -3,7 +3,7 @@ package com.adamratzman.services
 import com.adamratzman.math.Expression
 import com.adamratzman.math.parser.ExpressionTokenizer
 import com.adamratzman.math.utils.round
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.remote.ServiceException
 import java.math.MathContext
 
 actual class CalculatorService : ICalculatorService {

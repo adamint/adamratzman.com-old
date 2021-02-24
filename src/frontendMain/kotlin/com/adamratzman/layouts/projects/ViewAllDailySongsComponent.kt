@@ -18,11 +18,11 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.perc
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.UNIT.perc
+import io.kvision.core.UNIT.px
+import io.kvision.core.style
+import io.kvision.html.*
 
 class ViewAllDailySongsComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginMediumTop, MarginMediumBottom)) {

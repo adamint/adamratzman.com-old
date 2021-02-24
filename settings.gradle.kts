@@ -12,7 +12,7 @@ pluginManagement {
         eachPlugin {
             when {
                 requested.id.id == "kotlinx-serialization" -> useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
-                requested.id.id == "kvision" -> useModule("pl.treksoft:kvision-gradle-plugin:${requested.version}")
+                requested.id.id == "kvision" -> useModule("io.kvision:kvision-gradle-plugin:${requested.version}")
             }
         }
     }

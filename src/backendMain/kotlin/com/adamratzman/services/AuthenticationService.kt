@@ -8,7 +8,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.remote.ServiceException
 
 actual class AuthenticationService : IAuthenticationService {
     @Inject

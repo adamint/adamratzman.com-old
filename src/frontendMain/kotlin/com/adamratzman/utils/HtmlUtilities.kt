@@ -7,10 +7,10 @@ import kotlinx.browser.window
 import kotlinx.dom.removeClass
 import org.w3c.dom.asList
 import org.w3c.dom.url.URLSearchParams
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.html.Tag
-import pl.treksoft.kvision.html.link
-import pl.treksoft.kvision.html.textNode
+import io.kvision.core.*
+import io.kvision.html.Tag
+import io.kvision.html.link
+import io.kvision.html.textNode
 
 fun Component.addUikitAttributes(vararg attributes: Any) {
     attributes.forEach { setAttribute(it.toString(), "") }

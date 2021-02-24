@@ -23,7 +23,7 @@ repositories {
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://jitpack.io") }
-  //  mavenLocal()
+    // mavenLocal()
 }
 
 // Versions
@@ -46,7 +46,7 @@ kotlin {
             }
         }
     }
-    js("frontend") {
+    js("frontend", IR) {
         browser {
             runTask {
                 outputFileName = "main.bundle.js"
@@ -75,7 +75,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("pl.treksoft:kvision-server-ktor:$kvisionVersion")
+                api("io.kvision:kvision-server-ktor:$kvisionVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
             }
             kotlin.srcDir("build/generated-src/common")
@@ -113,27 +113,27 @@ kotlin {
         val frontendMain by getting {
             resources.srcDir(webDir)
             dependencies {
-                implementation("pl.treksoft:kvision:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap:$kvisionVersion")
-                // implementation("pl.treksoft:kvision-bootstrap-css:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-select:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-datetime:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-spinner:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-upload:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-dialog:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-typeahead:$kvisionVersion")
-                implementation("pl.treksoft:kvision-fontawesome:$kvisionVersion")
-                implementation("pl.treksoft:kvision-i18n:$kvisionVersion")
-                implementation("pl.treksoft:kvision-richtext:$kvisionVersion")
-                implementation("pl.treksoft:kvision-handlebars:$kvisionVersion")
-                implementation("pl.treksoft:kvision-datacontainer:$kvisionVersion")
-                implementation("pl.treksoft:kvision-redux:$kvisionVersion")
-                implementation("pl.treksoft:kvision-chart:$kvisionVersion")
-                implementation("pl.treksoft:kvision-tabulator:$kvisionVersion")
-                implementation("pl.treksoft:kvision-pace:$kvisionVersion")
-                implementation("pl.treksoft:kvision-toast:$kvisionVersion")
-                implementation("pl.treksoft:kvision-moment:$kvisionVersion")
-                implementation("com.adamratzman:spotify-api-kotlin-core:3.4.03")
+                implementation("io.kvision:kvision:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
+                // implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-select:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-datetime:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-upload:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-dialog:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-typeahead:$kvisionVersion")
+                implementation("io.kvision:kvision-fontawesome:$kvisionVersion")
+                implementation("io.kvision:kvision-i18n:$kvisionVersion")
+                implementation("io.kvision:kvision-richtext:$kvisionVersion")
+                implementation("io.kvision:kvision-handlebars:$kvisionVersion")
+                implementation("io.kvision:kvision-datacontainer:$kvisionVersion")
+                implementation("io.kvision:kvision-redux:$kvisionVersion")
+                implementation("io.kvision:kvision-chart:$kvisionVersion")
+                implementation("io.kvision:kvision-tabulator:$kvisionVersion")
+                implementation("io.kvision:kvision-pace:$kvisionVersion")
+                implementation("io.kvision:kvision-toast:$kvisionVersion")
+                implementation("io.kvision:kvision-moment:$kvisionVersion")
+                implementation("com.adamratzman:spotify-api-kotlin-js:3.6.0-rc.1")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
             kotlin.srcDir("build/generated-src/frontend")
@@ -141,11 +141,12 @@ kotlin {
         val frontendTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
-                implementation("pl.treksoft:kvision-testutils:$kvisionVersion:tests")
+                implementation("io.kvision:kvision-testutils:$kvisionVersion:tests")
             }
         }
     }
 }
+
 
 
 
