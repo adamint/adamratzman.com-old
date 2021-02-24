@@ -36,7 +36,7 @@ class FooterComponent(parent: Container) : SiteStatefulComponent(parent = parent
             ).map { it.first to it.second.toDevOrProdUrl() }
 
             links.forEach { (name, url) ->
-                link(label = "", url = url, classes = nameSetOf("black", MarginMediumRight, "link-color")) {
+                link(label = "", url = url, classes = nameSetOf("black", MarginMediumRight)) {
                     b(content = name)
                 }
             }

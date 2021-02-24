@@ -46,7 +46,7 @@ kotlin {
             }
         }
     }
-    js("frontend", IR) {
+    js("frontend") {
         browser {
             runTask {
                 outputFileName = "main.bundle.js"
@@ -115,7 +115,7 @@ kotlin {
             dependencies {
                 implementation("io.kvision:kvision:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
-                // implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap-select:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap-datetime:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
@@ -180,9 +180,9 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                                "$buildDir/js/node_modules/gettext.js/bin/po2json",
-                                it.absolutePath,
-                                "${it.parent}/${it.nameWithoutExtension}.json"
+                            "$buildDir/js/node_modules/gettext.js/bin/po2json",
+                            it.absolutePath,
+                            "${it.parent}/${it.nameWithoutExtension}.json"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -195,7 +195,7 @@ afterEvaluate {
             group = "package"
             archiveAppendix.set("frontend")
             val distribution =
-                    project.tasks.getByName("frontendBrowserDevelopmentWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName("frontendBrowserDevelopmentWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }
@@ -206,12 +206,12 @@ afterEvaluate {
             outputs.file(archiveFile)
             manifest {
                 attributes(
-                        mapOf(
-                                "Implementation-Title" to rootProject.name,
-                                "Implementation-Group" to rootProject.group,
-                                "Implementation-Version" to rootProject.version,
-                                "Timestamp" to System.currentTimeMillis()
-                        )
+                    mapOf(
+                        "Implementation-Title" to rootProject.name,
+                        "Implementation-Group" to rootProject.group,
+                        "Implementation-Version" to rootProject.version,
+                        "Timestamp" to System.currentTimeMillis()
+                    )
                 )
             }
         }
@@ -221,7 +221,7 @@ afterEvaluate {
             group = "package"
             archiveAppendix.set("frontend")
             val distribution =
-                    project.tasks.getByName("frontendBrowserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName("frontendBrowserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }
@@ -232,12 +232,12 @@ afterEvaluate {
             outputs.file(archiveFile)
             manifest {
                 attributes(
-                        mapOf(
-                                "Implementation-Title" to rootProject.name,
-                                "Implementation-Group" to rootProject.group,
-                                "Implementation-Version" to rootProject.version,
-                                "Timestamp" to System.currentTimeMillis()
-                        )
+                    mapOf(
+                        "Implementation-Title" to rootProject.name,
+                        "Implementation-Group" to rootProject.group,
+                        "Implementation-Version" to rootProject.version,
+                        "Timestamp" to System.currentTimeMillis()
+                    )
                 )
             }
         }
@@ -250,13 +250,13 @@ afterEvaluate {
             group = "package"
             manifest {
                 attributes(
-                        mapOf(
-                                "Implementation-Title" to rootProject.name,
-                                "Implementation-Group" to rootProject.group,
-                                "Implementation-Version" to rootProject.version,
-                                "Timestamp" to System.currentTimeMillis(),
-                                "Main-Class" to mainClassName
-                        )
+                    mapOf(
+                        "Implementation-Title" to rootProject.name,
+                        "Implementation-Group" to rootProject.group,
+                        "Implementation-Version" to rootProject.version,
+                        "Timestamp" to System.currentTimeMillis(),
+                        "Main-Class" to mainClassName
+                    )
                 )
             }
             val dependencies = configurations["backendRuntimeClasspath"].filter { it.name.endsWith(".jar") } +
@@ -275,8 +275,8 @@ afterEvaluate {
             group = "run"
             main = mainClassName
             classpath =
-                    configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
-                            project.tasks["backendProcessResources"].outputs.files
+                configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
+                        project.tasks["backendProcessResources"].outputs.files
             workingDir = buildDir
         }
         create("backendRunProd", JavaExec::class) {
@@ -284,9 +284,9 @@ afterEvaluate {
             group = "run"
             main = mainClassName
             classpath =
-                    configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
-                            project.tasks["backendProcessResources"].outputs.files +
-                            project.tasks["frontendArchive"].outputs.files
+                configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
+                        project.tasks["backendProcessResources"].outputs.files +
+                        project.tasks["frontendArchive"].outputs.files
             workingDir = buildDir
         }
         getByName("compileKotlinBackend") {

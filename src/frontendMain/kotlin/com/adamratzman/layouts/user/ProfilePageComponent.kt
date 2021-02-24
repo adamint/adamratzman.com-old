@@ -13,6 +13,7 @@ import com.adamratzman.spotify.utils.getCurrentTimeMs
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addBootstrap
 import com.adamratzman.utils.nameSetOf
+import com.adamratzman.utils.removeAbcCheckbox
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.browser.document
 import kotlinx.coroutines.GlobalScope
@@ -287,7 +288,7 @@ private class InsertBlogPostComponent(clientSideData: ClientSideData, parent: Co
 
                 add(
                     InsertBlogPostForm::deleted,
-                    checkBox(label = "Mark as deleted?")
+                    checkBox(label = "Mark as deleted?").apply { removeAbcCheckbox() }
                 )
 
                 val preview = div()

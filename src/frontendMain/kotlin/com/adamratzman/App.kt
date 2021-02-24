@@ -83,7 +83,7 @@ class App : Application() {
                     MyTopTracksAndArtistsPage -> MyTopTracksAndArtistsComponent(this)
                     is ViewBlogHomePage -> BlogHomePage(state.view.filterCategories, this)
                     is ViewBlogPostPage -> BlogPostPage(state.view.id, this)
-
+                    is GenerateSpotifyClientTokenPage -> GenerateSpotifyTokenComponent(state.view.code, this)
 
                 }
             }

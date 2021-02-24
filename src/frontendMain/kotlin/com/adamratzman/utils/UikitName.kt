@@ -153,7 +153,7 @@ enum class UikitName(val cssClassOrAttributeName: String) {
 
     // Form
     UkFormIcon("uk-form-icon"),
-
+    UkCheckbox("uk-checkbox")
 
     ;
 

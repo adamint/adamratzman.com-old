@@ -13,6 +13,10 @@ import com.adamratzman.spotify.models.Token
 import com.adamratzman.spotify.spotifyImplicitGrantApi
 import com.adamratzman.spotify.utils.getCurrentTimeMs
 import com.adamratzman.utils.toDevOrProdUrl
+import io.kvision.html.Div
+import io.kvision.navigo.Navigo
+import io.kvision.state.ObservableList
+import io.kvision.state.observableListOf
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
@@ -20,10 +24,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
 import org.w3c.dom.set
-import io.kvision.html.Div
-import io.kvision.state.ObservableList
-import io.kvision.state.observableListOf
-import io.kvision.navigo.Navigo
 import redux.RAction
 import kotlin.js.RegExp
 
@@ -32,6 +32,8 @@ const val spotifyTokenExpiryLocalStorageKey = "spotifyTokenExpirationMillis"
 const val redirectBackToLocalStorageKey = "redirectBackTo"
 const val clientSideDataLocalStorageKey = "clientSideData"
 const val clientSideDataInvalidationTimeKey = "clientSideDataInvalidationTime"
+const val spotifyPkceCodeChallengeKey = "spotifyPkceCodeChallenge"
+
 val isDevServer = window.location.host == "localhost:3000"
 
 class NavbarPage(val name: String, val url: String, val icon: String? = null, val view: View? = null) {
@@ -60,6 +62,14 @@ data class SiteState(
     val workExperience = getWorkExperience()
     val selectedProjects = getSelectedProjects()
     val studentInvolvement = getStudentInvolvement()
+
+    val codeVerifier
+        get(): String = if (localStorage[spotifyPkceCodeChallengeKey] != null) localStorage[spotifyPkceCodeChallengeKey]!!
+        else {
+            val codeVerifier = (1..100).map { ('a'..'z').random() }.joinToString("")
+            localStorage[spotifyPkceCodeChallengeKey] = codeVerifier
+            codeVerifier
+        }
 
     val spotifyImplicitGrantApi
         get(): SpotifyImplicitGrantApi? = localStorage[spotifyTokenLocalStorageKey]?.let { tokenString ->
@@ -195,6 +205,13 @@ sealed class View(val name: String, val url: String, val needsInitialLoadingSpin
         }
     }
 
+    data class GenerateSpotifyClientTokenPage(val code: String? = null) :
+        View(
+            "Generate Spotify Client Token",
+            "/projects/spotify/generate-token",
+            needsInitialLoadingSpinner = true
+        )
+
 
     fun devOrProdUrl() = url.toDevOrProdUrl()
     fun isSameView(other: View) = this::class == other::class
@@ -231,7 +248,7 @@ sealed class SiteAction : RAction {
     object LoadMyTopTracksAndArtistsPage : SiteAction()
     data class LoadBlogHomePage(val filterCategories: List<String>) : SiteAction()
     data class LoadBlogPostPage(val id: String) : SiteAction()
-
+    data class LoadGenerateSpotifyClientTokenPage(val code: String?) : SiteAction()
 }
 
 fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (action) {
@@ -268,6 +285,7 @@ fun siteStateReducer(state: SiteState, action: SiteAction): SiteState = when (ac
     LoadMyTopTracksAndArtistsPage -> state.copy(view = MyTopTracksAndArtistsPage)
     is LoadBlogHomePage -> state.copy(view = ViewBlogHomePage(action.filterCategories))
     is LoadBlogPostPage -> state.copy(view = ViewBlogPostPage(action.id))
+    is LoadGenerateSpotifyClientTokenPage -> state.copy(view = GenerateSpotifyClientTokenPage(action.code))
 }
 
 fun Navigo.initialize(): Navigo {
@@ -312,5 +330,6 @@ fun Navigo.initialize(): Navigo {
         .on(MyTopTracksAndArtistsPage.url, { _ -> myTopTracksAndArtistsPage() })
         .on("/blog", { _ -> blogHomePage() })
         .on(ViewBlogPostPage.regExp, { postId -> blogPostPage(postId) })
+        .on(GenerateSpotifyClientTokenPage().url, { _ -> generateSpotifyClientTokenPage() })
         .apply { notFound({ _ -> notFoundPage() }) }
 }

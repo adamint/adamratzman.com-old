@@ -155,7 +155,7 @@ class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulCom
 
                         add(
                             CalculatorParametersForm::useRadians,
-                            checkBox(label = "Use Radians?")
+                            checkBox(label = "Use Radians?").apply { removeAbcCheckbox() }
                         )
                     }
                 }

@@ -21,9 +21,10 @@ import io.kvision.remote.ServiceException
 const val spotifyClientId = "4341dad364794fbaa97a37fd4739b088"
 val spotifyRedirectUri = encodeURIComponent(SiteManager.domain)
 
+val requiredSpotifyScopes = arrayOf(SpotifyScope.PLAYLIST_MODIFY_PUBLIC, SpotifyScope.USER_TOP_READ)
+
 val spotifyAuthRedirectUri = getSpotifyAuthorizationUrl(
-        SpotifyScope.PLAYLIST_MODIFY_PUBLIC,
-        SpotifyScope.USER_TOP_READ,
+        *requiredSpotifyScopes,
         clientId = spotifyClientId,
         redirectUri = spotifyRedirectUri,
         isImplicitGrantFlow = true

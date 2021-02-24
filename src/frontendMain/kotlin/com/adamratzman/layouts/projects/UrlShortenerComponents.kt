@@ -59,7 +59,7 @@ class UrlShortenerHomePageComponent(parent: Container) : SiteStatefulComponent(p
 
                     add(
                         ShortenedUrlDto::rickrollAllowed,
-                        checkBox(label = "Add 40% rickroll chance")
+                        checkBox(label = "Add 40% rickroll chance").apply { removeAbcCheckbox() }
                     )
 
                     hPanel(spacing = 10) {

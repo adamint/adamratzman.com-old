@@ -8,9 +8,14 @@ import kotlinx.dom.removeClass
 import org.w3c.dom.asList
 import org.w3c.dom.url.URLSearchParams
 import io.kvision.core.*
+import io.kvision.form.check.CheckBox
 import io.kvision.html.Tag
 import io.kvision.html.link
 import io.kvision.html.textNode
+
+fun CheckBox.removeAbcCheckbox() {
+    removeCssClass("abc-checkbox")
+}
 
 fun Component.addUikitAttributes(vararg attributes: Any) {
     attributes.forEach { setAttribute(it.toString(), "") }

@@ -7,18 +7,18 @@ import com.adamratzman.services.SerializableDate
 import com.adamratzman.spotify.utils.parseSpotifyCallbackHashToToken
 import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.toDevOrProdUrl
-import kotlinx.browser.localStorage
-import kotlinx.browser.window
-import org.w3c.dom.get
-import org.w3c.dom.set
 import io.kvision.core.Col
 import io.kvision.core.Color
 import io.kvision.core.Container
 import io.kvision.core.style
 import io.kvision.html.h2
+import io.kvision.navigo.Navigo
 import io.kvision.redux.createReduxStore
 import io.kvision.routing.routing
-import io.kvision.navigo.Navigo
+import kotlinx.browser.localStorage
+import kotlinx.browser.window
+import org.w3c.dom.get
+import org.w3c.dom.set
 
 object SiteManager {
     var redirectBackUrl: String?
@@ -117,3 +117,4 @@ fun viewDailySongPage(date: SerializableDate) = SiteManager.siteStore.dispatch(L
 fun myTopTracksAndArtistsPage() = SiteManager.siteStore.dispatch(LoadMyTopTracksAndArtistsPage)
 fun blogHomePage() = SiteManager.siteStore.dispatch(LoadBlogHomePage(getSearchParams().get("category")?.split(",") ?: listOf()))
 fun blogPostPage(postId: String) = SiteManager.siteStore.dispatch(LoadBlogPostPage(postId))
+fun generateSpotifyClientTokenPage() = SiteManager.siteStore.dispatch(LoadGenerateSpotifyClientTokenPage(getSearchParams().get("code")))

@@ -118,4 +118,10 @@ fun getInteractives() = listOf(
         MyTopTracksAndArtistsPage.url,
         ProjectCategory.SPOTIFY
     ),
+    InteractiveProject(
+        "Generate Spotify OAuth Token",
+        "Quickly and easily generate a Spotify OAuth Token to use in spotify-web-api-kotlin",
+        GenerateSpotifyClientTokenPage().url,
+        ProjectCategory.SPOTIFY
+    )
 ).toMutableSet()
