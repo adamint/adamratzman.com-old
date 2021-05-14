@@ -10,10 +10,10 @@ import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.FontStyle.ITALIC
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.FontStyle.ITALIC
+import io.kvision.core.style
+import io.kvision.html.*
 
 class BlogHomePage(filterCategories: List<String>, parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     val all = getSearchParams().get("all") == "true"
@@ -24,8 +24,8 @@ class BlogHomePage(filterCategories: List<String>, parent: Container) : SiteStat
                 if (filterCategories.isEmpty()) {
                     if (all) +"Blog - all posts"
                     else +"Blog"
-                } else textNode(content = "") {
-                    + "Posts tagged "
+                } else {
+                    textNode("Posts tagged ")
                     span(classes = nameSetOf("link-color"), content = filterCategories.joinToString(","))
                 }
             }

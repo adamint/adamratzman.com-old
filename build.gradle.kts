@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     val kotlinVersion: String by System.getProperties()
-    id("kotlinx-serialization") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
     kotlin("multiplatform") version kotlinVersion
     val kvisionVersion: String by System.getProperties()
     id("kvision") version kvisionVersion
@@ -16,14 +16,8 @@ group = "com.adamratzman"
 repositories {
     mavenCentral()
     jcenter()
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
-    maven { url = uri("https://dl.bintray.com/rjaros/kotlin") }
-    maven { url = uri("https://repo.spring.io/milestone") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    mavenLocal()
     maven { url = uri("https://jitpack.io") }
-    // mavenLocal()
 }
 
 // Versions
@@ -75,8 +69,18 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("pl.treksoft:kvision-server-ktor:$kvisionVersion")
+                api("io.kvision:kvision-server-ktor:$kvisionVersion") {
+                    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+                }
+
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core") {
+                    version {
+                        strictly("1.4.3")
+                    }
+                }
+
             }
             kotlin.srcDir("build/generated-src/common")
         }
@@ -113,22 +117,32 @@ kotlin {
         val frontendMain by getting {
             resources.srcDir(webDir)
             dependencies {
-                implementation("pl.treksoft:kvision:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-select:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-datetime:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-spinner:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-dialog:$kvisionVersion")
-                implementation("pl.treksoft:kvision-bootstrap-typeahead:$kvisionVersion")
-                implementation("pl.treksoft:kvision-fontawesome:$kvisionVersion")
-                implementation("pl.treksoft:kvision-richtext:$kvisionVersion")
-                implementation("pl.treksoft:kvision-handlebars:$kvisionVersion")
-                implementation("pl.treksoft:kvision-datacontainer:$kvisionVersion")
-                implementation("pl.treksoft:kvision-redux:$kvisionVersion")
-                implementation("pl.treksoft:kvision-chart:$kvisionVersion")
-                implementation("pl.treksoft:kvision-tabulator:$kvisionVersion")
-                implementation("pl.treksoft:kvision-pace:$kvisionVersion")
-                implementation("pl.treksoft:kvision-toast:$kvisionVersion")
-                implementation("com.adamratzman:spotify-api-kotlin-js:3.6.0-rc.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core") {
+                    version {
+                        strictly("1.4.3")
+                    }
+                }
+                implementation("io.kvision:kvision:$kvisionVersion") {
+                    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+                }
+
+                npm(name = "crypto-browserify", version = "3.12.0")
+                implementation("io.kvision:kvision-bootstrap-select:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-datetime:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-dialog:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-typeahead:$kvisionVersion")
+                implementation("io.kvision:kvision-fontawesome:$kvisionVersion")
+                implementation("io.kvision:kvision-richtext:$kvisionVersion")
+                implementation("io.kvision:kvision-handlebars:$kvisionVersion")
+                implementation("io.kvision:kvision-datacontainer:$kvisionVersion")
+                implementation("io.kvision:kvision-redux:$kvisionVersion")
+                implementation("io.kvision:kvision-routing-navigo:$kvisionVersion")
+                implementation("io.kvision:kvision-chart:$kvisionVersion")
+                implementation("io.kvision:kvision-tabulator:$kvisionVersion")
+                implementation("io.kvision:kvision-pace:$kvisionVersion")
+                implementation("io.kvision:kvision-toast:$kvisionVersion")
+                implementation("com.adamratzman:spotify-api-kotlin-js:3.7.0")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
             kotlin.srcDir("build/generated-src/frontend")
@@ -136,7 +150,7 @@ kotlin {
         val frontendTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
-                implementation("pl.treksoft:kvision-testutils:$kvisionVersion:tests")
+                implementation("io.kvision:kvision-testutils:$kvisionVersion:tests")
             }
         }
     }
@@ -190,7 +204,10 @@ afterEvaluate {
             group = "package"
             archiveAppendix.set("frontend")
             val distribution =
-                project.tasks.getByName("frontendBrowserDevelopmentWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName(
+                    "frontendBrowserDevelopmentWebpack",
+                    KotlinWebpack::class
+                ).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }

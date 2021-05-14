@@ -8,17 +8,17 @@ import com.adamratzman.utils.UikitName.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.core.FontStyle.ITALIC
-import pl.treksoft.kvision.core.UNIT.perc
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.form.check.checkBox
-import pl.treksoft.kvision.form.formPanel
-import pl.treksoft.kvision.form.spinner.spinner
-import pl.treksoft.kvision.form.text.text
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.modal.Modal
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.*
+import io.kvision.core.FontStyle.ITALIC
+import io.kvision.core.UNIT.perc
+import io.kvision.core.UNIT.px
+import io.kvision.form.check.checkBox
+import io.kvision.form.formPanel
+import io.kvision.form.spinner.spinner
+import io.kvision.form.text.text
+import io.kvision.html.*
+import io.kvision.modal.Modal
+import io.kvision.remote.ServiceException
 
 class ArbitraryPrecisionCalculatorComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginMediumTop, PaddingRemoveBottom)) {

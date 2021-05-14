@@ -4,13 +4,13 @@ import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addAttributes
 import com.adamratzman.utils.getRandomColor
 import com.adamratzman.utils.nameSetOf
-import pl.treksoft.kvision.core.Background
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.div
-import pl.treksoft.kvision.html.h1
-import pl.treksoft.kvision.html.h4
-import pl.treksoft.kvision.html.iframe
+import io.kvision.core.Background
+import io.kvision.core.Container
+import io.kvision.core.style
+import io.kvision.html.div
+import io.kvision.html.h1
+import io.kvision.html.h4
+import io.kvision.html.iframe
 
 class NotFoundComponent(parent: Container) : SiteStatefulComponent(parent = parent,buildStatefulComponent = {
     div(classes = nameSetOf(UkSection, WidthTwoThirds, MarginAuto)) {

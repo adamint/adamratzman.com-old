@@ -14,23 +14,25 @@ import com.adamratzman.layouts.user.ProfilePageComponent
 import com.adamratzman.utils.UikitName.UkSpinnerAttribute
 import com.adamratzman.utils.addAttributes
 import com.adamratzman.utils.getSearchParams
-import pl.treksoft.kvision.Application
-import pl.treksoft.kvision.core.Position
-import pl.treksoft.kvision.core.UNIT.perc
-import pl.treksoft.kvision.core.UNIT.px
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.div
-import pl.treksoft.kvision.html.main
-import pl.treksoft.kvision.module
-import pl.treksoft.kvision.panel.root
-import pl.treksoft.kvision.startApplication
+import io.kvision.Application
+import io.kvision.core.Position
+import io.kvision.core.UNIT.perc
+import io.kvision.core.UNIT.px
+import io.kvision.core.style
+import io.kvision.html.div
+import io.kvision.html.main
+import io.kvision.module
+import io.kvision.panel.root
+import io.kvision.routing.Routing
+import io.kvision.startApplication
 
 class App : Application() {
     init {
-        pl.treksoft.kvision.require("static/css/main.css")
+        io.kvision.require("static/css/main.css")
     }
 
     override fun start(state: Map<String, Any>) {
+        Routing.init()
         SiteManager.initialize()
         root("kvapp", addRow = false) {
             if (getSearchParams().get("logout") != null) {

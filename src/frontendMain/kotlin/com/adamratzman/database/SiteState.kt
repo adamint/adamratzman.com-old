@@ -20,10 +20,10 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
 import org.w3c.dom.set
-import pl.treksoft.kvision.html.Div
-import pl.treksoft.kvision.state.ObservableList
-import pl.treksoft.kvision.state.observableListOf
-import pl.treksoft.navigo.Navigo
+import io.kvision.html.Div
+import io.kvision.state.ObservableList
+import io.kvision.state.observableListOf
+import io.kvision.navigo.Navigo
 import redux.RAction
 import kotlin.js.RegExp
 

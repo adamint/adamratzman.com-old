@@ -2,13 +2,26 @@ package com.adamratzman.layouts
 
 import com.adamratzman.layouts.partials.ExperienceComponent
 import com.adamratzman.layouts.partials.TechnicalSkillsComponent
-import com.adamratzman.utils.UikitName.*
+import com.adamratzman.utils.UikitName.MarginAuto
+import com.adamratzman.utils.UikitName.MarginMediumBottom
+import com.adamratzman.utils.UikitName.MarginMediumTop
+import com.adamratzman.utils.UikitName.MarginRemoveBottom
+import com.adamratzman.utils.UikitName.MarginRemoveTop
+import com.adamratzman.utils.UikitName.MarginSmallBottom
+import com.adamratzman.utils.UikitName.MarginSmallTop
+import com.adamratzman.utils.UikitName.WidthTwoThirds
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.toDevOrProdUrl
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.UNIT.rem
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.UNIT.rem
+import io.kvision.core.style
+import io.kvision.html.div
+import io.kvision.html.h2
+import io.kvision.html.h3
+import io.kvision.html.h4
+import io.kvision.html.link
+import io.kvision.html.p
+import io.kvision.html.span
 
 class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     div(classes = nameSetOf(MarginMediumTop, WidthTwoThirds, MarginAuto)) {
@@ -16,7 +29,7 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
             style { fontSize = 2.5 to rem }
             +"Hi. I'm "
             span(content = "Adam Ratzman", classes = nameSetOf("dashed"))
-            +", a junior at Indiana University Bloomington"
+            +", a graduate student at Indiana University Bloomington"
         }
         p(classes = nameSetOf(MarginMediumBottom, MarginSmallTop, "rem-1-2")) {
             +"You can read below to learn more about me or see some of my "
@@ -28,25 +41,18 @@ class HomePageComponent(parent: Container) : SiteStatefulComponent(parent = pare
             h3(content = "About me", classes = nameSetOf(MarginSmallBottom, "bold", "solid-border-sm"))
             h4(classes = nameSetOf(MarginRemoveTop, MarginSmallBottom, "experience-width")) {
                 +"I'm a "
-                span(content = "senior*", classes = nameSetOf("dashed")) {
+                span(content = "graduate student*", classes = nameSetOf("dashed")) {
                     setAttribute(
-                            "uk-tooltip",
-                            """title: My class status and graduation date are slightly complicated. 
-                                    |I began college Fall 2019, but I am officially a senior and will finish all 
-                                    |graduation requirements next semester (Spring 2021). However, I have decided 
-                                    |to take an extra year (academic year 2021) to study abroad and pursue other 
-                                    |academic interests, as I have no intention in graduating in 2 years. I will 
-                                    |be starting a one year accelerated Master's in Computer Science at IU Fall 2022, 
-                                    |and will graduate in May 2023, simultaneously receiving an MS in Computer Science 
-                                    |and BS in Computer Science with Honors.
+                        "uk-tooltip",
+                        """title: I will graduate in Spring 2022 with an MS in Computer Science.
                                 """.trimMargin().replace("\n", "")
                     )
                 }
-                +" studying Computer Science, Cognitive Science, and French. I build software and distributed systems, tools, and APIs."
+                +" studying Computer Science. I build software and distributed systems, tools, and APIs."
             }
             h4(classes = nameSetOf(MarginRemoveTop, "experience-width")) {
                 +"Currently, I'm a Software Engineering (SWE) Intern at the Naval Surface Warfare Center in Crane, Indiana."
-                +" I am a former SWE intern at Microsoft and E-gineering, and will be returning to Microsoft as a summer 2021 SWE intern."
+                +" I am a former software engineering intern at E-gineering and current intern at Microsoft."
             }
         }
         // education

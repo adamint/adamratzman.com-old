@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.Op.Companion
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.remote.ServiceException
 
 actual class BlogService : IBlogService {
     @Inject

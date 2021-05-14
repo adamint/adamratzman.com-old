@@ -7,7 +7,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.remote.ServiceException
 
 actual class DailySongService : IDailySongService {
     @Inject

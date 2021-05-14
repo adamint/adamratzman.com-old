@@ -12,9 +12,9 @@ import com.adamratzman.utils.getSearchParams
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.removeLoadingSpinner
 import com.adamratzman.utils.showDefaultErrorToast
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.html.*
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.Container
+import io.kvision.html.*
+import io.kvision.remote.ServiceException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

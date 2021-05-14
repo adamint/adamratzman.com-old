@@ -3,9 +3,9 @@ package com.adamratzman.layouts
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.toDevOrProdUrl
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.data.dataContainer
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.data.dataContainer
+import io.kvision.html.*
 
 class ProjectsHomeComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     val projectCategories = state.interactives

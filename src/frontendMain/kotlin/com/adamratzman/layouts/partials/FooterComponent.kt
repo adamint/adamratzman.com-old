@@ -5,17 +5,17 @@ import com.adamratzman.services.AuthenticationServiceFrontend
 import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.nameSetOf
 import com.adamratzman.utils.toDevOrProdUrl
-import pl.treksoft.kvision.core.Col.GRAY
-import pl.treksoft.kvision.core.Color
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.html.div
-import pl.treksoft.kvision.html.link
-import pl.treksoft.kvision.html.p
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.Col.GRAY
+import io.kvision.core.Color
+import io.kvision.core.Container
+import io.kvision.core.style
+import io.kvision.html.div
+import io.kvision.html.link
+import io.kvision.html.p
+import io.kvision.remote.ServiceException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pl.treksoft.kvision.html.bold
+import io.kvision.html.bold
 
 class FooterComponent(parent: Container) : SiteStatefulComponent(parent = parent, buildStatefulComponent = { state ->
     GlobalScope.launch {

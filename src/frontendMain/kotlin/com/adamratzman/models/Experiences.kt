@@ -23,15 +23,26 @@ fun getEducationExperience() = listOf(
         ResumeExperienceWrapper(
                 "Indiana University Bloomington",
                 "Bloomington, IN",
-                "August 2019",
+                "August 2021",
                 "May 2022",
+                listOf(
+                        ResumeExperience(
+                                "MS in Computer Science",
+                                null
+                        )
+                )
+        ),
+        ResumeExperienceWrapper(
+                "Indiana University Bloomington",
+                "Bloomington, IN",
+                "August 2019",
+                "May 2021",
                 listOf(
                         ResumeExperience(
                                 "Bachelor of Science in Computer Science",
                                 listOf(
                                         "Honors: Hudson & Holland Scholar, Founders Scholar, Provost’s Scholarship, Hutton Honors College.",
-                                        "Part of the BSMS Computer Science program. I will be " +
-                                                "graduating in May 2023 simulatenously with a BS in Computer Science and MS in Computer Science."
+                                        "Part of the BSMS Computer Science program."
                                 )
                         )
                 ),
@@ -178,9 +189,9 @@ fun getSelectedProjects() = mutableListOf(
                 null,
                 listOf(
                         ResumeExperience(
-                                "Creator",
+                                "Creator, Maintainer",
                                 listOf(
-                                        "Created a modern, asynchronous wrapper targeting the JVM for the Spotify Web API",
+                                        "Created a modern, asynchronous Kotlin MPP library for the Spotify Web, Web Playback, and Auth APIs with 90+ stars",
                                         "Developed using TDD and Agile methods"
                                 )
                         )

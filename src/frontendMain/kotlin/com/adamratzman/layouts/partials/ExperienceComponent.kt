@@ -6,12 +6,12 @@ import com.adamratzman.utils.UikitName.*
 import com.adamratzman.utils.addAttributes
 import com.adamratzman.utils.addLineBreak
 import com.adamratzman.utils.nameSetOf
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.FontStyle.ITALIC
-import pl.treksoft.kvision.core.TextAlign.RIGHT
-import pl.treksoft.kvision.core.style
-import pl.treksoft.kvision.data.dataContainer
-import pl.treksoft.kvision.html.*
+import io.kvision.core.Container
+import io.kvision.core.FontStyle.ITALIC
+import io.kvision.core.TextAlign.RIGHT
+import io.kvision.core.style
+import io.kvision.data.dataContainer
+import io.kvision.html.*
 
 class ExperienceComponent(val experienceWrapper: ResumeExperienceWrapper, parent: Container) :
     SiteStatefulComponent(parent = parent, buildStatefulComponent = {

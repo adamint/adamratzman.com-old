@@ -15,8 +15,8 @@ import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.w3c.dom.get
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.remote.ServiceException
+import io.kvision.core.Container
+import io.kvision.remote.ServiceException
 
 const val spotifyClientId = "4341dad364794fbaa97a37fd4739b088"
 val spotifyRedirectUri = encodeURIComponent(SiteManager.domain)
